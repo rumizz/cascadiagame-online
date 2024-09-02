@@ -2501,34 +2501,7 @@ function pickNewTilesTokens() {
   }, 1000);
 }
 
-export function updateTokensAndTiles() {
-  tileTokenContainer.innerHTML = "";
-  var initialTokenTileHTML = "";
-
-  // again, since there are 4 combinations of tiles+tokens container, the below loop is actioned 4 times
-  for (let k = 0; k < 4; k++) {
-    // the below code generates the HTML to store information for each tile and token combination and then inserts it into the DOM
-    initialTokenTileHTML +=
-      '<div class="tokenTileContainer" tokenTileNum="' + k + '">';
-    initialTokenTileHTML += generateDisplayTile(state.currentTiles[k]);
-    initialTokenTileHTML +=
-      '<div class="tokenContainer" wildlifetoken="' +
-      state.currentTokens[k] +
-      '">';
-    initialTokenTileHTML +=
-      '<img class="token" src="img/tokens/' +
-      state.currentTokens[k] +
-      '.png" />';
-    initialTokenTileHTML += "</div>";
-    initialTokenTileHTML += "</div>";
-  }
-
-  $("#tileTokenContainer").append(initialTokenTileHTML);
-
-  checkDuplicateTokens();
-}
-
-function checkDuplicateTokens() {
+export function checkDuplicateTokens() {
   // THIS CODE ONLY CHECKS TO SEE IF THERE IS A SCENARIO THAT WILL MEAN THAT 4 DUPLICATED TOKENS WILL BE REPLACED OR IF THERE IS 3 DUPLICATED TOKENS - IT WILL ONLY ACTIVATE THE REMOVE DUPLICATES BUTTON
 
   // disable the "replaceDuplicateTokens" button
@@ -2971,7 +2944,7 @@ function removeNatureCubeChosenTokens() {
   }, timeDelayPerToken[parseInt(timeDelayPerToken.length) - 1]);
 }
 
-function generateDisplayTile(thisTile) {
+export function generateDisplayTile(thisTile) {
   var displayTileHTML = '<div class="tileContainer" ';
 
   // store the habitat(s) info in a attribute on the parent container to allow for easy processing of information
@@ -3343,8 +3316,6 @@ function neighbourTiles(tileID) {
 }
 
 function updateNextTurn(mode) {
-  // starting variable: var turnsLeft = 21;
-
   if (mode != "setup") {
     // the function runs when the player succesfully concludes a turn, the turnsLeft variable figure is always reduced by one
     turnsLeft--;

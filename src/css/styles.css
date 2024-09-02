@@ -782,6 +782,11 @@ body.gameOver #mapContainer {
 	top: 410px;
 }
 
+#tileTokenContainer.natureCubeTempDimensions .tokenTileContainer[tokentilenum="4"] {
+	top: 528px;
+}
+
+
 
 .tokenTileContainer[tokentilenum="0"] {
 	top:0px;
@@ -797,6 +802,10 @@ body.gameOver #mapContainer {
 
 .tokenTileContainer[tokentilenum="3"] {
 	top:390px;
+}
+
+.tokenTileContainer[tokentilenum="4"] {
+  top:520px;
 }
 
 .tokenTileContainer[tokentilenum="-1"] {
@@ -2487,6 +2496,10 @@ top: 290px;
 		top: 36vw;
 	}
 
+  .tokenTileContainer[tokentilenum="4"] {
+    top: 48vw;
+  }
+
 	.tokenTileContainer[tokentilenum="-1"] {
 		top:-27vw;
 	}
@@ -3408,6 +3421,10 @@ top: 290px;
 		top: 38.3vw;
 	}
 
+  #tileTokenContainer.natureCubeTempDimensions .tokenTileContainer[tokentilenum="4"] {
+    top: 47.8vw;
+  }
+
 	body.gameOver #mapContainer {
 		height: 40vw;
 		width: 57vw;
@@ -3970,6 +3987,11 @@ top: 290px;
 		left: 72vw;
 	}
 
+  .tokenTileContainer[tokentilenum="4"] {
+    top: 0vw;
+    left: 96vw;
+  }
+
 	#tileTokenContainer.natureCubeTempDimensions {
 		height: 47.8vw;
 	}
@@ -3989,6 +4011,10 @@ top: 290px;
 	#tileTokenContainer.natureCubeTempDimensions .tokenTileContainer[tokentilenum="3"] {
 		top: 12vw!important;		
 	}
+
+  #tileTokenContainer.natureCubeTempDimensions .tokenTileContainer[tokentilenum="4"] {
+    top: 12vw!important;    
+  }
 
 	#mapContainer, body.gameOver #mapContainer {
 		border: .3vw solid #000;
@@ -5335,4 +5361,9 @@ top: 290px;
 		margin-right: 1vw!important;
 	}
 
+}
+
+.slide {
+  transition: all .7s ease-in-out;
+  
 }
