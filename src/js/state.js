@@ -2,7 +2,7 @@ import { doc, getDoc, increment, onSnapshot, setDoc, updateDoc } from "firebase/
 import { db } from "./firebase";
 import { tiles } from "./data";
 import { randomRotation } from "./util/randomRotation";
-import { setupInitialTokensAndTiles } from "./ui/setupInitialTokensAndTiles";
+import { updateTokensAndTiles } from "./ui/updateTokens";
 
 class State {
   gameId = "";
@@ -15,9 +15,7 @@ class State {
   currentTiles = [];
   currentTokens = [];
 
-  natureCubesNum = 0;
-
-  initial = true;
+  natureCubesNum = -0;
 
   async init(gameId, clientId) {
     this.gameId = gameId;
@@ -65,10 +63,7 @@ class State {
       console.log("tiles:", this.currentTiles);
       console.log("tokens:", this.currentTokens);
 
-      if (this.initial) {
-        this.initial = false;
-        setupInitialTokensAndTiles();
-      }
+      updateTokensAndTiles();
     });
   }
 
