@@ -7,6 +7,8 @@ import state from "./state.js";
 import { initiateMap } from "./scripts.js";
 import { uuidv4 } from "./util/uuid.js";
 
+import "./image-preloader.js";
+
 const gameId = window.location.pathname.slice(1);
 
 $(document).ready(() => {
