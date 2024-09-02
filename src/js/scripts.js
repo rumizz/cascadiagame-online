@@ -1,4 +1,10 @@
 import { tiles, startingTiles, defaultTokenNums } from "./data";
+import {
+  tileImage,
+  tokenActiveImage,
+  tokenImage,
+  tokenInactiveImage,
+} from "./images";
 import { createAndJoinGame } from "./main";
 import state from "./state";
 import { randomRotation } from "./util/randomRotation";
@@ -857,9 +863,7 @@ $(document).on(
       $(
         ".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer.chosenNatureCubeToken"
       ).append(
-        '<img class="token" src="img/tokens/' +
-          previouslyChosenToken +
-          '.png" />'
+        '<img class="token" src="' + tokenImage[previouslyChosenToken] + '" />'
       );
       // Add the .previouslyChosenTokenContainer in order to to target the previous token container to remove the active token once its faded out later
       $(
@@ -889,9 +893,9 @@ $(document).on(
     $(
       ".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer.chosenNatureCubeToken"
     ).append(
-      '<img class="activeToken" src="img/tokens/' +
-        currentChosenWildlife +
-        'Active.png" />'
+      '<img class="activeToken" src="' +
+        tokenActiveImage[currentChosenWildlife] +
+        '" />'
     );
 
     // fade in the newly created active state of the currently selected token
@@ -952,9 +956,9 @@ $(document).on(
       $(
         ".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation"
       ).append(
-        '<img class="activeToken" src="img/tokens/' +
-          currentWildlifeToken +
-          'Active.png" />'
+        '<img class="activeToken" src="' +
+          tokenActiveImage[currentWildlifeToken] +
+          '" />'
       );
       $(
         ".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation .activeToken"
@@ -987,9 +991,7 @@ $(document).on(
       $(
         ".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation"
       ).append(
-        '<img class="token" src="img/tokens/' +
-          currentWildlifeToken +
-          '.png" />'
+        '<img class="token" src="' + tokenImage[currentWildlifeToken] + '" />'
       );
       $(
         ".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation .token"
@@ -1074,9 +1076,9 @@ $(document).on(
     $(this)
       .children()
       .append(
-        '<img class="wildlifeToken" src="img/tokens/' +
-          currentChosenWildlife +
-          'Active.png" />'
+        '<img class="wildlifeToken" src="' +
+          tokenActiveImage[currentChosenWildlife] +
+          '" />'
       );
   }
 );
@@ -1486,9 +1488,9 @@ function selectAllTokensToClearFunction() {
   ).each(function () {
     let currentWildlifeToken = $(this).attr("wildlifetoken");
     $(this).append(
-      '<img class="activeToken" src="img/tokens/' +
-        currentWildlifeToken +
-        'Active.png" />'
+      '<img class="activeToken" src="' +
+        tokenActiveImage[currentWildlifeToken] +
+        '" />'
     );
   });
 }
@@ -1552,7 +1554,7 @@ $(document).on(
     $(
       ".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer.chosenNatureCubeToken"
     ).append(
-      '<img class="token" src="img/tokens/' + previouslyChosenToken + '.png" />'
+      '<img class="token" src="' + tokenImage[previouslyChosenToken] + '" />'
     );
     // fade in the newly created default image state of the declined token
     $(
@@ -1866,9 +1868,9 @@ function confirmInvalidTokenPlacementFunction() {
 
   // add the inactive version of the removed wildlife token intot he container, along with a red cross
   $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer").append(
-    '<img class="duplicateToken" src="img/tokens/' +
-      currentChosenWildlife +
-      'Inactive.png" />'
+    '<img class="duplicateToken" src="' +
+      tokenInactiveImage[currentChosenWildlife] +
+      '" />'
   );
   $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer").append(
     '<img class="redCross" src="img/cross.png" />'
@@ -1923,9 +1925,9 @@ function confirmInvalidNatureCubeTokenPlacementFunction() {
   $(
     ".tokenTileContainer.potentialNatureCube.natureCubeToken.chosenNatureCubeTokenParent .tokenContainer.chosenNatureCubeToken"
   ).append(
-    '<img class="duplicateToken" src="img/tokens/' +
-      currentChosenWildlife +
-      'Inactive.png" />'
+    '<img class="duplicateToken" src="' +
+      tokenInactiveImage[currentChosenWildlife] +
+      '" />'
   );
   $(
     ".tokenTileContainer.potentialNatureCube.natureCubeToken.chosenNatureCubeTokenParent .tokenContainer.chosenNatureCubeToken"
@@ -2030,7 +2032,9 @@ function undoTilePlacementFunction() {
     ) {
       // Create the standard default token image and insert it into the current chosen token container
       $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer").append(
-        '<img class="token" src="img/tokens/' + currentChosenWildlife + '.png">'
+        '<img class="token" src="' +
+          tokenActiveImage[currentChosenWildlife] +
+          '">'
       );
 
       // Fade out the active token image (which we already knows exists based on this if statement condition being met) and at the same time fade in the newly created standard default token image
@@ -2101,7 +2105,7 @@ function undoTilePlacementFunction() {
       $(
         ".tokenTileContainer.chosenNatureCubeTokenParent .tokenContainer"
       ).append(
-        '<img class="token" src="img/tokens/' + currentChosenWildlife + '.png">'
+        '<img class="token" src="' + tokenImage[currentChosenWildlife] + '">'
       );
 
       // Fade out the active token image (which we already knows exists based on this if statement condition being met) and at the same time fade in the newly created standard default token image
@@ -2344,7 +2348,7 @@ function pickNewTilesTokens() {
     nextTokenTileHTML +=
       '<div class="tokenContainer" wildlifetoken="' + thisToken[0] + '">';
     nextTokenTileHTML +=
-      '<img class="token" src="img/tokens/' + thisToken[0] + '.png" />';
+      '<img class="token" src="' + tokenImage[thisToken[0]] + '" />';
     nextTokenTileHTML += "</div>";
     nextTokenTileHTML += "</div>";
     // add the newly created tile+token container into the same container with the rest of them
@@ -2516,9 +2520,7 @@ export function updateTokensAndTiles() {
       state.currentTokens[k] +
       '">';
     initialTokenTileHTML +=
-      '<img class="token" src="img/tokens/' +
-      state.currentTokens[k] +
-      '.png" />';
+      '<img class="token" src="' + tokenImage[state.currentTokens[k]] + '" />';
     initialTokenTileHTML += "</div>";
     initialTokenTileHTML += "</div>";
   }
@@ -2555,9 +2557,9 @@ function checkDuplicateTokens() {
     $(".duplicateWildlifeText").html(uniqueTokens[0]);
     // similarly, the duplicated token image is also inserted into the instructions
     var duplicateImgContainer =
-      '<img class="duplicateTokenExample" src="img/tokens/' +
-      uniqueTokens[0] +
-      'Inactive.png" />';
+      '<img class="duplicateTokenExample" src="' +
+      tokenInactiveImage[uniqueTokens[0]] +
+      '" />';
     $(
       "#allDuplicateTokensModal .modal-content .notification #duplicateImgContainer"
     ).html(duplicateImgContainer);
@@ -2605,9 +2607,9 @@ function removeDuplicateTokens(duplicateAmount) {
 
     $(".tokenContainer").each(function () {
       $(this).append(
-        '<img class="duplicateToken" src="img/tokens/' +
-          displayedTokens[currentToken] +
-          'Inactive.png" />'
+        '<img class="duplicateToken" src="' +
+          tokenImage[displayedTokens[currentToken]] +
+          '" />'
       );
       $(this).append('<img class="redCross" src="img/cross.png" />');
       currentToken++;
@@ -2683,9 +2685,9 @@ function removeDuplicateTokens(duplicateAmount) {
         $(
           '.tokenTileContainer[tokentilenum="' + k + '"] .tokenContainer '
         ).append(
-          '<img class="replacedToken" src="img/tokens/' +
-            displayedTokens[k] +
-            '.png" />'
+          '<img class="replacedToken" src="' +
+            tokenImage[displayedTokens[k]] +
+            '" />'
         );
         $('.tokenTileContainer[tokentilenum="' + k + '"] .tokenContainer').attr(
           "wildlifetoken",
@@ -2749,9 +2751,9 @@ function removeDuplicateTokens(duplicateAmount) {
 
     // for each of the containers that contain the duplicate token, create inactive image of that matched wildlife type, as well as a red cross, and insert it into each of the containers
     $('.tokenContainer[wildlifetoken="' + duplicatedToken + '"]').append(
-      '<img class="duplicateToken" src="img/tokens/' +
-        duplicatedToken +
-        'Inactive.png" />'
+      '<img class="duplicateToken" src="' +
+        tokenInactiveImage[duplicatedToken] +
+        '" />'
     );
     $('.tokenContainer[wildlifetoken="' + duplicatedToken + '"]').append(
       '<img class="redCross" src="img/cross.png" />'
@@ -2831,9 +2833,9 @@ function removeDuplicateTokens(duplicateAmount) {
             matchedTokensIndexes[k] +
             '"] .tokenContainer'
         ).append(
-          '<img class="replacedToken" src="img/tokens/' +
-            displayedTokens[matchedTokensIndexes[k]] +
-            '.png" />'
+          '<img class="replacedToken" src="' +
+            tokenImage[displayedTokens[matchedTokensIndexes[k]]] +
+            '" />'
         );
       }
       // the newly chosen tokens are faded in
@@ -2882,9 +2884,9 @@ function removeNatureCubeChosenTokens() {
         tokensToReplaceIndexes[j] +
         '"] .tokenContainer'
     ).append(
-      '<img class="duplicateToken" src="img/tokens/' +
-        tokensToReplaceWildlife[j] +
-        'Inactive.png" />'
+      '<img class="duplicateToken" src="' +
+        tokenInactiveImage[tokensToReplaceWildlife[j]] +
+        '" />'
     );
     $(
       '.tokenTileContainer[tokentilenum="' +
@@ -2943,9 +2945,9 @@ function removeNatureCubeChosenTokens() {
           tokensToReplaceIndexes[p] +
           '"] .tokenContainer'
       ).append(
-        '<img class="replacedToken" src="img/tokens/' +
-          displayedTokens[tokensToReplaceIndexes[p]] +
-          '.png" />'
+        '<img class="replacedToken" src="' +
+          tokenImage[isplayedTokens[tokensToReplaceIndexes[p]]] +
+          '" />'
       );
     }
     // the newly chosen tokens are faded in
@@ -3003,16 +3005,14 @@ function generateDisplayTile(thisTile) {
   // generate the actual tile image, based on the habitat(s)
   if (thisTile.habitats.length == 1) {
     displayTileHTML +=
-      '<img class="habitatTile" src="img/tiles/' +
-      thisTile.habitats[0] +
-      '.png" />';
+      '<img class="habitatTile" src="' +
+      tileImage[thisTile.habitats[0]] +
+      '" />';
   } else if (thisTile.habitats.length == 2) {
     displayTileHTML +=
-      '<img class="habitatTile" src="img/tiles/' +
-      thisTile.habitats[0] +
-      "+" +
-      thisTile.habitats[1] +
-      '.png" style="transform: rotate(' +
+      '<img class="habitatTile" src="' +
+      tileImage[thisTile.habitats[0] + "+" + thisTile.habitats[1]] +
+      '" style="transform: rotate(' +
       thisTile.rotation +
       'deg);" />';
   }
@@ -3021,9 +3021,9 @@ function generateDisplayTile(thisTile) {
     displayTileHTML +=
       '<img class="tileToken wildlifeToken-' +
       (i + 1) +
-      '" src="img/tokens/' +
-      thisTile.wildlife[i] +
-      '.png" />';
+      '" src="' +
+      tokenImage[thisTile.wildlife[i]] +
+      '" />';
   }
 
   displayTileHTML += "</div>";
@@ -3171,18 +3171,18 @@ function generateMap() {
 
         if (mapData[i][j].habitats.length == 1) {
           mapHTML +=
-            '<img class="habitatTile" src="img/tiles/' +
-            mapData[i][j].habitats +
-            '.png" style="transform: rotate(' +
+            '<img class="habitatTile" src="' +
+            tileImage[mapData[i][j].habitats] +
+            '" style="transform: rotate(' +
             mapData[i][j].rotation +
             'deg);">';
         } else {
           mapHTML +=
-            '<img class="habitatTile" src="img/tiles/' +
-            mapData[i][j].habitats[0] +
-            "+" +
-            mapData[i][j].habitats[1] +
-            '.png" style="transform: rotate(' +
+            '<img class="habitatTile" src="' +
+            tileImage[
+              mapData[i][j].habitats[0] + "+" + mapData[i][j].habitats[1]
+            ] +
+            '" style="transform: rotate(' +
             mapData[i][j].rotation +
             'deg);">';
         }
@@ -3192,9 +3192,9 @@ function generateMap() {
             mapHTML +=
               '<img class="tileToken wildlifeToken-' +
               (k + 1) +
-              '" src="img/tokens/' +
-              mapData[i][j].wildlife[k] +
-              '.png">';
+              '" src="' +
+              tokenImage[mapData[i][j].wildlife[k]] +
+              '">';
           }
         }
 
@@ -3206,9 +3206,9 @@ function generateMap() {
 
       if (mapData[i][j].placedToken) {
         mapHTML +=
-          '<img class="placedWildlifeToken" src="img/tokens/' +
-          mapData[i][j].placedToken +
-          'Active.png" />';
+          '<img class="placedWildlifeToken" src="' +
+          tokenActiveImage[mapData[i][j].placedToken] +
+          '" />';
       }
 
       mapHTML += "</div>";
@@ -3371,9 +3371,9 @@ function activateTokenPlacement(mode) {
 
     // the active token image (with a green border) is added into the token container. By default it is hidden
     $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer").append(
-      '<img class="activeToken" src="img/tokens/' +
-        currentChosenWildlife +
-        'Active.png" />'
+      '<img class="activeToken" src="' +
+        tokenActiveImage[currentChosenWildlife] +
+        '" />'
     );
 
     // the active token image fades in
@@ -3445,9 +3445,9 @@ function activateTokenPlacement(mode) {
       $(
         "#noValidPlacementModal .modal-content .notification .invalidTokenImg"
       ).html(
-        '<img class="removedToken" src="img/tokens/' +
-          currentChosenWildlife +
-          'Inactive.png" alt=""><img class="removeTokenRedCross" src="img/cross.png" />'
+        '<img class="removedToken" src="' +
+          tokenInactiveImage[currentChosenWildlife] +
+          '" alt=""><img class="removeTokenRedCross" src="img/cross.png" />'
       );
     } else if ($(".tokenTileContainer.potentialNatureCube").length) {
       // this condition is met if the player is currently carrying out a NATURE CUBE token placement
@@ -3458,9 +3458,9 @@ function activateTokenPlacement(mode) {
       $(
         "#noValidPlacementNatureCubeModal .modal-content .notification .invalidTokenImg"
       ).html(
-        '<img class="removedToken" src="img/tokens/' +
-          currentChosenWildlife +
-          'Inactive.png" alt=""><img class="removeTokenRedCross" src="img/cross.png" />'
+        '<img class="removedToken" src="' +
+          tokenInactiveImage[currentChosenWildlife] +
+          '" alt=""><img class="removeTokenRedCross" src="img/cross.png" />'
       );
     }
   }
@@ -3990,7 +3990,7 @@ function setupFinalScoring() {
   $("#mapHiddenOverlay .mapTileContainer .placedWildlifeToken").each(
     function () {
       let tokenWildlife = $(this).attr("wildlife");
-      $(this).attr("src", `img/tokens/${tokenWildlife}.png`);
+      $(this).attr("src", tokenImage[tokenWildlife]);
     }
   );
 
