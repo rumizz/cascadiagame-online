@@ -154,7 +154,7 @@ body.gameOver #ks-container #kickstartImg {
 }
 
 #setupLayer {
-	display: block;
+	display: hidden;
 	margin-top: 10px;
 }
 

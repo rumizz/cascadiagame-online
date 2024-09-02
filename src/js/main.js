@@ -1,8 +1,41 @@
-import { doc, onSnapshot } from "firebase/firestore";
+import { addDoc, collection, doc, onSnapshot } from "firebase/firestore";
 import { db } from "./firebase.js";
+import { defaultTokenNums, tiles } from "./data.js";
+import { shuffle } from "./util/shuffle.js";
+import { navigate } from "./util/navigate.js";
+import state from "./state.js";
+import { initiateMap } from "./scripts.js";
 
-const gameId = "test";
+const gameId = window.location.pathname.slice(1);
 
-const unsub = onSnapshot(doc(db, "games", gameId), (doc) => {
-    console.log("Game data: ", doc.data());
+$(document).ready(() => {
+  if (gameId) {
+    $("body").addClass("gameView");
+    initiateMap();
+    state.init(gameId);
+    $("#gameLayer").show();
+  } else {
+    $("#setupLayer").show();
+  }
 });
+
+export const createAndJoinGame = async () => {
+  // setup tiles
+  let allTileNums = shuffle(tiles).map((tile) => tile.tileNum);
+  // setup tokens
+  let allTokens = [];
+  for (var tokenNum in defaultTokenNums) {
+    if (defaultTokenNums.hasOwnProperty(tokenNum)) {
+      for (let i = 0; i < defaultTokenNums[tokenNum]; i++) {
+        allTokens.push(tokenNum);
+      }
+    }
+  }
+  allTokens = shuffle(allTokens);
+  // create game document
+  const gameRef = await addDoc(collection(db, "games"), {
+    allTileNums,
+    allTokens,
+  });
+  navigate(`/${gameRef.id}`);
+};
