@@ -143,7 +143,7 @@ function checkScreenWidth() {
       $("#homepageButtonContainer .startCommenceButton").attr("id", "startGame");
     }
 
-    if ($("#mapContainer #mapHiddenOverlay").length) {
+    if ($("#gameLayer > .mapContainer #mapHiddenOverlay").length) {
       setZoom(zoomLevel, document.getElementById("mapHiddenOverlay"));
     }
 
@@ -283,11 +283,11 @@ function updateMapPosition(moveDirection) {
   if (moveDirection == "horizontal") {
     let newLeftPosNum = mapMoveAmount.tilePos.left * mapMoveAmount.view[currentView].incs.horizontal * (zoomLevel / 10);
     let newLeftPos = newLeftPosNum + mapMoveAmount.view[currentView].unit;
-    $("#mapContainer #mapHiddenOverlay").css("left", newLeftPos);
+    $("#gameLayer > .mapContainer #mapHiddenOverlay").css("left", newLeftPos);
   } else if (moveDirection == "vertical") {
     let newTopPosNum = mapMoveAmount.tilePos.top * mapMoveAmount.view[currentView].incs.vertical * (zoomLevel / 10);
     let newTopPos = newTopPosNum + mapMoveAmount.view[currentView].unit;
-    $("#mapContainer #mapHiddenOverlay").css("top", newTopPos);
+    $("#gameLayer > .mapContainer #mapHiddenOverlay").css("top", newTopPos);
   }
 }
 
@@ -332,7 +332,11 @@ $(document).on(touchEvent, "#mobileGoalThumbnails .mobileThumbnail", function ()
   $(`#quickViewGoalImg-${currentWildlifeGoal}`).addClass("activeQuickViewGoalImg");
 });
 
-$(document).on(touchEvent, ".modal.is-active .modal-background.closableModalBackground", function () {
+// $(document).on(touchEvent, ".modal.is-active .modal-background.closableModalBackground", function () {
+//   $(".modal.is-active").removeClass("is-active");
+// });
+
+$(document).on(touchEvent, ".modal-background", function () {
   $(".modal.is-active").removeClass("is-active");
 });
 
@@ -579,7 +583,7 @@ $(document).on(touchEvent, ".mapTileContainer.potentialPlacement", function () {
 
   setTimeout(function () {
     // adding the showOptions class to the #placedTileOptions element causes it to slideUp for the user to view the options, such as rotating the tile, confirming the placement, or cancelling the placement
-    $("#mapContainer #placedTileOptions").addClass("showOptions");
+    $("#gameLayer > .mapContainer #placedTileOptions").addClass("showOptions");
     $(".mobileTilePlacementOptions.inactiveTileOptions")
       .addClass("activeTileOptions")
       .removeClass("inactiveTileOptions");
@@ -643,7 +647,7 @@ $(document).on(touchEvent, ".mapTileContainer.potentialNatureCubeTilePlacement",
 
   setTimeout(function () {
     // adding the showOptions class to the #placedTileOptions element causes it to slideUp for the user to view the options, such as rotating the tile, confirming the placement, or cancelling the placement
-    $("#mapContainer #placedTileOptions").addClass("showOptions");
+    $("#gameLayer > .mapContainer #placedTileOptions").addClass("showOptions");
     $(".mobileTilePlacementOptions.inactiveTileOptions")
       .addClass("activeTileOptions")
       .removeClass("inactiveTileOptions");
@@ -2582,79 +2586,75 @@ function loadStartingTileDetails(startingTile) {
   state.saveMap();
 }
 
-function generateMap() {
+export function generateMapHTML(mapData, addUi) {
   // the map HTML script
   var mapHTML = '<div id="mapHiddenOverlay">';
-  for (let i = 0; i < state.mapData.length; i++) {
-    for (let j = 0; j < state.mapData[i].length; j++) {
+  for (let i = 0; i < mapData.length; i++) {
+    for (let j = 0; j < mapData[i].length; j++) {
       mapHTML +=
         '<div id="row-' +
-        state.mapData[i][j].row +
+        mapData[i][j].row +
         "-column-" +
-        state.mapData[i][j].column +
+        mapData[i][j].column +
         '" class="mapTileContainer row-' +
-        state.mapData[i][j].row +
+        mapData[i][j].row +
         " column-" +
-        state.mapData[i][j].column;
+        mapData[i][j].column;
 
-      if (state.mapData[i][j].placedToken) {
+      if (mapData[i][j].placedToken) {
         mapHTML += " placedToken";
       }
 
-      if (state.mapData[i][j].placedTile) {
+      if (mapData[i][j].placedTile) {
         mapHTML += ' placedTile">';
 
         mapHTML += '<div class="tileContainer" ';
 
-        if (state.mapData[i][j].habitats.length == 1) {
+        if (mapData[i][j].habitats.length == 1) {
           ``;
-          mapHTML += 'habitats="' + state.mapData[i][j].habitats[0] + '" ';
-        } else if (state.mapData[i][j].habitats.length == 2) {
-          mapHTML += 'habitats="' + state.mapData[i][j].habitats[0] + " " + state.mapData[i][j].habitats[1] + '" ';
+          mapHTML += 'habitats="' + mapData[i][j].habitats[0] + '" ';
+        } else if (mapData[i][j].habitats.length == 2) {
+          mapHTML += 'habitats="' + mapData[i][j].habitats[0] + " " + mapData[i][j].habitats[1] + '" ';
         }
 
-        if (!state.mapData[i][j].placedToken) {
+        if (!mapData[i][j].placedToken) {
           mapHTML += 'wildlife="';
 
-          for (let k = 0; k < state.mapData[i][j].wildlife.length; k++) {
-            if (k < state.mapData[i][j].wildlife.length - 1) {
-              mapHTML += state.mapData[i][j].wildlife[k] + " ";
+          for (let k = 0; k < mapData[i][j].wildlife.length; k++) {
+            if (k < mapData[i][j].wildlife.length - 1) {
+              mapHTML += mapData[i][j].wildlife[k] + " ";
             } else {
-              mapHTML += state.mapData[i][j].wildlife[k];
+              mapHTML += mapData[i][j].wildlife[k];
             }
           }
         }
 
         mapHTML +=
-          '" tilewildlife="' +
-          state.mapData[i][j].wildlife.length +
-          '" tilerotation="' +
-          state.mapData[i][j].rotation +
-          '">';
+          '" tilewildlife="' + mapData[i][j].wildlife.length + '" tilerotation="' + mapData[i][j].rotation + '">';
 
-        if (state.mapData[i][j].habitats.length == 1) {
+        if (mapData[i][j].habitats.length == 1) {
           mapHTML +=
             '<img class="habitatTile" src="' +
-            tileImage[state.mapData[i][j].habitats] +
+            tileImage[mapData[i][j].habitats] +
             '" style="transform: rotate(' +
-            state.mapData[i][j].rotation +
+            mapData[i][j].rotation +
             'deg);">';
         } else {
           mapHTML +=
             '<img class="habitatTile" src="' +
-            tileImage[state.mapData[i][j].habitats[0] + "+" + state.mapData[i][j].habitats[1]] +
+            tileImage[mapData[i][j].habitats[0] + "+" + mapData[i][j].habitats[1]] +
             '" style="transform: rotate(' +
-            state.mapData[i][j].rotation +
+            mapData[i][j].rotation +
             'deg);">';
         }
 
-        if (!state.mapData[i][j].placedToken) {
-          for (let k = 0; k < state.mapData[i][j].wildlife.length; k++) {
+        if (!mapData[i][j].placedToken) {
+          for (let k = 0; k < mapData[i][j].wildlife.length; k++) {
             mapHTML +=
               '<img class="tileToken wildlifeToken-' +
               (k + 1) +
               '" src="' +
-              tokenImage[state.mapData[i][j].wildlife[k]] +
+              tokenImage[mapData[i][j].wildlife[k]] +
               '">';
           }
         }
@@ -2665,47 +2665,45 @@ function generateMap() {
         mapHTML += '<img class="tileOutline" src="img/tileOutline.png" />';
       }
 
-      if (state.mapData[i][j].placedToken) {
-        mapHTML +=
-          '<img class="placedWildlifeToken" src="' + tokenActiveImage[state.mapData[i][j].placedToken] + '" />';
+      if (mapData[i][j].placedToken) {
+        mapHTML += '<img class="placedWildlifeToken" src="' + tokenActiveImage[mapData[i][j].placedToken] + '" />';
       }
 
       mapHTML += "</div>";
     }
   }
   mapHTML += "</div>";
+  if (addUi) {
+    mapHTML += '<div class="zoomOptions">';
+    mapHTML += '<img zoomType="zoomIn" class="zoomIn zoomOption inactiveZoom" src="img/zoomIn-inactive.png" />';
+    mapHTML += '<img zoomType="zoomOut" class="zoomOut zoomOption activeZoom" src="img/zoomOut.png" />';
+    mapHTML += "</div>";
 
-  mapHTML += '<div class="zoomOptions">';
+    mapHTML += '<div class="mapNavigation">';
+    mapHTML += '<img class="navBackground" src="img/woodCircle.png" />';
+    mapHTML += '<img direction="up" class="upArrow navArrow" src="img/arrow.png" />';
+    mapHTML += '<img direction="right" class="rightArrow navArrow" src="img/arrow.png" />';
+    mapHTML += '<img direction="down" class="downArrow navArrow" src="img/arrow.png" />';
+    mapHTML += '<img direction="left" class="leftArrow navArrow" src="img/arrow.png" />';
+    mapHTML += "</div>";
 
-  mapHTML += '<img zoomType="zoomIn" class="zoomIn zoomOption inactiveZoom" src="img/zoomIn-inactive.png" />';
-  mapHTML += '<img zoomType="zoomOut" class="zoomOut zoomOption activeZoom" src="img/zoomOut.png" />';
+    mapHTML += '<div id="placedTileOptions">';
+    mapHTML += '<button id="cancelTilePlacement" class="button is-danger nonNatureCubeButton">Cancel</button>';
+    mapHTML += '<button id="confirmTilePlacement" class="button is-success nonNatureCubeButton">Confirm</button>';
+    mapHTML += '<button id="cancelNatureCubeTilePlacement" class="button is-danger natureCubeButton">Cancel</button>';
+    mapHTML +=
+      '<button id="confirmNatureCubeTilePlacement" class="button is-success natureCubeButton">Confirm</button>';
+    mapHTML += '<button id="rotateTileCounterclockwise" class="button is-link">Rotate Counterclockwise</button>';
+    mapHTML += '<button id="rotateTileClockwise" class="button is-primary">Rotate Clockwise</button>';
+    mapHTML += "</div>";
+  }
+  return mapHTML;
+}
 
-  mapHTML += "</div>";
-
-  mapHTML += '<div class="mapNavigation">';
-
-  mapHTML += '<img class="navBackground" src="img/woodCircle.png" />';
-
-  mapHTML += '<img direction="up" class="upArrow navArrow" src="img/arrow.png" />';
-  mapHTML += '<img direction="right" class="rightArrow navArrow" src="img/arrow.png" />';
-  mapHTML += '<img direction="down" class="downArrow navArrow" src="img/arrow.png" />';
-  mapHTML += '<img direction="left" class="leftArrow navArrow" src="img/arrow.png" />';
-
-  mapHTML += "</div>";
-
-  mapHTML += '<div id="placedTileOptions">';
-
-  mapHTML += '<button id="cancelTilePlacement" class="button is-danger nonNatureCubeButton">Cancel</button>';
-  mapHTML += '<button id="confirmTilePlacement" class="button is-success nonNatureCubeButton">Confirm</button>';
-  mapHTML += '<button id="cancelNatureCubeTilePlacement" class="button is-danger natureCubeButton">Cancel</button>';
-  mapHTML += '<button id="confirmNatureCubeTilePlacement" class="button is-success natureCubeButton">Confirm</button>';
-  mapHTML += '<button id="rotateTileCounterclockwise" class="button is-link">Rotate Counterclockwise</button>';
-  mapHTML += '<button id="rotateTileClockwise" class="button is-primary">Rotate Clockwise</button>';
-
-  mapHTML += "</div>";
-
+function generateMap() {
+  var mapHTML = generateMapHTML(state.mapData, true);
   // the map is generated and all the exisiting information has been replaced
-  $("#gameLayer #mapContainer").html(mapHTML);
+  $("#gameLayer > .mapContainer").html(mapHTML);
 
   if ($(".tokenTileContainer.potentialNatureCube").length) {
     $(".nonNatureCubeButton").hide();
@@ -2720,7 +2718,7 @@ function showPossibleTilePlacements(mode) {
   var potentialTiles = [];
 
   // since you need to place a new tile next to an existing tile, the code first of all loops through all of the currently placed tiles out on the board
-  $(".mapTileContainer.placedTile").each(function (index) {
+  $("#gameLayer > .mapContainer .mapTileContainer.placedTile").each(function (index) {
     // store the current id of the placedTile in question
     let thisID = $(this).attr("id");
     // run the "neighbourTiles" function to find out which tiles are next to the currently selected already placed tile, and store them in the "potentialPlacements" array
@@ -2835,7 +2833,7 @@ function activateTokenPlacement(mode) {
   var validTokenPlacements = false;
 
   // loop through every map hex that has a placed tile BUT DOES NOT HAVE A PLACED TOKEN
-  $(".mapTileContainer.placedTile:not(.placedToken) .tileContainer").each(function (index) {
+  $("#gameLayer > .mapContainer .mapTileContainer.placedTile:not(.placedToken) .tileContainer").each(function (index) {
     // store all of the associated wildlife types for each placed tile into a variable
     let thisTilesWildlife = $(this).attr("wildlife");
     // split the stored information by blank spaces (if there's multiple wildlife types they'll have a space between each of them)
@@ -2897,7 +2895,7 @@ function endOfGameSetup() {
     $("#goalsContainer").remove();
     $("#tileTokenContainer").addClass("finalScoring");
 
-    $("#mapContainer #mapHiddenOverlay .mapTileContainer .tileToken").remove();
+    $("#gameLayer > .mapContainer #mapHiddenOverlay .mapTileContainer .tileToken").remove();
 
     $("#allEndGameScoringCategories").show();
 
@@ -3121,7 +3119,7 @@ function debugShowTileIDs() {
     }
   });
 
-  $("body.gameOver #mapContainer").css({
+  $("body.gameOver .mapContainer").css({
     height: "70vw",
     width: "97vw",
     position: "absolute",
@@ -3130,7 +3128,7 @@ function debugShowTileIDs() {
     "z-index": "99",
   });
 
-  $("body.gameOver #mapContainer #mapHiddenOverlay").css({
+  $("body.gameOver .mapContainer #mapHiddenOverlay").css({
     top: "0px",
     left: "420px",
   });

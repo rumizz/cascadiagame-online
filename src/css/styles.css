@@ -500,7 +500,7 @@ ion-icon[name="help-circle-outline"] {
 	display:none;
 }
 
-#mapContainer {
+.mapContainer {
     border: 1px solid #000;
     float: left;
     margin: 10px 0px 10px 0px;
@@ -513,12 +513,36 @@ ion-icon[name="help-circle-outline"] {
     border-radius: 20px;
 }
 
-body.gameOver #mapContainer {
+body.gameOver .mapContainer {
     height: 490px;
     width: 739px;
 }
 
-#mapContainer #placedTileOptions {
+.modal-card:has(.mapContainer) {
+   width: 900px;
+}
+
+.modal-card-body:has(.mapContainer) {
+    padding: 0px;
+    overflow: scroll;
+}
+
+.modal .mapContainer {
+  float: unset;
+  height: 1500px;
+  width: 1700px;
+  border: none;
+  border-radius: 0px;
+  margin: 0px;
+}
+
+.modal .mapContainer #mapHiddenOverlay {
+  scale: .8;
+  top: 550px;
+  left: 450px;
+}
+
+.mapContainer #placedTileOptions {
     background-image: url(/img/buttonBackground.jpg);
     background-size: cover;
     position: absolute;
@@ -530,7 +554,7 @@ body.gameOver #mapContainer {
 	z-index: 4;
 }
 
-#mapContainer #placedTileOptions.showOptions {
+.mapContainer #placedTileOptions.showOptions {
 	bottom: -12px;
 }
 
@@ -538,7 +562,7 @@ body.gameOver #mapContainer {
 	display:none;
 }
 
-#mapContainer #placedTileOptions .button {
+.mapContainer #placedTileOptions .button {
 	margin-right: 17px;
 }
 
@@ -558,7 +582,7 @@ body.gameOver #mapContainer {
     opacity: .4;
 }
 
-#mapContainer .zoomOptions .zoomOption {
+.mapContainer .zoomOptions .zoomOption {
 	width: 51px;
     margin: 6px 2px 0px 12px;
 }
@@ -570,7 +594,7 @@ body.gameOver #mapContainer {
 	z-index: 5;
 }
 
-#mapContainer .mapNavigation .navBackground {
+.mapContainer .mapNavigation .navBackground {
     width: 140px;
 }
 
@@ -617,26 +641,26 @@ body.gameOver #mapContainer {
 	transform: rotate(180deg);    
 }
 
-#mapContainer .mapNavigation .navArrow {
+.mapContainer .mapNavigation .navArrow {
 	width: 42px;
 }
 
-#mapContainer .mapNavigation .upArrow {
+.mapContainer .mapNavigation .upArrow {
     right: 49px;
     top: 17px;
 }
 
-#mapContainer .mapNavigation .rightArrow {
+.mapContainer .mapNavigation .rightArrow {
 	right: 14px;
     top: 54px;
 }
 
-#mapContainer .mapNavigation .downArrow {
+.mapContainer .mapNavigation .downArrow {
 	right: 51px;
     top: 91px;
 }
 
-#mapContainer .mapNavigation .leftArrow {
+.mapContainer .mapNavigation .leftArrow {
 	right: 86px;
     top: 51px;
 }
@@ -934,7 +958,7 @@ body.gameOver #mapContainer {
     z-index: 1;
 }
 
-#mapContainer #mapHiddenOverlay {
+.mapContainer #mapHiddenOverlay {
 	position:relative;
 	width:4000px;
 	height:4000px;
@@ -945,13 +969,13 @@ body.gameOver #mapContainer {
 	transition: all .2s ease-in-out;
 }
 	
-#mapContainer #mapHiddenOverlay .mapTileContainer {
+.mapContainer #mapHiddenOverlay .mapTileContainer {
     position: absolute;
     width: 100px;
     height: 115px;
 }
 
-#mapContainer #mapHiddenOverlay .mapTileContainer.potentialPlacement,  .mapTileContainer.potentialNatureCubePlacement {
+.mapContainer #mapHiddenOverlay .mapTileContainer.potentialPlacement,  .mapTileContainer.potentialNatureCubePlacement {
     z-index:1;
 }
 
@@ -2576,7 +2600,7 @@ top: 290px;
 		top: 39vw;
 	}
 
-	#mapContainer {
+	.mapContainer {
 		border: .3vw solid #000;
 		float: left;
 		margin: 0vw 0vw 0vw 1.5vw;
@@ -2586,7 +2610,7 @@ top: 290px;
 		border-radius: 2vw;
 	}
 
-	#mapContainer .zoomOptions {
+	.mapContainer .zoomOptions {
 		position: absolute;
 		top: .5vw;
 		left: 0vw;
@@ -2594,12 +2618,12 @@ top: 290px;
 		width: 7vw;
 	}
 
-	#mapContainer .zoomOptions .zoomOption {
+	.mapContainer .zoomOptions .zoomOption {
 		width: 4.1vw;
 		margin: 0vw .75vw 0vw;
 	}
 
-	#mapContainer .mapNavigation {
+	.mapContainer .mapNavigation {
 		position: absolute;
 		top: 0vw;
 		right: 0vw;
@@ -2608,30 +2632,30 @@ top: 290px;
 		height: 12vw;
 	}
 
-	#mapContainer .mapNavigation .navBackground {
+	.mapContainer .mapNavigation .navBackground {
 		width: 100%;
 	}
 
-	#mapContainer .mapNavigation .navArrow {
+	.mapContainer .mapNavigation .navArrow {
 		width: 4.4vw;
 	}
 
-	#mapContainer .mapNavigation .upArrow {
+	.mapContainer .mapNavigation .upArrow {
 		right: 3.7vw;
 		top: 1.2vw;
 	}
 
-	#mapContainer .mapNavigation .rightArrow {
+	.mapContainer .mapNavigation .rightArrow {
 		right: 0.6vw;
 		top: 4.3vw;
 	}
 
-	#mapContainer .mapNavigation .downArrow {
+	.mapContainer .mapNavigation .downArrow {
 		right: 4.1vw;
 		top: 7.6vw;
 	}
 
-	#mapContainer .mapNavigation .leftArrow {
+	.mapContainer .mapNavigation .leftArrow {
 		right: 7.2vw;
 		top: 3.9vw;
 	}
@@ -2646,7 +2670,7 @@ top: 290px;
 		opacity: .2;
 	}
 
-	#mapContainer #mapHiddenOverlay {
+	.mapContainer #mapHiddenOverlay {
 		width: 238.1vw;
 		height: 238.1vw;
 		top: 0vw;
@@ -2654,28 +2678,28 @@ top: 290px;
 		transform-origin: 13.4% 8%;
 	}
 
-	#mapContainer #mapHiddenOverlay .mapTileContainer {
+	.mapContainer #mapHiddenOverlay .mapTileContainer {
 		width: 9.3vw;
     	height: 10.75vw;
 	}
 	
 
-	#mapContainer #mapHiddenOverlay .mapTileContainer .validPlacement {
+	.mapContainer #mapHiddenOverlay .mapTileContainer .validPlacement {
 		width: 9.5vw;
 	}
 
-	#mapContainer #placedTileOptions {
+	.mapContainer #placedTileOptions {
 		bottom: -7vw;
 		height: 7vw;
 		width: 69vw;
 		padding: 1.2vw 0vw 0vw 1vw;
 	}
 
-	#mapContainer #placedTileOptions.showOptions {
+	.mapContainer #placedTileOptions.showOptions {
 		bottom: 0vw;
 	}
 
-	#mapContainer #placedTileOptions .button {
+	.mapContainer #placedTileOptions .button {
 		margin: 0.3vw .5vw 0vw;
 		font-size: 1.65vw;
 		height: 4vw;
@@ -2686,7 +2710,7 @@ top: 290px;
 		display: inline-flex;
 	}
 
-	#mapContainer #placedTileOptions .button.natureCubeButton {
+	.mapContainer #placedTileOptions .button.natureCubeButton {
 		display: none;
 	}
 
@@ -3425,7 +3449,7 @@ top: 290px;
     top: 47.8vw;
   }
 
-	body.gameOver #mapContainer {
+	body.gameOver .mapContainer {
 		height: 40vw;
 		width: 57vw;
 	}
@@ -4016,7 +4040,7 @@ top: 290px;
     top: 12vw!important;    
   }
 
-	#mapContainer, body.gameOver #mapContainer {
+	.mapContainer, body.gameOver .mapContainer {
 		border: .3vw solid #000;
 		float: none;
 		margin: 0vw auto;
@@ -4025,11 +4049,11 @@ top: 290px;
 		border-radius: 2vw;
 	}
 
-	#mapContainer .zoomOptions {
+	.mapContainer .zoomOptions {
 		display:none;
 	}
 
-	#mapContainer .mapNavigation {
+	.mapContainer .mapNavigation {
 		display:none;
 	}
 
@@ -4092,7 +4116,7 @@ top: 290px;
 		top: 13.2vw;
 	}
 
-	#mapContainer #placedTileOptions {
+	.mapContainer #placedTileOptions {
 		display:none;
 	}
 
@@ -4124,7 +4148,7 @@ top: 290px;
 		cursor:pointer;
 	}
 
-	#mapContainer #mapHiddenOverlay {
+	.mapContainer #mapHiddenOverlay {
 		transform-origin: 21.1% 14%;
 	}
 
@@ -4138,13 +4162,13 @@ top: 290px;
     	height: 18.8vw;
 	}
 
-	#mapContainer #mapHiddenOverlay .mapTileContainer {
+	.mapContainer #mapHiddenOverlay .mapTileContainer {
 		width: 16.35vw;
     	height: 18.8vw;
 	}
 	
 
-	#mapContainer #mapHiddenOverlay .mapTileContainer .validPlacement {
+	.mapContainer #mapHiddenOverlay .mapTileContainer .validPlacement {
 		width: 16.35vw;
 	}
 
@@ -4983,7 +5007,7 @@ top: 290px;
 		display:none;
 	}
 
-	body.gameOver #mapContainer .mapNavigation {
+	body.gameOver .mapContainer .mapNavigation {
 		display: block;
 		position: absolute;
 		top: 0vw;
@@ -4993,31 +5017,31 @@ top: 290px;
 		height: 22.5vw;
 	}
 
-	body.gameOver #mapContainer .mapNavigation .navArrow {
+	body.gameOver .mapContainer .mapNavigation .navArrow {
 		width: 8vw;
 	}
 
-	body.gameOver #mapContainer .mapNavigation .upArrow {
+	body.gameOver .mapContainer .mapNavigation .upArrow {
 		right: 7vw;
 		top: 2.2vw;
 	}
 
-	body.gameOver #mapContainer .mapNavigation .rightArrow {
+	body.gameOver .mapContainer .mapNavigation .rightArrow {
 		right: 1vw;
 		top: 8.4vw;
 	}
 
-	body.gameOver #mapContainer .mapNavigation .downArrow {
+	body.gameOver .mapContainer .mapNavigation .downArrow {
 		right: 7.7vw;
 		top: 14.6vw;
 	}
 
-	body.gameOver #mapContainer .mapNavigation .leftArrow {
+	body.gameOver .mapContainer .mapNavigation .leftArrow {
 		right: 13.7vw;
 		top: 7.7vw;
 	}
 
-	body.gameOver #mapContainer .zoomOptions {
+	body.gameOver .mapContainer .zoomOptions {
 		display: block;
 		position: absolute;
 		top: 1vw;
@@ -5026,7 +5050,7 @@ top: 290px;
 		width: 10vw;
 	}
 
-	body.gameOver #mapContainer .zoomOptions .zoomOption {
+	body.gameOver .mapContainer .zoomOptions .zoomOption {
 		width: 9vw;
 		margin: 0vw 0vw .5vw 0vw;
 	}
@@ -5162,7 +5186,7 @@ top: 290px;
 		left: 0vw;
 	}
 
-	body.gameOver #mapContainer {
+	body.gameOver .mapContainer {
 		border: .3vw solid #000;
 		float: none;
 		margin: 0vw auto;
@@ -5178,7 +5202,7 @@ top: 290px;
 		/* margin-top: 0.5vw!important; */
 	}
 
-	body.gameOver #mapContainer {
+	body.gameOver .mapContainer {
 		border: .3vw solid #000;
 		float: none;
 		margin: 0vw 0vw 0vw 4vw;
@@ -5399,7 +5423,7 @@ top: 290px;
   margin-left: -1px;
 }
 
-#playersContainer .player div  {
+#playersContainer .player > .row  {
   display: flex;
   align-items: center;
   gap: 6px
