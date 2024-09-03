@@ -42,12 +42,14 @@ $(document).ready(() => {
   }
 });
 
-join.addEventListener("click", () => {
-  $("#joinLayer").hide();
-  $("body").addClass("gameView");
-  initiateMap(true);
-  state.joinGame(nameField.value);
-  $("#gameLayer").show();
+joinForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  await state.joinGame(nameField.value);
+  location.reload();
+  // $("#joinLayer").hide();
+  // $("body").addClass("gameView");
+  // initiateMap(true);
+  // $("#gameLayer").show();
 });
 
 export const createAndJoinGame = async () => {

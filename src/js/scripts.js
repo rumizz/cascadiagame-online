@@ -161,6 +161,10 @@ $(document).ready(function () {
 });
 
 $(document).keydown(function (e) {
+  // let input events run
+  if (joinLayer.style.display == "block") {
+    return;
+  }
   if (!lockMap) {
     lockMap = true;
     setTimeout(function () {
@@ -490,6 +494,10 @@ $(document).on(
   touchEvent,
   ".tokenTileContainer:not(.chosenTokenTileContainer):not(.inactive):not(.potentialNatureCube):not(.natureCubeClearTokens)",
   function () {
+    if (state.currentPlayer != state.clientId) {
+      console.warn("Not your turn");
+      return;
+    }
     // Click on one of the four possible tile+token pairings to activate that container and show possible placemenets on the map
 
     // remove the previous active container class (if another container had been previously selected)

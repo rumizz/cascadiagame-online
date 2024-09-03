@@ -5368,18 +5368,6 @@ top: 290px;
   
 }
 
-#joinLayer {
-  display: none;
-  float: left;
-  width: 300px;
-  margin-top: 2rem;
-  margin-left: 200px;
-}
-
-#joinLayer #join {
-  border: 1px solid black;
-}
-
 #playersContainer {
   float: left;
   margin-top: 1rem;
@@ -5428,4 +5416,24 @@ top: 290px;
 #playersContainer .player div.turnsLeft span {
   font-weight: bold;
   margin-left: 4px;
+}
+
+#joinLayer {
+  display: none;
+  float: left;
+  width: 100%;
+}
+
+#joinLayer > div {
+  padding-top: 2rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+#joinLayer > div > form {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }

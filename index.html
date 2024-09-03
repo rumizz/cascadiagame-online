@@ -515,10 +515,14 @@
 
         <div class="clearDiv"></div>
       </div>
-
       <div id="joinLayer">
-        <input id="nameField" type="text" />
-        <button type="button" id="join">Join</button>
+        <div>
+          <form id="joinForm">
+            <label for="nameField">Nickname</label>
+            <input id="nameField" name="name" type="text" class="input" />
+            <button type="submit" class="button is-success">Join</button>
+          </form>
+        </div>
       </div>
 
       <div id="goalsLayer" class="layer"></div>

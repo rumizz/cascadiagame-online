@@ -78,10 +78,12 @@ class State {
     });
   }
 
-  joinGame(name) {
-    setDoc(doc(db, "games", this.gameId, "players", this.clientId), {
+  async joinGame(name) {
+    await setDoc(doc(db, "games", this.gameId, "players", this.clientId), {
       name,
       turnsLeft: 5,
+    }).then(() => {
+      console.log("Player joined game");
     });
   }
 
@@ -95,6 +97,7 @@ class State {
       allTokens: this.allTokens.filter((_, index) => index !== tokenIndex),
       currentPlayer:
         this.players[(this.players.findIndex((player) => player.id === this.clientId) + 1) % this.players.length].id,
+      isStarted: true,
     });
     updateDoc(doc(db, "games", this.gameId, "players", this.clientId), {
       turnsLeft: increment(-1),
