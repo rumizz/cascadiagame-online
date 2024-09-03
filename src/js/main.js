@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, onSnapshot } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, onSnapshot } from "firebase/firestore";
 import { db } from "./firebase.js";
 import { defaultTokenNums, tiles } from "./data.js";
 import { shuffle } from "./util/shuffle.js";
@@ -12,19 +12,40 @@ import "./image-preloader.js";
 const gameId = window.location.pathname.slice(1);
 
 $(document).ready(() => {
-  const clientId = localStorage.getItem("cascadia-client-id");
+  let clientId = localStorage.getItem("cascadia-client-id");
   if (!clientId) {
-    const clientId = uuidv4();
+    clientId = uuidv4();
     localStorage.setItem("cascadia-client-id", clientId);
   }
   if (gameId) {
-    $("body").addClass("gameView");
-    initiateMap();
     state.init(gameId, clientId);
-    $("#gameLayer").show();
+    getDoc(doc(db, "games", gameId, "players", clientId)).then((player) => {
+      if (player.exists()) {
+        const data = player.data();
+        if (!data.mapData) {
+          initiateMap(true);
+        } else {
+          state.mapData = JSON.parse(data.mapData);
+          state.logMap();
+          initiateMap();
+        }
+        $("body").addClass("gameView");
+        $("#gameLayer").show();
+      } else {
+        $("#joinLayer").show();
+      }
+    });
   } else {
     $("#setupLayer").show();
   }
+});
+
+join.addEventListener("click", () => {
+  $("#joinLayer").hide();
+  $("body").addClass("gameView");
+  initiateMap(true);
+  state.joinGame(nameField.value);
+  $("#gameLayer").show();
 });
 
 export const createAndJoinGame = async () => {
@@ -44,6 +65,7 @@ export const createAndJoinGame = async () => {
   const gameRef = await addDoc(collection(db, "games"), {
     allTileNums,
     allTokens,
+    isStarted: false,
   });
   navigate(`/${gameRef.id}`);
 };

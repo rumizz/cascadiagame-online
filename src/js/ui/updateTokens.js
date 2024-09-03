@@ -1,3 +1,4 @@
+import { tokenImage } from "../images";
 import { checkDuplicateTokens, generateDisplayTile } from "../scripts";
 import state from "../state";
 
@@ -10,7 +11,7 @@ function generateTokenContainer(i, tile, token) {
   newElem.innerHTML = `
       ${generateDisplayTile(tile)}
       <div class="tokenContainer" wildlifetoken="${token}">
-        <img class="token" src="img/tokens/${token}.png" />
+        <img class="token" src="${tokenImage[token]}" />
       </div>
     `;
   return newElem;

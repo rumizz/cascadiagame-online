@@ -3,11 +3,12 @@ import { db } from "./firebase";
 import { tiles } from "./data";
 import { randomRotation } from "./util/randomRotation";
 import { updateTokensAndTiles } from "./ui/updateTokens";
+import { initiateMap } from "./scripts";
 
 class State {
   gameId = "";
   clientId = "";
-  player = {};
+  mapData = [];
   currentPlayer = "";
 
   allTiles = [];
@@ -15,7 +16,7 @@ class State {
   currentTiles = [];
   currentTokens = [];
 
-  natureCubesNum = -0;
+  natureCubesNum = 0;
 
   async init(gameId, clientId) {
     this.gameId = gameId;
@@ -56,7 +57,7 @@ class State {
       for (let i = 0; i < 4; i++) {
         var thisTile = this.allTiles[i];
         if (thisTile.habitats.length == 2) {
-          thisTile.rotation = randomRotation(thisTile.tileNum);
+          thisTile.rotation = (+thisTile.tileNum % 6) * 60;
         }
         this.currentTiles.push(thisTile);
       }
@@ -85,6 +86,23 @@ class State {
     updateDoc(doc(db, "games", this.gameId, "players", this.clientId), {
       turnsLeft: increment(-1),
     });
+  }
+
+  async saveMap() {
+    console.log("Saving map data...");
+    this.logMap();
+    await updateDoc(doc(db, "games", this.gameId, "players", this.clientId), {
+      mapData: JSON.stringify(this.mapData),
+    });
+  }
+
+  logMap() {
+    console.log(
+      "Map data:",
+      this.mapData
+        .filter((row) => row.some((cell) => cell.habitats.length))
+        .map((row) => row.filter((cell) => cell.habitats.length).map((cell) => `${cell.habitats.join("+")}`))
+    );
   }
 }
 

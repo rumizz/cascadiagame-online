@@ -5367,3 +5367,15 @@ top: 290px;
   transition: all .7s ease-in-out;
   
 }
+
+#joinLayer {
+  display: none;
+  float: left;
+  width:300px;
+  margin-top: 2rem;
+  margin-left: 210px;
+}
+
+#joinLayer #join {
+  border: 1px solid black;
+}

@@ -1,10 +1,5 @@
 import { tiles, startingTiles, defaultTokenNums } from "./data";
-import {
-  tileImage,
-  tokenActiveImage,
-  tokenImage,
-  tokenInactiveImage,
-} from "./images";
+import { tileImage, tokenActiveImage, tokenImage, tokenInactiveImage } from "./images";
 import { createAndJoinGame } from "./main";
 import state from "./state";
 import { randomRotation } from "./util/randomRotation";
@@ -13,7 +8,7 @@ import { shuffle } from "./util/shuffle";
 var turnsLeft = 20;
 
 var displayedTokens = [];
-var mapData = [];
+// var state.mapData = [];
 
 var mapRowsColumnsIndexes = {
   rows: {},
@@ -118,8 +113,7 @@ var rotateTileAllowed = false;
 
 var currentView = "desktop";
 
-var rulesURL =
-  "https://drive.google.com/file/d/1fY8-__M2f0QSxvBi0P2oycG6F0l1yJiI/view";
+var rulesURL = "https://drive.google.com/file/d/1fY8-__M2f0QSxvBi0P2oycG6F0l1yJiI/view";
 
 $(window).resize(function () {
   checkScreenWidth();
@@ -148,15 +142,9 @@ function checkScreenWidth() {
 
   if (changeOfView) {
     if (currentView != "desktop") {
-      $("#homepageButtonContainer .startCommenceButton").attr(
-        "id",
-        "commenceGame"
-      );
+      $("#homepageButtonContainer .startCommenceButton").attr("id", "commenceGame");
     } else {
-      $("#homepageButtonContainer .startCommenceButton").attr(
-        "id",
-        "startGame"
-      );
+      $("#homepageButtonContainer .startCommenceButton").attr("id", "startGame");
     }
 
     if ($("#mapContainer #mapHiddenOverlay").length) {
@@ -253,30 +241,16 @@ function checkIfMapLimitReached(direction, newIncrementPosition) {
     let horizontalTileLimit = mapStats.zoomStats[zoomLevel].xTilesVisible;
     let horizontalTilesHalfwayAmount = Math.floor(horizontalTileLimit / 2);
 
-    if (
-      newIncrementPosition <=
-      mapStats.centerColumn - mapLimits.right + horizontalTilesHalfwayAmount + 1
-    ) {
+    if (newIncrementPosition <= mapStats.centerColumn - mapLimits.right + horizontalTilesHalfwayAmount + 1) {
       mapStats.directionStatus.right = "mapLimit-locked";
       $(".rightArrow").hide();
-    } else if (
-      newIncrementPosition <=
-      mapStats.tileExtremes.column.right - horizontalTilesHalfwayAmount
-    ) {
+    } else if (newIncrementPosition <= mapStats.tileExtremes.column.right - horizontalTilesHalfwayAmount) {
       mapStats.directionStatus.right = "tileLimit-locked";
       $(".rightArrow").hide();
-    } else if (
-      newIncrementPosition >
-      mapStats.centerColumn -
-        mapLimits.left -
-        (horizontalTilesHalfwayAmount + 1)
-    ) {
+    } else if (newIncrementPosition > mapStats.centerColumn - mapLimits.left - (horizontalTilesHalfwayAmount + 1)) {
       mapStats.directionStatus.left = "mapLimit-locked";
       $(".leftArrow").hide();
-    } else if (
-      newIncrementPosition + 1 >=
-      mapStats.tileExtremes.column.left + horizontalTilesHalfwayAmount
-    ) {
+    } else if (newIncrementPosition + 1 >= mapStats.tileExtremes.column.left + horizontalTilesHalfwayAmount) {
       mapStats.directionStatus.left = "tileLimit-locked";
       $(".leftArrow").hide();
     }
@@ -289,28 +263,16 @@ function checkIfMapLimitReached(direction, newIncrementPosition) {
     let verticalTileLimit = mapStats.zoomStats[zoomLevel].yTilesVisible;
     let verticalTilesHalfwayAmount = Math.floor(verticalTileLimit / 2);
 
-    if (
-      newIncrementPosition <=
-      mapStats.centerRow - mapLimits.down + verticalTilesHalfwayAmount + 1
-    ) {
+    if (newIncrementPosition <= mapStats.centerRow - mapLimits.down + verticalTilesHalfwayAmount + 1) {
       mapStats.directionStatus.down = "mapLimit-locked";
       $(".downArrow").hide();
-    } else if (
-      newIncrementPosition - 1 <=
-      mapStats.tileExtremes.row.bottom - verticalTilesHalfwayAmount
-    ) {
+    } else if (newIncrementPosition - 1 <= mapStats.tileExtremes.row.bottom - verticalTilesHalfwayAmount) {
       mapStats.directionStatus.down = "tileLimit-locked";
       $(".downArrow").hide();
-    } else if (
-      newIncrementPosition >
-      mapStats.centerRow - mapLimits.up - (verticalTilesHalfwayAmount + 1)
-    ) {
+    } else if (newIncrementPosition > mapStats.centerRow - mapLimits.up - (verticalTilesHalfwayAmount + 1)) {
       mapStats.directionStatus.up = "mapLimit-locked";
       $(".upArrow").hide();
-    } else if (
-      newIncrementPosition >=
-      mapStats.tileExtremes.row.top + verticalTilesHalfwayAmount
-    ) {
+    } else if (newIncrementPosition >= mapStats.tileExtremes.row.top + verticalTilesHalfwayAmount) {
       mapStats.directionStatus.up = "tileLimit-locked";
       $(".upArrow").hide();
     }
@@ -319,17 +281,11 @@ function checkIfMapLimitReached(direction, newIncrementPosition) {
 
 function updateMapPosition(moveDirection) {
   if (moveDirection == "horizontal") {
-    let newLeftPosNum =
-      mapMoveAmount.tilePos.left *
-      mapMoveAmount.view[currentView].incs.horizontal *
-      (zoomLevel / 10);
+    let newLeftPosNum = mapMoveAmount.tilePos.left * mapMoveAmount.view[currentView].incs.horizontal * (zoomLevel / 10);
     let newLeftPos = newLeftPosNum + mapMoveAmount.view[currentView].unit;
     $("#mapContainer #mapHiddenOverlay").css("left", newLeftPos);
   } else if (moveDirection == "vertical") {
-    let newTopPosNum =
-      mapMoveAmount.tilePos.top *
-      mapMoveAmount.view[currentView].incs.vertical *
-      (zoomLevel / 10);
+    let newTopPosNum = mapMoveAmount.tilePos.top * mapMoveAmount.view[currentView].incs.vertical * (zoomLevel / 10);
     let newTopPos = newTopPosNum + mapMoveAmount.view[currentView].unit;
     $("#mapContainer #mapHiddenOverlay").css("top", newTopPos);
   }
@@ -362,35 +318,23 @@ $(document).on(touchEvent, "#hideWildlifeGoals", function () {
   $("#gameLayer #goalLayerListContainer").hide();
 });
 
-$(document).on(
-  touchEvent,
-  "#mobileGoalThumbnails .mobileThumbnail",
-  function () {
-    $(".mobileThumbnailActiveFrame").remove();
-    $(".activeQuickViewGoal").removeClass("activeQuickViewGoal");
-    $(".activeQuickViewGoalImg").removeClass("activeQuickViewGoalImg");
+$(document).on(touchEvent, "#mobileGoalThumbnails .mobileThumbnail", function () {
+  $(".mobileThumbnailActiveFrame").remove();
+  $(".activeQuickViewGoal").removeClass("activeQuickViewGoal");
+  $(".activeQuickViewGoalImg").removeClass("activeQuickViewGoalImg");
 
-    let thisID = $(this).attr("id");
-    let splitID = thisID.split("-");
-    let currentWildlifeGoal = splitID[1];
+  let thisID = $(this).attr("id");
+  let splitID = thisID.split("-");
+  let currentWildlifeGoal = splitID[1];
 
-    $(this).addClass("activeQuickViewGoal");
-    $(this).append(
-      '<img class="mobileThumbnailActiveFrame" src="img/mobileScoringGoal-hover.png" alt="">'
-    );
-    $(`#quickViewGoalImg-${currentWildlifeGoal}`).addClass(
-      "activeQuickViewGoalImg"
-    );
-  }
-);
+  $(this).addClass("activeQuickViewGoal");
+  $(this).append('<img class="mobileThumbnailActiveFrame" src="img/mobileScoringGoal-hover.png" alt="">');
+  $(`#quickViewGoalImg-${currentWildlifeGoal}`).addClass("activeQuickViewGoalImg");
+});
 
-$(document).on(
-  touchEvent,
-  ".modal.is-active .modal-background.closableModalBackground",
-  function () {
-    $(".modal.is-active").removeClass("is-active");
-  }
-);
+$(document).on(touchEvent, ".modal.is-active .modal-background.closableModalBackground", function () {
+  $(".modal.is-active").removeClass("is-active");
+});
 
 $(document).on(touchEvent, "#frontPageGameInstructionsButton", function () {
   openInNewTab(rulesURL);
@@ -404,45 +348,29 @@ $(document).on(touchEvent, "#mobileGameInstructionsButton", function () {
   openInNewTab(rulesURL);
 });
 
-$(document).on(
-  touchEvent,
-  "#replaceDuplicateTokens:not([disabled])",
-  function () {
-    // in case the player has already clicked a tile+token container to start the vanilla tile placement process - undo all of the active states before processing wwith the naturew cube process.
-    deactivateChosenTile();
+$(document).on(touchEvent, "#replaceDuplicateTokens:not([disabled])", function () {
+  // in case the player has already clicked a tile+token container to start the vanilla tile placement process - undo all of the active states before processing wwith the naturew cube process.
+  deactivateChosenTile();
 
-    $("#threeDuplicateTokensModal").addClass("is-active");
-  }
-);
+  $("#threeDuplicateTokensModal").addClass("is-active");
+});
 
-$(document).on(
-  touchEvent,
-  "#goalTilesContainer #goalList .goalScoring",
-  function () {
-    let thisWildlife = $(this).attr("id").split("-");
-    $("#" + thisWildlife[0] + "ScoringModal.modal").addClass("is-active");
-  }
-);
+$(document).on(touchEvent, "#goalTilesContainer #goalList .goalScoring", function () {
+  let thisWildlife = $(this).attr("id").split("-");
+  $("#" + thisWildlife[0] + "ScoringModal.modal").addClass("is-active");
+});
 
-$(document).on(
-  touchEvent,
-  "#goalsContainer .goalScoringThumbnailContainer",
-  function () {
-    let thisWildlife = $(this).attr("id").split("-");
-    $("#" + thisWildlife[0] + "ScoringModal.modal").addClass("is-active");
-  }
-);
+$(document).on(touchEvent, "#goalsContainer .goalScoringThumbnailContainer", function () {
+  let thisWildlife = $(this).attr("id").split("-");
+  $("#" + thisWildlife[0] + "ScoringModal.modal").addClass("is-active");
+});
 
-$(document).on(
-  touchEvent,
-  ".useNatureCube.button:not([disabled])",
-  function () {
-    // in case the player has already clicked a tile+token container to start the vanilla tile placement process - undo all of the active states before processing wwith the naturew cube process.
-    deactivateChosenTile();
+$(document).on(touchEvent, ".useNatureCube.button:not([disabled])", function () {
+  // in case the player has already clicked a tile+token container to start the vanilla tile placement process - undo all of the active states before processing wwith the naturew cube process.
+  deactivateChosenTile();
 
-    $("#natureCubesModal").addClass("is-active");
-  }
-);
+  $("#natureCubesModal").addClass("is-active");
+});
 
 $(document).on(touchEvent, "#confirmReplacingDuplicates", function () {
   $(".modal.is-active").removeClass("is-active");
@@ -475,15 +403,11 @@ $(document).on(touchEvent, "#commenceGame", function () {
   createAndJoinGame();
 });
 
-$(document).on(
-  touchEvent,
-  "#goalTilesContainer #goalList .goalScoring",
-  function () {
-    var targID = $(this).attr("id");
-    var thisWildlife = targID.split("-");
-    $("#" + thisWildlife[0] + "ScoringModal").addClass("is-active");
-  }
-);
+$(document).on(touchEvent, "#goalTilesContainer #goalList .goalScoring", function () {
+  var targID = $(this).attr("id");
+  var thisWildlife = targID.split("-");
+  $("#" + thisWildlife[0] + "ScoringModal").addClass("is-active");
+});
 
 $(document).on(touchEvent, ".zoomOptions .zoomOption.activeZoom", function () {
   if (!lockFunction) {
@@ -505,30 +429,22 @@ $(document).on(touchEvent, ".zoomOptions .zoomOption.activeZoom", function () {
     }
 
     if (zoomLevel == zoomInLimit) {
-      $(".zoomOptions .zoomIn")
-        .removeClass("activeZoom")
-        .addClass("inactiveZoom");
+      $(".zoomOptions .zoomIn").removeClass("activeZoom").addClass("inactiveZoom");
       $(".zoomOptions .zoomIn").attr("src", "img/zoomIn-inactive.png");
     } else if (zoomLevel == zoomOutLimit) {
       $(".zoomOptions .zoomOut").attr("src", "img/zoomOut-inactive.png");
-      $(".zoomOptions .zoomOut")
-        .removeClass("activeZoom")
-        .addClass("inactiveZoom");
+      $(".zoomOptions .zoomOut").removeClass("activeZoom").addClass("inactiveZoom");
     } else {
       if (zoomLevel < zoomInLimit) {
         if ($(".zoomOptions .zoomIn").hasClass("inactiveZoom")) {
-          $(".zoomOptions .zoomIn")
-            .removeClass("inactiveZoom")
-            .addClass("activeZoom");
+          $(".zoomOptions .zoomIn").removeClass("inactiveZoom").addClass("activeZoom");
           $(".zoomOptions .zoomIn").attr("src", "img/zoomIn.png");
         }
       }
 
       if (zoomLevel > zoomOutLimit) {
         if ($(".zoomOptions .zoomOut").hasClass("inactiveZoom")) {
-          $(".zoomOptions .zoomOut")
-            .removeClass("inactiveZoom")
-            .addClass("activeZoom");
+          $(".zoomOptions .zoomOut").removeClass("inactiveZoom").addClass("activeZoom");
           $(".zoomOptions .zoomOut").attr("src", "img/zoomOut.png");
         }
       }
@@ -590,52 +506,36 @@ $(document).on(
     $(this).addClass("chosenTokenTileContainer");
 
     // add the yellow outline to the tile that corresponds with the newly chosen container
-    $(this)
-      .children(".tileContainer")
-      .append('<img class="selectedTileOutline" src="img/selectedTile.png" />');
+    $(this).children(".tileContainer").append('<img class="selectedTileOutline" src="img/selectedTile.png" />');
 
     // run the function to generate the opaque yellow hexes on the map that show the player where the possible placements are
     showPossibleTilePlacements("normal");
   }
 );
 
-$(document).on(
-  "mouseenter",
-  ".mapTileContainer.potentialPlacement",
-  function () {
-    // the .potentialPlacement class has been previously add to every hex container on the map to show the player where they can place the newly chosen tile on the map
+$(document).on("mouseenter", ".mapTileContainer.potentialPlacement", function () {
+  // the .potentialPlacement class has been previously add to every hex container on the map to show the player where they can place the newly chosen tile on the map
 
-    // target the currently hovered over tile
-    var thisTile = $(this);
+  // target the currently hovered over tile
+  var thisTile = $(this);
 
-    // the tile+token pairing that had previously been clicked has the .chosenTokenTileContainer class assigned to it
-    // targeting the .tileContainer child, a copy of all of the tile information is now created on the map hex that the user is currently hovering over
-    $(".chosenTokenTileContainer .tileContainer").clone().appendTo(thisTile);
+  // the tile+token pairing that had previously been clicked has the .chosenTokenTileContainer class assigned to it
+  // targeting the .tileContainer child, a copy of all of the tile information is now created on the map hex that the user is currently hovering over
+  $(".chosenTokenTileContainer .tileContainer").clone().appendTo(thisTile);
 
-    // copying all of the tile contents also copies over the yellow border into the map - which we don't need as the user can easily tell what hex has just ben generated, so we can immediately delete this element from the newly generated tile html in the map
-    $(
-      ".mapTileContainer.potentialPlacement .tileContainer .selectedTileOutline"
-    ).remove();
-  }
-);
+  // copying all of the tile contents also copies over the yellow border into the map - which we don't need as the user can easily tell what hex has just ben generated, so we can immediately delete this element from the newly generated tile html in the map
+  $(".mapTileContainer.potentialPlacement .tileContainer .selectedTileOutline").remove();
+});
 
-$(document).on(
-  "mouseleave",
-  ".mapTileContainer.potentialPlacement",
-  function () {
-    // once the user leaves a map hex that is a potential placement, the tile that is currently being previewed is deleted
-    $(
-      ".mapTileContainer.potentialPlacement .tileContainer:not(.lockedIn)"
-    ).remove();
-  }
-);
+$(document).on("mouseleave", ".mapTileContainer.potentialPlacement", function () {
+  // once the user leaves a map hex that is a potential placement, the tile that is currently being previewed is deleted
+  $(".mapTileContainer.potentialPlacement .tileContainer:not(.lockedIn)").remove();
+});
 
 $(document).on(touchEvent, ".mapTileContainer.potentialPlacement", function () {
   if ($(".mapTileContainer.potentialPlacement .tileContainer").length) {
     // add the class mapPreviewTileContainer to the currently cloned tile container in the map hex to be able to differentiate between the tile container that's going to be moved from the displayed are for the purposes of fading and removing the preview version
-    $(".mapTileContainer.potentialPlacement .tileContainer").addClass(
-      "mapPreviewTileContainer"
-    );
+    $(".mapTileContainer.potentialPlacement .tileContainer").addClass("mapPreviewTileContainer");
 
     // fade out the tileContainer that was cloned into the map hex as a preview so that we can animate the final tile contents from the displayed tile area
     $(".tileContainer.mapPreviewTileContainer").fadeOut();
@@ -662,9 +562,7 @@ $(document).on(touchEvent, ".mapTileContainer.potentialPlacement", function () {
 
   // adding the 'lockedIn' class allows differentiation between all of the other tile html in map div once the tile html is animated and transferred into the map
   // this class will be removed once the tile is finalized
-  $(".tokenTileContainer.chosenTokenTileContainer .tileContainer").addClass(
-    "lockedIn"
-  );
+  $(".tokenTileContainer.chosenTokenTileContainer .tileContainer").addClass("lockedIn");
 
   // now that the chosen tile has been selected by the user AND a valid hex on the map has also been clicked on to move the chosen tile - all of the other tile+token elements have an inactive class added in order to show that they are currently off limits to be chosen
   // this was not done previously as even once the user had clicked JUST the displayed tile+tokencombination, they could just as easily click another container to change their mind
@@ -673,9 +571,7 @@ $(document).on(touchEvent, ".mapTileContainer.potentialPlacement", function () {
   temporarilyLockMap(1000);
 
   // move the chosen displayed tile onto the chosen blank map hex
-  $(
-    ".tokenTileContainer.chosenTokenTileContainer .tileContainer.lockedIn"
-  ).parentToAnimate($("#" + targID), 1000);
+  $(".tokenTileContainer.chosenTokenTileContainer .tileContainer.lockedIn").parentToAnimate($("#" + targID), 1000);
 
   setTimeout(function () {
     // adding the showOptions class to the #placedTileOptions element causes it to slideUp for the user to view the options, such as rotating the tile, confirming the placement, or cancelling the placement
@@ -687,97 +583,68 @@ $(document).on(touchEvent, ".mapTileContainer.potentialPlacement", function () {
   }, 300);
 });
 
-$(document).on(
-  "mouseenter",
-  ".mapTileContainer.potentialNatureCubeTilePlacement",
-  function () {
-    // this event listener is activated once a player has clicked the Nature Cubes button (if they have any to use), clicked a tile to place (which will show all of the valid placements on the map which are assigned the .potentialNatureCubeTilePlacement), and THEN they hover over a valid map hex to place that chosen tile
+$(document).on("mouseenter", ".mapTileContainer.potentialNatureCubeTilePlacement", function () {
+  // this event listener is activated once a player has clicked the Nature Cubes button (if they have any to use), clicked a tile to place (which will show all of the valid placements on the map which are assigned the .potentialNatureCubeTilePlacement), and THEN they hover over a valid map hex to place that chosen tile
 
-    // target the hovered over map hex element
-    var thisTile = $(this);
+  // target the hovered over map hex element
+  var thisTile = $(this);
 
-    // clone the chosen tile information into the valid map hex element
-    $(
-      ".tokenTileContainer.potentialNatureCube.natureCubeTile .tileContainer.chosenNatureCubeTile"
-    )
-      .clone()
-      .appendTo(thisTile);
+  // clone the chosen tile information into the valid map hex element
+  $(".tokenTileContainer.potentialNatureCube.natureCubeTile .tileContainer.chosenNatureCubeTile")
+    .clone()
+    .appendTo(thisTile);
 
-    // since cloning all of the html in the displayed tile info ALSO clones the yellow outline which currently indicates which displayed tile has been chosen, when duplicating this on the map we can remove this element (since the user obviously knows which tile is currently being duplicated since that's where their mouse is)
-    $(
-      ".mapTileContainer.potentialNatureCubeTilePlacement .tileContainer:not(.lockedIn) .selectedTileOutline"
-    ).remove();
-  }
-);
+  // since cloning all of the html in the displayed tile info ALSO clones the yellow outline which currently indicates which displayed tile has been chosen, when duplicating this on the map we can remove this element (since the user obviously knows which tile is currently being duplicated since that's where their mouse is)
+  $(".mapTileContainer.potentialNatureCubeTilePlacement .tileContainer:not(.lockedIn) .selectedTileOutline").remove();
+});
 
-$(document).on(
-  "mouseleave",
-  ".mapTileContainer.potentialNatureCubeTilePlacement",
-  function () {
-    // whenever the user moves their mouse from an area of the map that's currently showing a tile preview for placement, remove that previewed tile information
-    $(
-      ".mapTileContainer.potentialNatureCubeTilePlacement .tileContainer"
-    ).remove();
-  }
-);
+$(document).on("mouseleave", ".mapTileContainer.potentialNatureCubeTilePlacement", function () {
+  // whenever the user moves their mouse from an area of the map that's currently showing a tile preview for placement, remove that previewed tile information
+  $(".mapTileContainer.potentialNatureCubeTilePlacement .tileContainer").remove();
+});
 
-$(document).on(
-  touchEvent,
-  ".mapTileContainer.potentialNatureCubeTilePlacement",
-  function () {
-    if (
-      $(".mapTileContainer.potentialNatureCubeTilePlacement .tileContainer")
-        .length
-    ) {
-      // add the class mapPreviewTileContainer to the currently cloned tile container in the map hex to be able to differentiate between the tile container that's going to be moved from the displayed are for the purposes of fading and removing the preview version
-      $(
-        ".mapTileContainer.potentialNatureCubeTilePlacement .tileContainer"
-      ).addClass("mapPreviewTileContainer");
+$(document).on(touchEvent, ".mapTileContainer.potentialNatureCubeTilePlacement", function () {
+  if ($(".mapTileContainer.potentialNatureCubeTilePlacement .tileContainer").length) {
+    // add the class mapPreviewTileContainer to the currently cloned tile container in the map hex to be able to differentiate between the tile container that's going to be moved from the displayed are for the purposes of fading and removing the preview version
+    $(".mapTileContainer.potentialNatureCubeTilePlacement .tileContainer").addClass("mapPreviewTileContainer");
 
-      // fade out the tileContainer that was cloned into the map hex as a preview so that we can animate the final tile contents from the displayed tile area
-      $(
-        ".mapTileContainer.potentialNatureCubeTilePlacement .tileContainer"
-      ).fadeOut();
-
-      setTimeout(function () {
-        // now that time has passed to fade out the preview tile element that was cloned into the chosen map hex - we can safely remove the previewed tile info
-        $(".tileContainer.mapPreviewTileContainer").remove();
-      }, 400);
-    }
-
-    rotateTileAllowed = false;
-
-    // store the id of the map hex currently chosen
-    // e.g. -->  row-20-column-19
-    var targID = $(this).attr("id");
-
-    // remove the potentialNatureCubeTilePlacement class from of the map hex elements, since we don't need to preview anymore tile information now that a tile placement has been finalized
-    $(".mapTileContainer.potentialNatureCubeTilePlacement").removeClass(
-      "potentialNatureCubeTilePlacement"
-    );
-
-    // adding the 'lockedIn' class allows differentiation between all of the other tile html in map div once the tile html is animated and transferred into the map
-    // this class will be removed once the tile is finalized
-    $(
-      ".tokenTileContainer.potentialNatureCube.natureCubeTile .tileContainer.chosenNatureCubeTile"
-    ).addClass("lockedIn");
-
-    temporarilyLockMap(1000);
-
-    // move the chosen displayed tile onto the chosen blank map hex
-    $(
-      ".tokenTileContainer.potentialNatureCube.natureCubeTile .tileContainer.chosenNatureCubeTile.lockedIn"
-    ).parentToAnimate($("#" + targID), 1000);
+    // fade out the tileContainer that was cloned into the map hex as a preview so that we can animate the final tile contents from the displayed tile area
+    $(".mapTileContainer.potentialNatureCubeTilePlacement .tileContainer").fadeOut();
 
     setTimeout(function () {
-      // adding the showOptions class to the #placedTileOptions element causes it to slideUp for the user to view the options, such as rotating the tile, confirming the placement, or cancelling the placement
-      $("#mapContainer #placedTileOptions").addClass("showOptions");
-      $(".mobileTilePlacementOptions.inactiveTileOptions")
-        .addClass("activeTileOptions")
-        .removeClass("inactiveTileOptions");
-    }, 300);
+      // now that time has passed to fade out the preview tile element that was cloned into the chosen map hex - we can safely remove the previewed tile info
+      $(".tileContainer.mapPreviewTileContainer").remove();
+    }, 400);
   }
-);
+
+  rotateTileAllowed = false;
+
+  // store the id of the map hex currently chosen
+  // e.g. -->  row-20-column-19
+  var targID = $(this).attr("id");
+
+  // remove the potentialNatureCubeTilePlacement class from of the map hex elements, since we don't need to preview anymore tile information now that a tile placement has been finalized
+  $(".mapTileContainer.potentialNatureCubeTilePlacement").removeClass("potentialNatureCubeTilePlacement");
+
+  // adding the 'lockedIn' class allows differentiation between all of the other tile html in map div once the tile html is animated and transferred into the map
+  // this class will be removed once the tile is finalized
+  $(".tokenTileContainer.potentialNatureCube.natureCubeTile .tileContainer.chosenNatureCubeTile").addClass("lockedIn");
+
+  temporarilyLockMap(1000);
+
+  // move the chosen displayed tile onto the chosen blank map hex
+  $(
+    ".tokenTileContainer.potentialNatureCube.natureCubeTile .tileContainer.chosenNatureCubeTile.lockedIn"
+  ).parentToAnimate($("#" + targID), 1000);
+
+  setTimeout(function () {
+    // adding the showOptions class to the #placedTileOptions element causes it to slideUp for the user to view the options, such as rotating the tile, confirming the placement, or cancelling the placement
+    $("#mapContainer #placedTileOptions").addClass("showOptions");
+    $(".mobileTilePlacementOptions.inactiveTileOptions")
+      .addClass("activeTileOptions")
+      .removeClass("inactiveTileOptions");
+  }, 300);
+});
 
 $(document).on(touchEvent, "#cancelTilePlacement", function () {
   cancelTilePlacement("normalTile");
@@ -850,33 +717,25 @@ $(document).on(
     // $('.previouslyChosenTokenContainer').removeClass('previouslyChosenTokenContainer');
 
     // Again the code checks to see if another token has previously been chosen - if it has the below code is actioned in order to remove the appropraite elements and classes
-    if (
-      $(
-        ".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer.chosenNatureCubeToken"
-      ).length
-    ) {
+    if ($(".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer.chosenNatureCubeToken").length) {
       // store the wildlife type of the previously chosen wildlife (we need this in order to recreate the normal token state of the previously chosen token in order to fade it back in)
       previouslyChosenToken = $(
         ".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer.chosenNatureCubeToken"
       ).attr("wildlifetoken");
       // recreate the default token image and append the previously chosen token container with it
-      $(
-        ".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer.chosenNatureCubeToken"
-      ).append(
+      $(".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer.chosenNatureCubeToken").append(
         '<img class="token" src="' + tokenImage[previouslyChosenToken] + '" />'
       );
       // Add the .previouslyChosenTokenContainer in order to to target the previous token container to remove the active token once its faded out later
-      $(
-        ".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer.chosenNatureCubeToken"
-      ).addClass("previouslyChosenTokenContainer");
+      $(".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer.chosenNatureCubeToken").addClass(
+        "previouslyChosenTokenContainer"
+      );
       // fade out the old active token since its now not the active token
       $(
         ".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer.previouslyChosenTokenContainer .activeToken"
       ).fadeOut();
       // remove the current .chosenNatureCubeTokenParent + chosenNatureCubeToken classes since another token is now active
-      $(".chosenNatureCubeTokenParent").removeClass(
-        "chosenNatureCubeTokenParent"
-      );
+      $(".chosenNatureCubeTokenParent").removeClass("chosenNatureCubeTokenParent");
       $(".chosenNatureCubeToken").removeClass("chosenNatureCubeToken");
     }
 
@@ -890,12 +749,8 @@ $(document).on(
     ).attr("wildlifetoken");
 
     // add the active state of the currently chosen token into the token container in order to fade it in
-    $(
-      ".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer.chosenNatureCubeToken"
-    ).append(
-      '<img class="activeToken" src="' +
-        tokenActiveImage[currentChosenWildlife] +
-        '" />'
+    $(".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer.chosenNatureCubeToken").append(
+      '<img class="activeToken" src="' + tokenActiveImage[currentChosenWildlife] + '" />'
     );
 
     // fade in the newly created active state of the currently selected token
@@ -903,9 +758,7 @@ $(document).on(
       ".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer.chosenNatureCubeToken .activeToken"
     ).fadeIn();
     // fade out the old default state of the currently selected token
-    $(
-      ".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer.chosenNatureCubeToken .token"
-    ).fadeOut();
+    $(".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer.chosenNatureCubeToken .token").fadeOut();
 
     // now we can add the appropriate classes to the map hexes where the newly chosen token will be valid placements
     activateTokenPlacement("natureCubeToken");
@@ -920,9 +773,7 @@ $(document).on(
         ".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer.chosenNatureCubeToken .token"
       ).remove();
       // we don't need the .previouslyChosenTokenContainer class to be assigned so we can remove them
-      $(".previouslyChosenTokenContainer").removeClass(
-        "previouslyChosenTokenContainer"
-      );
+      $(".previouslyChosenTokenContainer").removeClass("previouslyChosenTokenContainer");
     }, 400);
   }
 );
@@ -936,33 +787,23 @@ $(document).on(
     var currentWildlifeToken = $(this).attr("wildlifetoken");
 
     $(this).addClass("currentTokenAnimation");
-    $(".tokenTileContainer.natureCubeClearTokens .tokenContainer").addClass(
-      "lockAllTokens"
-    );
+    $(".tokenTileContainer.natureCubeClearTokens .tokenContainer").addClass("lockAllTokens");
 
     if (
-      !$(
-        ".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation"
-      ).hasClass("confirmedTokenToClear")
+      !$(".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation").hasClass(
+        "confirmedTokenToClear"
+      )
     ) {
       // add the .confirmedTokenToClear to the clicked token IF IT DOESN'T ALREADY HAVE THAT CLASS as the clicked token is now chosen to be cleared
-      $(
-        ".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation"
-      ).addClass("confirmedTokenToClear");
-      $("#confirmClearSelectedTokens").removeAttr("disabled");
-      $(
-        ".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation .token"
-      ).fadeOut();
-      $(
-        ".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation"
-      ).append(
-        '<img class="activeToken" src="' +
-          tokenActiveImage[currentWildlifeToken] +
-          '" />'
+      $(".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation").addClass(
+        "confirmedTokenToClear"
       );
-      $(
-        ".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation .activeToken"
-      ).fadeIn();
+      $("#confirmClearSelectedTokens").removeAttr("disabled");
+      $(".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation .token").fadeOut();
+      $(".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation").append(
+        '<img class="activeToken" src="' + tokenActiveImage[currentWildlifeToken] + '" />'
+      );
+      $(".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation .activeToken").fadeIn();
 
       setTimeout(function () {
         $(".currentTokenAnimation .token").remove();
@@ -970,14 +811,14 @@ $(document).on(
         $(".lockAllTokens").removeClass("lockAllTokens");
       }, 400);
     } else if (
-      $(
-        ".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation"
-      ).hasClass("confirmedTokenToClear")
+      $(".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation").hasClass(
+        "confirmedTokenToClear"
+      )
     ) {
       // remove the .confirmedTokenToClear to the clicked token IF ALREADY HAS THAT CLASS since the token is now not chosen to be cleared
-      $(
-        ".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation"
-      ).removeClass("confirmedTokenToClear");
+      $(".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation").removeClass(
+        "confirmedTokenToClear"
+      );
 
       if ($(".confirmedTokenToClear").length) {
         $("#confirmClearSelectedTokens").removeAttr("disabled");
@@ -985,17 +826,11 @@ $(document).on(
         $("#confirmClearSelectedTokens").attr("disabled", "disabled");
       }
 
-      $(
-        ".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation .activeToken"
-      ).fadeOut();
-      $(
-        ".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation"
-      ).append(
+      $(".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation .activeToken").fadeOut();
+      $(".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation").append(
         '<img class="token" src="' + tokenImage[currentWildlifeToken] + '" />'
       );
-      $(
-        ".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation .token"
-      ).fadeIn();
+      $(".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation .token").fadeIn();
 
       setTimeout(function () {
         $(".currentTokenAnimation .activeToken").remove();
@@ -1018,11 +853,7 @@ $(document).on(
   rotateTileClockwiseFunction
 );
 
-$(document).on(
-  touchEvent,
-  "#rotateTileCounterclockwise",
-  rotateTileCounterClockwiseFunction
-);
+$(document).on(touchEvent, "#rotateTileCounterclockwise", rotateTileCounterClockwiseFunction);
 $(document).on(
   touchEvent,
   "#mobileMapNavContainer .mobileTilePlacementOptions.activeTileOptions .mobileTilePlacementRotateCounterClockwise",
@@ -1031,313 +862,263 @@ $(document).on(
 
 function rotateTileClockwiseFunction() {
   // find the currently chosen tile that is currently being placed, and store it's current rotation value into a variable
-  var currentRotation = parseInt(
-    $(".mapTileContainer .tileContainer.lockedIn").attr("tilerotation")
-  );
+  var currentRotation = parseInt($(".mapTileContainer .tileContainer.lockedIn").attr("tilerotation"));
   // add 60 degrees to the current rotation since it's being rotated clockwise
   var newRotation = currentRotation + 60;
   // update the new value on the tilerotation attribute that corresponds with chosen tile
-  $(".mapTileContainer .tileContainer.lockedIn").attr(
-    "tilerotation",
-    newRotation
-  );
+  $(".mapTileContainer .tileContainer.lockedIn").attr("tilerotation", newRotation);
   // update the new value in the css to animate the tile moving to the new correct rotation
-  $(".mapTileContainer .tileContainer.lockedIn .habitatTile").css(
-    "transform",
-    "rotate(" + newRotation + "deg)"
-  );
+  $(".mapTileContainer .tileContainer.lockedIn .habitatTile").css("transform", "rotate(" + newRotation + "deg)");
 }
 
 function rotateTileCounterClockwiseFunction() {
   // find the currently chosen tile that is currently being placed, and store it's current rotation value into a variable
-  var currentRotation = parseInt(
-    $(".mapTileContainer .tileContainer.lockedIn").attr("tilerotation")
-  );
+  var currentRotation = parseInt($(".mapTileContainer .tileContainer.lockedIn").attr("tilerotation"));
   // minus 60 degrees to the current rotation since it's being rotated counter-clockwise
   var newRotation = currentRotation - 60;
   // update the new value on the tilerotation attribute that corresponds with chosen tile
-  $(".mapTileContainer .tileContainer.lockedIn").attr(
-    "tilerotation",
-    newRotation
-  );
+  $(".mapTileContainer .tileContainer.lockedIn").attr("tilerotation", newRotation);
   // update the new value in the css to animate the tile moving to the new correct <rotation></rotation>
-  $(".mapTileContainer .tileContainer.lockedIn .habitatTile").css(
-    "transform",
-    "rotate(" + newRotation + "deg)"
-  );
+  $(".mapTileContainer .tileContainer.lockedIn .habitatTile").css("transform", "rotate(" + newRotation + "deg)");
 }
 
-$(document).on(
-  "mouseenter",
-  ".mapTileContainer.placedTile.wildlifeTokenPotential",
-  function () {
-    // when the player is up to the point to place a token on the map, each valid map hex will have the .wildlifeTokenPotential class assigned to it
-    // once a map hex with this class is hovered over, a copy of the currenty chosen token is created in the hex to give the player a preview of what the token will look like in relation to all of the other tile + tokens already on the board
-    $(this)
-      .children()
-      .append(
-        '<img class="wildlifeToken" src="' +
-          tokenActiveImage[currentChosenWildlife] +
-          '" />'
-      );
-  }
-);
+$(document).on("mouseenter", ".mapTileContainer.placedTile.wildlifeTokenPotential", function () {
+  // when the player is up to the point to place a token on the map, each valid map hex will have the .wildlifeTokenPotential class assigned to it
+  // once a map hex with this class is hovered over, a copy of the currenty chosen token is created in the hex to give the player a preview of what the token will look like in relation to all of the other tile + tokens already on the board
+  $(this)
+    .children()
+    .append('<img class="wildlifeToken" src="' + tokenActiveImage[currentChosenWildlife] + '" />');
+});
 
-$(document).on(
-  "mouseleave",
-  ".mapTileContainer.placedTile.wildlifeTokenPotential",
-  function () {
-    // when the player moves their mouse off a map hex that is currently previewing a token, that token is removed
-    $(
-      ".mapTileContainer.placedTile.wildlifeTokenPotential .wildlifeToken"
-    ).remove();
-  }
-);
+$(document).on("mouseleave", ".mapTileContainer.placedTile.wildlifeTokenPotential", function () {
+  // when the player moves their mouse off a map hex that is currently previewing a token, that token is removed
+  $(".mapTileContainer.placedTile.wildlifeTokenPotential .wildlifeToken").remove();
+});
 
-$(document).on(
-  touchEvent,
-  ".mapTileContainer.placedTile.wildlifeTokenPotential",
-  function () {
-    temporarilyLockMap(1000);
+$(document).on(touchEvent, ".mapTileContainer.placedTile.wildlifeTokenPotential", function () {
+  temporarilyLockMap(1000);
 
-    // this code runs while the player is currently choosing where to place a token on the board
+  // this code runs while the player is currently choosing where to place a token on the board
 
-    // TOKEN PLACEMENT CODE FOR NON-NATURE CUBE + NATURE CUBE PLACEMENTS!!!!!!
+  // TOKEN PLACEMENT CODE FOR NON-NATURE CUBE + NATURE CUBE PLACEMENTS!!!!!!
 
-    // once the touchevent has is triggered, it signifies that the player has made their choice by clicking the map hex where the currently chosen token is currently being previewed
+  // once the touchevent has is triggered, it signifies that the player has made their choice by clicking the map hex where the currently chosen token is currently being previewed
 
-    // create the keystoneTile variable as false in order to update if the tile later on turns out to be a keystone tile
-    // (if it is we will need to give the player a nature token)
-    var keystoneTile = false;
+  // create the keystoneTile variable as false in order to update if the tile later on turns out to be a keystone tile
+  // (if it is we will need to give the player a nature token)
+  var keystoneTile = false;
 
-    // since the player has now placed a tile AND token, they are not able to undo the last tile placement, so we now make the button that gives that option inactive, and also remove the .lastPlacedTile class
-    $("#undoTilePlacement").attr("disabled", "disabled");
-    $(".lastPlacedTile").removeClass("lastPlacedTile");
+  // since the player has now placed a tile AND token, they are not able to undo the last tile placement, so we now make the button that gives that option inactive, and also remove the .lastPlacedTile class
+  $("#undoTilePlacement").attr("disabled", "disabled");
+  $(".lastPlacedTile").removeClass("lastPlacedTile");
 
-    // store the id of the map hex container that the player has clicked to finalize the placement of the wildlife token into
-    var chosenTokenTileID = $(this).closest(".mapTileContainer").attr("id");
+  // store the id of the map hex container that the player has clicked to finalize the placement of the wildlife token into
+  var chosenTokenTileID = $(this).closest(".mapTileContainer").attr("id");
 
-    // add the .placedToken class
-    $("#" + chosenTokenTileID).addClass("placedToken");
+  // add the .placedToken class
+  $("#" + chosenTokenTileID).addClass("placedToken");
 
-    // split the id using the hyphens and then store the row and column numbers in the appropriate variables as integers
-    var splitChosenTokenTileID = chosenTokenTileID.split("-");
-    var tokenRow = parseInt(splitChosenTokenTileID[1]);
-    var tokenColumn = parseInt(splitChosenTokenTileID[3]);
+  // split the id using the hyphens and then store the row and column numbers in the appropriate variables as integers
+  var splitChosenTokenTileID = chosenTokenTileID.split("-");
+  var tokenRow = parseInt(splitChosenTokenTileID[1]);
+  var tokenColumn = parseInt(splitChosenTokenTileID[3]);
 
-    // now that the token has been placed, we can remove the "wildlifeTokenPotentialType" attribute
-    $(".mapTileContainer").removeAttr("wildlifeTokenPotentialType");
+  // now that the token has been placed, we can remove the "wildlifeTokenPotentialType" attribute
+  $(".mapTileContainer").removeAttr("wildlifeTokenPotentialType");
 
-    // loop through the mapData variable, find the relevant row and column
-    for (let i = 0; i < mapData.length; i++) {
-      if (mapData[i][0].row == tokenRow) {
-        for (let j = 0; j < mapData[i].length; j++) {
-          if (mapData[i][j].column == tokenColumn) {
-            //run this code once the relevant row and column has been triggered, which will now target the tile details that has been chosen to place the token
+  // loop through the state.mapData variable, find the relevant row and column
+  for (let i = 0; i < state.mapData.length; i++) {
+    if (state.mapData[i][0].row == tokenRow) {
+      for (let j = 0; j < state.mapData[i].length; j++) {
+        if (state.mapData[i][j].column == tokenColumn) {
+          //run this code once the relevant row and column has been triggered, which will now target the tile details that has been chosen to place the token
 
-            // update the placedToken attribute in the class with the currently chosen wildlife token name
-            mapData[i][j].placedToken = currentChosenWildlife;
+          // update the placedToken attribute in the class with the currently chosen wildlife token name
+          state.mapData[i][j].placedToken = currentChosenWildlife;
 
-            // if the current tile only has one habitat it is a keystone tile, and the previously created variable is now updated to reflect this
-            if (mapData[i][j].habitats.length == 1) {
-              keystoneTile = true;
-            }
+          // if the current tile only has one habitat it is a keystone tile, and the previously created variable is now updated to reflect this
+          if (state.mapData[i][j].habitats.length == 1) {
+            keystoneTile = true;
           }
         }
       }
     }
+  }
 
-    // fade out the preview token that has up to now been generated inside the map hex element as a preview for the player
-    $(
-      ".mapTileContainer.placedTile.wildlifeTokenPotential .wildlifeToken"
-    ).fadeOut();
+  // fade out the preview token that has up to now been generated inside the map hex element as a preview for the player
+  $(".mapTileContainer.placedTile.wildlifeTokenPotential .wildlifeToken").fadeOut();
 
-    setTimeout(function () {
-      // now that time has elapsed for the previewed token to be hidden, it is now removed
-      $(
-        ".mapTileContainer.placedTile.wildlifeTokenPotential .wildlifeToken"
-      ).remove();
-    }, 400);
+  setTimeout(function () {
+    // now that time has elapsed for the previewed token to be hidden, it is now removed
+    $(".mapTileContainer.placedTile.wildlifeTokenPotential .wildlifeToken").remove();
+  }, 400);
 
-    // this variable will alter depending on whether the tile that has had the token placed on it is a keystone tile (there needs to be time to update the number of nature tokens the player has acces to + to animate the notification status).
-    var tileTokenResetTime = 1000;
+  // this variable will alter depending on whether the tile that has had the token placed on it is a keystone tile (there needs to be time to update the number of nature tokens the player has acces to + to animate the notification status).
+  var tileTokenResetTime = 1000;
 
-    if ($(".tokenTileContainer.chosenTokenTileContainer").length) {
-      // NON-NATURE CUBE TILE PLACEMENT CODE
-      // this part of the if statement is triggered if its a standard token+tile pairing that is currently being placed and resolved
+  if ($(".tokenTileContainer.chosenTokenTileContainer").length) {
+    // NON-NATURE CUBE TILE PLACEMENT CODE
+    // this part of the if statement is triggered if its a standard token+tile pairing that is currently being placed and resolved
 
-      // first of all, move the chosen token from the display area onto the chosen tile
+    // first of all, move the chosen token from the display area onto the chosen tile
 
-      $(
-        ".tokenTileContainer.chosenTokenTileContainer .tokenContainer .activeToken"
-      ).attr("wildlife", currentChosenWildlife);
-      $(
-        ".tokenTileContainer.chosenTokenTileContainer .tokenContainer .activeToken"
-      ).parentToAnimate($("#" + chosenTokenTileID), 1000);
+    $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer .activeToken").attr(
+      "wildlife",
+      currentChosenWildlife
+    );
+    $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer .activeToken").parentToAnimate(
+      $("#" + chosenTokenTileID),
+      1000
+    );
 
-      if (keystoneTile) {
-        // if the keystoneTile variable is true, immediately update the tileTokenResetTime variable to 2500 to give time for the nature cube addition animate to conclude
-        tileTokenResetTime = 2500;
+    if (keystoneTile) {
+      // if the keystoneTile variable is true, immediately update the tileTokenResetTime variable to 2500 to give time for the nature cube addition animate to conclude
+      tileTokenResetTime = 2500;
+
+      setTimeout(function () {
+        // ANIMATE NATURE TOKEN TO MOVE TO THE NATURE TOKEN BUTTON AREA!
+
+        natureCubesNum++;
+        updateNatureCubesNum(false);
+
+        let tileParentOffest = $("#" + chosenTokenTileID + " .activeToken").offset();
+
+        $("body").append(
+          '<div id="earnedNatureTokenContainer"><img class="earnedNatureToken" src="img/tokens/nature-token.png" /><p class="plusOneText">+1</p></div>'
+        );
+
+        let keystoneTileTopPos = tileParentOffest.top;
+        let keystoneTileLeftPos = tileParentOffest.left - 15;
+
+        $("#earnedNatureTokenContainer").css({
+          position: "absolute",
+          top: keystoneTileTopPos,
+          left: keystoneTileLeftPos,
+          zIndex: 9,
+        });
 
         setTimeout(function () {
-          // ANIMATE NATURE TOKEN TO MOVE TO THE NATURE TOKEN BUTTON AREA!
-
-          natureCubesNum++;
-          updateNatureCubesNum(false);
-
-          let tileParentOffest = $(
-            "#" + chosenTokenTileID + " .activeToken"
-          ).offset();
-
-          $("body").append(
-            '<div id="earnedNatureTokenContainer"><img class="earnedNatureToken" src="img/tokens/nature-token.png" /><p class="plusOneText">+1</p></div>'
-          );
-
-          let keystoneTileTopPos = tileParentOffest.top;
-          let keystoneTileLeftPos = tileParentOffest.left - 15;
-
-          $("#earnedNatureTokenContainer").css({
-            position: "absolute",
-            top: keystoneTileTopPos,
-            left: keystoneTileLeftPos,
-            zIndex: 9,
-          });
-
-          setTimeout(function () {
-            $("#earnedNatureTokenContainer").addClass("animationEnabled");
-          }, 10);
-
-          setTimeout(function () {
-            let animatedTopPos = keystoneTileTopPos - 120;
-            $("#earnedNatureTokenContainer").css({
-              opacity: 1,
-              top: animatedTopPos,
-            });
-          }, 20);
-
-          setTimeout(function () {
-            $("#earnedNatureTokenContainer").css("opacity", "0");
-          }, 1500);
-
-          setTimeout(function () {
-            $("#earnedNatureTokenContainer").remove();
-          }, 2500);
-        }, 1050);
-      }
-
-      // Now that enough time has elapsed to finish the animation of the token moving from the display area onto the chosen tile AND/OR the nature cube button to have the relevantr animation applied, the code runs the rest of the turn end upkeep
-      setTimeout(function () {
-        // the tiles and tokens are removed based on the solo mechanism ( the bottom-most tile and the bottom-most token)
-        removeSoloTilesTokens();
-
-        // the token that was moved from the display area onto the map now has it's activeToken class removed and has the .placedWildlifeToken class added to it in order to differentiate from future .activeTokens that will be chosen
-        $(".activeToken")
-          .addClass("placedWildlifeToken")
-          .removeClass("activeToken");
-        // the map hex that was chosen to place the token can now have the wildlife attribute removed from it since we will never need to preview anymore tokens in relation to that map hex again
-        $("#" + chosenTokenTileID + " .tileContainer").removeAttr("wildlife");
-      }, tileTokenResetTime);
-    } else if ($(".tokenTileContainer.potentialNatureCube").length) {
-      // NATURE CUBE TOKEN PLACEMENT CODE
-
-      // this part of the if statement is triggered if a nature cube has been used to choose the current tile and token
-      $(
-        ".tokenTileContainer.potentialNatureCube.natureCubeToken.chosenNatureCubeTokenParent .tokenContainer.chosenNatureCubeToken .activeToken"
-      ).attr("wildlife", currentChosenWildlife);
-      $(
-        ".tokenTileContainer.potentialNatureCube.natureCubeToken.chosenNatureCubeTokenParent .tokenContainer.chosenNatureCubeToken .activeToken"
-      ).parentToAnimate($("#" + chosenTokenTileID), 1000);
-
-      if (keystoneTile) {
-        // if the keystoneTile variable is true, immediately update the tileTokenResetTime variable to 2500 to give time for the nature cube addition animate to conclude
-        tileTokenResetTime = 2500;
+          $("#earnedNatureTokenContainer").addClass("animationEnabled");
+        }, 10);
 
         setTimeout(function () {
-          // ANIMATE NATURE TOKEN TO MOVE TO THE NATURE TOKEN BUTTON AREA!
-
-          natureCubesNum++;
-          updateNatureCubesNum(false);
-
-          let tileParentOffest = $(
-            "#" + chosenTokenTileID + " .activeToken"
-          ).offset();
-
-          $("body").append(
-            '<div id="earnedNatureTokenContainer"><img class="earnedNatureToken" src="img/tokens/nature-token.png" /><p class="plusOneText">+1</p></div>'
-          );
-
-          let keystoneTileTopPos = tileParentOffest.top;
-          let keystoneTileLeftPos = tileParentOffest.left - 15;
-
+          let animatedTopPos = keystoneTileTopPos - 120;
           $("#earnedNatureTokenContainer").css({
-            position: "absolute",
-            top: keystoneTileTopPos,
-            left: keystoneTileLeftPos,
-            zIndex: 9,
+            opacity: 1,
+            top: animatedTopPos,
           });
+        }, 20);
 
-          setTimeout(function () {
-            $("#earnedNatureTokenContainer").addClass("animationEnabled");
-          }, 10);
+        setTimeout(function () {
+          $("#earnedNatureTokenContainer").css("opacity", "0");
+        }, 1500);
 
-          setTimeout(function () {
-            let animatedTopPos = keystoneTileTopPos - 120;
-            $("#earnedNatureTokenContainer").css({
-              opacity: 1,
-              top: animatedTopPos,
-            });
-          }, 20);
-
-          setTimeout(function () {
-            $("#earnedNatureTokenContainer").css("opacity", "0");
-          }, 1100);
-
-          setTimeout(function () {
-            $("#earnedNatureTokenContainer").remove();
-          }, 2500);
-        }, 1050);
-      }
-
-      // Now that enough time has elapsed to finish the animation of the token moving from the display area onto the chosen tile AND/OR the nature cube button to have the relevantr animation applied, the code runs the rest of the turn end upkeep
-      setTimeout(function () {
-        // if the user previously cleared duplicates on a previous turn (given they can only do this once per turn), they now gain the ability back since it's now a new turn
-        duplicatesClearedThisTurn = false;
-        // the tiles and tokens are removed based on the solo mechanism ( the bottom-most tile and the bottom-most token)
-
-        $(".tokenTileContainer")
-          .removeClass("potentialNatureCube")
-          .addClass("finishedNatureCubePlacement");
-
-        removeSoloTilesTokens();
-        // the .potentialNatureCube class is removed ready for the next turn
-        // $('.potentialNatureCube').removeClass('potentialNatureCube');
-        // the token that was moved from the display area onto the map now has it's activeToken class removed and has the .placedWildlifeToken class added to it in order to differentiate from future .activeTokens that will be chosen
-        $(".activeToken")
-          .addClass("placedWildlifeToken")
-          .removeClass("activeToken");
-        currentChosenWildlife = "";
-        // the global variable "currentChosenWildlife" that corresponds with the currently chosen token is cleared ready for the next turn
-        $("#" + chosenTokenTileID + " .tileContainer").removeAttr("wildlife");
-
-        // remove all natureCube associated classes from the displayed area
-        $(".natureCubeToken").removeClass("natureCubeToken");
-        $(".chosenNatureCubeToken").removeClass("chosenNatureCubeToken");
-        $(".chosenNatureCubeTokenParent").removeClass(
-          "chosenNatureCubeTokenParent"
-        );
-        $(".chosenNatureCubeTileParent").removeClass(
-          "chosenNatureCubeTileParent"
-        );
-      }, tileTokenResetTime);
+        setTimeout(function () {
+          $("#earnedNatureTokenContainer").remove();
+        }, 2500);
+      }, 1050);
     }
 
-    // hide the small wildlife tokens the are "printed" on the tile now that is has a token placed on it
-    $("#" + chosenTokenTileID + " .tileContainer .tileToken").fadeOut();
+    // Now that enough time has elapsed to finish the animation of the token moving from the display area onto the chosen tile AND/OR the nature cube button to have the relevantr animation applied, the code runs the rest of the turn end upkeep
+    setTimeout(function () {
+      // the tiles and tokens are removed based on the solo mechanism ( the bottom-most tile and the bottom-most token)
+      removeSoloTilesTokens();
 
-    // remove the .wildlifeTokenPotential since we're not needing to preview a token on the valid map hexes anymore
-    $(".wildlifeTokenPotential").removeClass("wildlifeTokenPotential");
+      // the token that was moved from the display area onto the map now has it's activeToken class removed and has the .placedWildlifeToken class added to it in order to differentiate from future .activeTokens that will be chosen
+      $(".activeToken").addClass("placedWildlifeToken").removeClass("activeToken");
+      // the map hex that was chosen to place the token can now have the wildlife attribute removed from it since we will never need to preview anymore tokens in relation to that map hex again
+      $("#" + chosenTokenTileID + " .tileContainer").removeAttr("wildlife");
+    }, tileTokenResetTime);
+  } else if ($(".tokenTileContainer.potentialNatureCube").length) {
+    // NATURE CUBE TOKEN PLACEMENT CODE
+
+    // this part of the if statement is triggered if a nature cube has been used to choose the current tile and token
+    $(
+      ".tokenTileContainer.potentialNatureCube.natureCubeToken.chosenNatureCubeTokenParent .tokenContainer.chosenNatureCubeToken .activeToken"
+    ).attr("wildlife", currentChosenWildlife);
+    $(
+      ".tokenTileContainer.potentialNatureCube.natureCubeToken.chosenNatureCubeTokenParent .tokenContainer.chosenNatureCubeToken .activeToken"
+    ).parentToAnimate($("#" + chosenTokenTileID), 1000);
+
+    if (keystoneTile) {
+      // if the keystoneTile variable is true, immediately update the tileTokenResetTime variable to 2500 to give time for the nature cube addition animate to conclude
+      tileTokenResetTime = 2500;
+
+      setTimeout(function () {
+        // ANIMATE NATURE TOKEN TO MOVE TO THE NATURE TOKEN BUTTON AREA!
+
+        natureCubesNum++;
+        updateNatureCubesNum(false);
+
+        let tileParentOffest = $("#" + chosenTokenTileID + " .activeToken").offset();
+
+        $("body").append(
+          '<div id="earnedNatureTokenContainer"><img class="earnedNatureToken" src="img/tokens/nature-token.png" /><p class="plusOneText">+1</p></div>'
+        );
+
+        let keystoneTileTopPos = tileParentOffest.top;
+        let keystoneTileLeftPos = tileParentOffest.left - 15;
+
+        $("#earnedNatureTokenContainer").css({
+          position: "absolute",
+          top: keystoneTileTopPos,
+          left: keystoneTileLeftPos,
+          zIndex: 9,
+        });
+
+        setTimeout(function () {
+          $("#earnedNatureTokenContainer").addClass("animationEnabled");
+        }, 10);
+
+        setTimeout(function () {
+          let animatedTopPos = keystoneTileTopPos - 120;
+          $("#earnedNatureTokenContainer").css({
+            opacity: 1,
+            top: animatedTopPos,
+          });
+        }, 20);
+
+        setTimeout(function () {
+          $("#earnedNatureTokenContainer").css("opacity", "0");
+        }, 1100);
+
+        setTimeout(function () {
+          $("#earnedNatureTokenContainer").remove();
+        }, 2500);
+      }, 1050);
+    }
+
+    // Now that enough time has elapsed to finish the animation of the token moving from the display area onto the chosen tile AND/OR the nature cube button to have the relevantr animation applied, the code runs the rest of the turn end upkeep
+    setTimeout(function () {
+      // if the user previously cleared duplicates on a previous turn (given they can only do this once per turn), they now gain the ability back since it's now a new turn
+      duplicatesClearedThisTurn = false;
+      // the tiles and tokens are removed based on the solo mechanism ( the bottom-most tile and the bottom-most token)
+
+      $(".tokenTileContainer").removeClass("potentialNatureCube").addClass("finishedNatureCubePlacement");
+
+      removeSoloTilesTokens();
+      // the .potentialNatureCube class is removed ready for the next turn
+      // $('.potentialNatureCube').removeClass('potentialNatureCube');
+      // the token that was moved from the display area onto the map now has it's activeToken class removed and has the .placedWildlifeToken class added to it in order to differentiate from future .activeTokens that will be chosen
+      $(".activeToken").addClass("placedWildlifeToken").removeClass("activeToken");
+      currentChosenWildlife = "";
+      // the global variable "currentChosenWildlife" that corresponds with the currently chosen token is cleared ready for the next turn
+      $("#" + chosenTokenTileID + " .tileContainer").removeAttr("wildlife");
+
+      // remove all natureCube associated classes from the displayed area
+      $(".natureCubeToken").removeClass("natureCubeToken");
+      $(".chosenNatureCubeToken").removeClass("chosenNatureCubeToken");
+      $(".chosenNatureCubeTokenParent").removeClass("chosenNatureCubeTokenParent");
+      $(".chosenNatureCubeTileParent").removeClass("chosenNatureCubeTileParent");
+    }, tileTokenResetTime);
   }
-);
+
+  // hide the small wildlife tokens the are "printed" on the tile now that is has a token placed on it
+  $("#" + chosenTokenTileID + " .tileContainer .tileToken").fadeOut();
+
+  // remove the .wildlifeTokenPotential since we're not needing to preview a token on the valid map hexes anymore
+  $(".wildlifeTokenPotential").removeClass("wildlifeTokenPotential");
+});
 
 $(document).on(touchEvent, "#natureCubePickAnyTileToken", function () {
   // This code is actioned once a player has clicked the "Nature Cube" button AND clicked the "Use Nature Cube" confirmation button
@@ -1345,9 +1126,7 @@ $(document).on(touchEvent, "#natureCubePickAnyTileToken", function () {
   // Show the nature cube related buttons in the tile placement options box (which will only be displayed once a tile has been placed), and hide the non-nature cube related buttons
   $(".nonNatureCubeButton").hide();
   $(".natureCubeButton").show();
-  $(".mobileTilePlacementOptions .mobileTilePlacementOption").addClass(
-    "natureCubeMode"
-  );
+  $(".mobileTilePlacementOptions .mobileTilePlacementOption").addClass("natureCubeMode");
 
   // Remove a nature cube and run the updateNatureCubesNum() function to update the amount of nature cubes available displayed on the button
   natureCubesNum--;
@@ -1398,100 +1177,74 @@ function clearAnyTokensWithNatureCube() {
   $("#natureCubesClearAnyNumberOfTokensModal").addClass("is-active");
 }
 
-$(document).on(
-  touchEvent,
-  "#natureCubesClearAnyNumberOfTokensModal .closeModalTrigger",
-  function () {
-    // now the player will be choosing a token to place, add the .natureCubeToken class to each tile+token container
+$(document).on(touchEvent, "#natureCubesClearAnyNumberOfTokensModal .closeModalTrigger", function () {
+  // now the player will be choosing a token to place, add the .natureCubeToken class to each tile+token container
 
-    $(".tokenTileContainer").addClass("natureCubeClearTokens");
+  $(".tokenTileContainer").addClass("natureCubeClearTokens");
 
-    setTimeout(function () {
-      $("#tileTokenContainer").addClass("natureCubeTempDimensions");
-      // the revealButton class is added to the button to animate it sliding into view at the same time that the tileToken containers will slide down to allow for more room
-      $("#confirmClearSelectedTokens").addClass("revealButton");
-      // the revealButton class is added to the button to animate it sliding into view at the same time that the tileToken containers will slide down to allow for more room
-      $("#selectAllTokensToClear").addClass("revealButton");
-    }, 50);
-  }
-);
+  setTimeout(function () {
+    $("#tileTokenContainer").addClass("natureCubeTempDimensions");
+    // the revealButton class is added to the button to animate it sliding into view at the same time that the tileToken containers will slide down to allow for more room
+    $("#confirmClearSelectedTokens").addClass("revealButton");
+    // the revealButton class is added to the button to animate it sliding into view at the same time that the tileToken containers will slide down to allow for more room
+    $("#selectAllTokensToClear").addClass("revealButton");
+  }, 50);
+});
 
 $(document).on(touchEvent, "#selectAllTokensToClear", function () {
   $("#confirmClearSelectedTokens").removeAttr("disabled");
 
-  $(
-    ".tokenTileContainer.natureCubeClearTokens .tokenContainer:not(.confirmedTokenToClear)"
-  ).addClass("lockAllTokens");
+  $(".tokenTileContainer.natureCubeClearTokens .tokenContainer:not(.confirmedTokenToClear)").addClass("lockAllTokens");
 
   selectAllTokensToClearFunction();
 
-  $(
-    ".tokenTileContainer.natureCubeClearTokens .tokenContainer:not(.confirmedTokenToClear)"
-  ).addClass("currentTokenAnimation");
-  $(
-    ".tokenTileContainer.natureCubeClearTokens .tokenContainer:not(.confirmedTokenToClear) .token"
-  ).fadeOut();
-  $(
-    ".tokenTileContainer.natureCubeClearTokens .tokenContainer:not(.confirmedTokenToClear) .activeToken"
-  ).fadeIn();
+  $(".tokenTileContainer.natureCubeClearTokens .tokenContainer:not(.confirmedTokenToClear)").addClass(
+    "currentTokenAnimation"
+  );
+  $(".tokenTileContainer.natureCubeClearTokens .tokenContainer:not(.confirmedTokenToClear) .token").fadeOut();
+  $(".tokenTileContainer.natureCubeClearTokens .tokenContainer:not(.confirmedTokenToClear) .activeToken").fadeIn();
 
   setTimeout(function () {
-    $(".tokenTileContainer.natureCubeClearTokens .tokenContainer").addClass(
-      "confirmedTokenToClear"
+    $(".tokenTileContainer.natureCubeClearTokens .tokenContainer").addClass("confirmedTokenToClear");
+    $(".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation .token").remove();
+    $(".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation").removeClass(
+      "currentTokenAnimation"
     );
-    $(
-      ".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation .token"
-    ).remove();
-    $(
-      ".tokenTileContainer.natureCubeClearTokens .tokenContainer.currentTokenAnimation"
-    ).removeClass("currentTokenAnimation");
     $(".lockAllTokens").removeClass("lockAllTokens");
   }, 400);
 });
 
-$(document).on(
-  touchEvent,
-  "#confirmClearSelectedTokens:not([disabled])",
-  function () {
-    $("#confirmClearSelectedTokens").attr("disabled", "disabled");
-    $("#selectAllTokensToClear").attr("disabled", "disabled");
+$(document).on(touchEvent, "#confirmClearSelectedTokens:not([disabled])", function () {
+  $("#confirmClearSelectedTokens").attr("disabled", "disabled");
+  $("#selectAllTokensToClear").attr("disabled", "disabled");
 
-    // now the player will be choosing a token to place, add the .natureCubeToken class to each tile+token container
+  // now the player will be choosing a token to place, add the .natureCubeToken class to each tile+token container
 
-    // now the player will be choosing a token to place, add the .natureCubeToken class to each tile+token container
+  // now the player will be choosing a token to place, add the .natureCubeToken class to each tile+token container
 
-    $(".natureCubeTempDimensions").removeClass("natureCubeTempDimensions");
-    $(".tokenTileContainer").addClass("inactive");
+  $(".natureCubeTempDimensions").removeClass("natureCubeTempDimensions");
+  $(".tokenTileContainer").addClass("inactive");
 
-    // now the player will be choosing a token to place, add the .natureCubeToken class to each tile+token container
+  // now the player will be choosing a token to place, add the .natureCubeToken class to each tile+token container
 
-    setTimeout(function () {
-      $(".tokenTileContainer.natureCubeClearTokens").removeClass(
-        "natureCubeClearTokens"
-      );
-    }, 700);
+  setTimeout(function () {
+    $(".tokenTileContainer.natureCubeClearTokens").removeClass("natureCubeClearTokens");
+  }, 700);
 
-    // the revealButton class is added to the button to animate it sliding into view at the same time that the tileToken containers will slide down to allow for more room
-    $("#confirmClearSelectedTokens").removeClass("revealButton");
-    // the revealButton class is added to the button to animate it sliding into view at the same time that the tileToken containers will slide down to allow for more room
-    $("#selectAllTokensToClear").removeClass("revealButton");
+  // the revealButton class is added to the button to animate it sliding into view at the same time that the tileToken containers will slide down to allow for more room
+  $("#confirmClearSelectedTokens").removeClass("revealButton");
+  // the revealButton class is added to the button to animate it sliding into view at the same time that the tileToken containers will slide down to allow for more room
+  $("#selectAllTokensToClear").removeClass("revealButton");
 
-    setTimeout(function () {
-      removeNatureCubeChosenTokens();
-    }, 600);
-  }
-);
+  setTimeout(function () {
+    removeNatureCubeChosenTokens();
+  }, 600);
+});
 
 function selectAllTokensToClearFunction() {
-  $(
-    ".tokenTileContainer.natureCubeClearTokens .tokenContainer:not(.confirmedTokenToClear)"
-  ).each(function () {
+  $(".tokenTileContainer.natureCubeClearTokens .tokenContainer:not(.confirmedTokenToClear)").each(function () {
     let currentWildlifeToken = $(this).attr("wildlifetoken");
-    $(this).append(
-      '<img class="activeToken" src="' +
-        tokenActiveImage[currentWildlifeToken] +
-        '" />'
-    );
+    $(this).append('<img class="activeToken" src="' + tokenActiveImage[currentWildlifeToken] + '" />');
   });
 }
 
@@ -1510,92 +1263,68 @@ $(document).on(touchEvent, "#natureCubeClearAllTokens", function () {
   removeDuplicateTokens(4);
 });
 
-$(document).on(
-  touchEvent,
-  ".tokenTileContainer.potentialNatureCube.natureCubeTile .tileContainer",
-  function () {
-    // this code runs when the player clicks one of the available displayed tiles WHILE in the Nature Cube mode
+$(document).on(touchEvent, ".tokenTileContainer.potentialNatureCube.natureCubeTile .tileContainer", function () {
+  // this code runs when the player clicks one of the available displayed tiles WHILE in the Nature Cube mode
 
-    // if there was a previously chosen nature cube tile, remove the following two classes, and remove the previously generated .selectedTileOutline element (the yellow hex border) in order to reset the previous choice
-    $(".chosenNatureCubeTile").removeClass("chosenNatureCubeTile");
-    $(".chosenNatureCubeTileParent").removeClass("chosenNatureCubeTileParent");
-    $(".selectedTileOutline").remove();
+  // if there was a previously chosen nature cube tile, remove the following two classes, and remove the previously generated .selectedTileOutline element (the yellow hex border) in order to reset the previous choice
+  $(".chosenNatureCubeTile").removeClass("chosenNatureCubeTile");
+  $(".chosenNatureCubeTileParent").removeClass("chosenNatureCubeTileParent");
+  $(".selectedTileOutline").remove();
 
-    // target the currently clicked on container and add the following two classes directly to the tileContainer and the tileContainers parent
-    $(this).addClass("chosenNatureCubeTile");
-    $(this).parent().addClass("chosenNatureCubeTileParent");
-    // insert the yellow hex border into the currently selected tileContainer to show which tile is now currently selected
-    $(this).append(
-      '<img class="selectedTileOutline" src="img/selectedTile.png" />'
-    );
+  // target the currently clicked on container and add the following two classes directly to the tileContainer and the tileContainers parent
+  $(this).addClass("chosenNatureCubeTile");
+  $(this).parent().addClass("chosenNatureCubeTileParent");
+  // insert the yellow hex border into the currently selected tileContainer to show which tile is now currently selected
+  $(this).append('<img class="selectedTileOutline" src="img/selectedTile.png" />');
 
-    // generate the opaque yellow hexes on the map to show all the possible placements for the currently selected tile
-    showPossibleTilePlacements("natureCube");
-  }
-);
+  // generate the opaque yellow hexes on the map to show all the possible placements for the currently selected tile
+  showPossibleTilePlacements("natureCube");
+});
 
 $(document).on(touchEvent, "#cancelInvalidTokenPlacement", function () {
   // if the current token is invalid (no valid tiles to place it on), and the player decides not to remove the token from the game, the whole tile placement is undone, to give the player of choosing another tile+token combination
   undoTilePlacementFunction();
 });
 
-$(document).on(
-  touchEvent,
-  "#cancelInvalidNatureCubeTokenPlacement",
-  function () {
-    // USING THE NATURE CUBE FUNCTION
-    // if the current token is invalid (no valid tiles to place it on), and the player decides not to remove the token from the game, then ONLY the active token classes and elements are reversed, since in the nature cube process, the tile and token placements are two separate processes.
+$(document).on(touchEvent, "#cancelInvalidNatureCubeTokenPlacement", function () {
+  // USING THE NATURE CUBE FUNCTION
+  // if the current token is invalid (no valid tiles to place it on), and the player decides not to remove the token from the game, then ONLY the active token classes and elements are reversed, since in the nature cube process, the tile and token placements are two separate processes.
 
-    // target the currently chosen wildlife token using the .chosenNatureCubeToken class and store the wildlife type in the "previouslyChosenToken" variable
-    var previouslyChosenToken = $(
-      ".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer.chosenNatureCubeToken"
-    ).attr("wildlifetoken");
-    // recreate the standard default token image in the currently chosen token container
-    $(
-      ".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer.chosenNatureCubeToken"
-    ).append(
-      '<img class="token" src="' + tokenImage[previouslyChosenToken] + '" />'
-    );
-    // fade in the newly created default image state of the declined token
-    $(
-      ".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer.chosenNatureCubeToken .token"
-    ).fadeIn();
-    // hide the active state image of the declined wildlife token
-    $(
-      ".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer .activeToken"
-    ).fadeOut();
-    // hide the active state image of the declined wildlife token
-    $(
-      ".tokenTileContainer.chosenNatureCubeTokenParent .tokenContainer.chosenNatureCubeToken"
-    ).addClass("previouslyChosenTokenContainer");
-    // remove the .chosenNatureCubeTokenParent and the .chosenNatureCubeToken classes since there is no currently active token choices again
-    $(".chosenNatureCubeTokenParent").removeClass(
-      "chosenNatureCubeTokenParent"
-    );
-    $(".chosenNatureCubeToken").removeClass("chosenNatureCubeToken");
+  // target the currently chosen wildlife token using the .chosenNatureCubeToken class and store the wildlife type in the "previouslyChosenToken" variable
+  var previouslyChosenToken = $(
+    ".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer.chosenNatureCubeToken"
+  ).attr("wildlifetoken");
+  // recreate the standard default token image in the currently chosen token container
+  $(".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer.chosenNatureCubeToken").append(
+    '<img class="token" src="' + tokenImage[previouslyChosenToken] + '" />'
+  );
+  // fade in the newly created default image state of the declined token
+  $(".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer.chosenNatureCubeToken .token").fadeIn();
+  // hide the active state image of the declined wildlife token
+  $(".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer .activeToken").fadeOut();
+  // hide the active state image of the declined wildlife token
+  $(".tokenTileContainer.chosenNatureCubeTokenParent .tokenContainer.chosenNatureCubeToken").addClass(
+    "previouslyChosenTokenContainer"
+  );
+  // remove the .chosenNatureCubeTokenParent and the .chosenNatureCubeToken classes since there is no currently active token choices again
+  $(".chosenNatureCubeTokenParent").removeClass("chosenNatureCubeTokenParent");
+  $(".chosenNatureCubeToken").removeClass("chosenNatureCubeToken");
 
-    setTimeout(function () {
-      // now tyhat enough time has elapsed, remove the old active token image of the previously declined token
-      $(
-        ".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer .activeToken"
-      ).remove();
-    }, 400);
-  }
-);
+  setTimeout(function () {
+    // now tyhat enough time has elapsed, remove the old active token image of the previously declined token
+    $(".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer .activeToken").remove();
+  }, 400);
+});
 
 $(document).on(touchEvent, "#confirmInvalidTokenPlacement", function () {
   // once the player has been warned that the currently chosen token cannot be placed anywhere and will be removed from the game, if they decide to proceed, the following function is run
   confirmInvalidTokenPlacementFunction();
 });
 
-$(document).on(
-  touchEvent,
-  "#confirmInvalidNatureCubeTokenPlacement",
-  function () {
-    // once the player has been warned that the currently chosen token (THROUGH THE NATURE CUBE PROCESS) cannot be placed anywhere and will be removed from the game, if they decide to proceed, the following function is run
-    confirmInvalidNatureCubeTokenPlacementFunction();
-  }
-);
+$(document).on(touchEvent, "#confirmInvalidNatureCubeTokenPlacement", function () {
+  // once the player has been warned that the currently chosen token (THROUGH THE NATURE CUBE PROCESS) cannot be placed anywhere and will be removed from the game, if they decide to proceed, the following function is run
+  confirmInvalidNatureCubeTokenPlacementFunction();
+});
 
 $(document).on(touchEvent, "#lastTurnModal .closeModalTrigger", function () {
   endOfGameSetup();
@@ -1628,9 +1357,7 @@ function setupNatureCubeTokenSelection() {
   // since the tile has been finalized, the tile placement options element can have the .showOptions class removed again to hide it
   $("#placedTileOptions").removeClass("showOptions");
 
-  $(".mobileTilePlacementOptions.activeTileOptions")
-    .addClass("inactiveTileOptions")
-    .removeClass("activeTileOptions");
+  $(".mobileTilePlacementOptions.activeTileOptions").addClass("inactiveTileOptions").removeClass("activeTileOptions");
 
   // remove the yellow colored border to show the active tile since there's no need for it now
   $(".selectedTileOutline").remove();
@@ -1687,10 +1414,7 @@ function confirmTilePlacement() {
     }
   }
 
-  if (
-    mapStats.centerRow - confirmedTileRow <
-    mapStats.tileExtremes.row.bottom
-  ) {
+  if (mapStats.centerRow - confirmedTileRow < mapStats.tileExtremes.row.bottom) {
     mapStats.tileExtremes.row.bottom = mapStats.centerRow - confirmedTileRow;
 
     if (mapStats.directionStatus.down == "tileLimit-locked") {
@@ -1702,12 +1426,8 @@ function confirmTilePlacement() {
   // convert the column string into a num and store in 'confirmedTileColumn' var
   var confirmedTileColumn = parseInt(splitConfirmedTileID[3]);
 
-  if (
-    mapStats.centerColumn - confirmedTileColumn >
-    mapStats.tileExtremes.column.left
-  ) {
-    mapStats.tileExtremes.column.left =
-      mapStats.centerColumn - confirmedTileColumn;
+  if (mapStats.centerColumn - confirmedTileColumn > mapStats.tileExtremes.column.left) {
+    mapStats.tileExtremes.column.left = mapStats.centerColumn - confirmedTileColumn;
 
     if (mapStats.directionStatus.left == "tileLimit-locked") {
       mapStats.directionStatus.left = "unlocked";
@@ -1715,12 +1435,8 @@ function confirmTilePlacement() {
     }
   }
 
-  if (
-    mapStats.centerColumn - confirmedTileColumn <
-    mapStats.tileExtremes.column.right
-  ) {
-    mapStats.tileExtremes.column.right =
-      mapStats.centerColumn - confirmedTileColumn;
+  if (mapStats.centerColumn - confirmedTileColumn < mapStats.tileExtremes.column.right) {
+    mapStats.tileExtremes.column.right = mapStats.centerColumn - confirmedTileColumn;
 
     if (mapStats.directionStatus.right == "tileLimit-locked") {
       mapStats.directionStatus.right = "unlocked";
@@ -1744,8 +1460,8 @@ function confirmTilePlacement() {
   // e.g. confirmedTileRotation = "300";
   var confirmedTileRotation = confirmedTile.attr("tilerotation");
 
-  // loop through the mapData array in order to update the newly placed tile information
-  for (let i = 0; i < mapData.length; i++) {
+  // loop through the state.mapData array in order to update the newly placed tile information
+  for (let i = 0; i < state.mapData.length; i++) {
     // we just need to target the first child under each top level tier in the array to ascertain what row the next level corresponds with
     // (the code is looking for row 20)
 
@@ -1756,11 +1472,11 @@ function confirmTilePlacement() {
     // 4: {row: 20, column: 13, placedTile: false, habitats: Array(0), wildlife: Array(0), …}
 
     // match = index 4
-    // mapData[4] contains the row that the code needs to update
+    // state.mapData[4] contains the row that the code needs to update
     // once the row matches that row of the map hex, that index is looped through to find the appropriate column
-    if (mapData[i][0].row == confirmedTileRow) {
-      for (let j = 0; j < mapData[i].length; j++) {
-        // mapData[4] = [
+    if (state.mapData[i][0].row == confirmedTileRow) {
+      for (let j = 0; j < state.mapData[i].length; j++) {
+        // state.mapData[4] = [
         // 0: {row: 20, column: 13, placedTile: false, habitats: Array(0), wildlife: Array(0), …}
         // 1: {row: 20, column: 14, placedTile: false, habitats: Array(0), wildlife: Array(0), …}
         // 2: {row: 20, column: 15, placedTile: false, habitats: Array(0), wildlife: Array(0), …}
@@ -1770,19 +1486,19 @@ function confirmTilePlacement() {
         // 6: {row: 20, column: 19, placedTile: false, habitats: Array(0), wildlife: Array(0), …}
         //]
 
-        if (mapData[i][j].column == confirmedTileColumn) {
-          // in example mapData[4][6] would match row-20-column-19 id
+        if (state.mapData[i][j].column == confirmedTileColumn) {
+          // in example state.mapData[4][6] would match row-20-column-19 id
           // now the code updates the details in that entry with the new information from the placed tile
 
-          mapData[i][j].placedTile = true;
-          mapData[i][j].rotation = confirmedTileRotation;
+          state.mapData[i][j].placedTile = true;
+          state.mapData[i][j].rotation = confirmedTileRotation;
 
           for (let k = 0; k < confirmedTileHabitats.length; k++) {
-            mapData[i][j].habitats.push(confirmedTileHabitats[k]);
+            state.mapData[i][j].habitats.push(confirmedTileHabitats[k]);
           }
 
           for (let l = 0; l < confirmedTileWildlife.length; l++) {
-            mapData[i][j].wildlife.push(confirmedTileWildlife[l]);
+            state.mapData[i][j].wildlife.push(confirmedTileWildlife[l]);
           }
         }
       }
@@ -1810,9 +1526,7 @@ function cancelTilePlacement(mode) {
     $(".inactive").removeClass("inactive");
   } else if (mode == "natureCubeTile") {
     // since the tile has already been moved from the display area onto the map - we now need to move the tile back FROM the map hex it's previously been moved to TO the same place in the display area it was taken from
-    $(
-      ".mapTileContainer .tileContainer.chosenNatureCubeTile.lockedIn"
-    ).parentToAnimate(
+    $(".mapTileContainer .tileContainer.chosenNatureCubeTile.lockedIn").parentToAnimate(
       $(".tokenTileContainer.chosenNatureCubeTileParent"),
       1000
     );
@@ -1824,9 +1538,7 @@ function cancelTilePlacement(mode) {
   // removing the "showOptions" class causes the option bar to retract until the next tile is placed
   $("#placedTileOptions").removeClass("showOptions");
 
-  $(".mobileTilePlacementOptions.activeTileOptions")
-    .addClass("inactiveTileOptions")
-    .removeClass("activeTileOptions");
+  $(".mobileTilePlacementOptions.activeTileOptions").addClass("inactiveTileOptions").removeClass("activeTileOptions");
 
   // the yellow border around the chosen hex is faded out since there is now no currently selected hex
   $(".selectedTileOutline").fadeOut();
@@ -1868,50 +1580,32 @@ function confirmInvalidTokenPlacementFunction() {
 
   // add the inactive version of the removed wildlife token intot he container, along with a red cross
   $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer").append(
-    '<img class="duplicateToken" src="' +
-      tokenInactiveImage[currentChosenWildlife] +
-      '" />'
+    '<img class="duplicateToken" src="' + tokenInactiveImage[currentChosenWildlife] + '" />'
   );
   $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer").append(
     '<img class="redCross" src="img/cross.png" />'
   );
 
   // fade out the activeToken class which corresponds with the active image of token
-  $(
-    ".tokenTileContainer.chosenTokenTileContainer .tokenContainer .activeToken"
-  ).fadeOut();
+  $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer .activeToken").fadeOut();
 
   // fade in the inactive version of the removed wildlife token and the cross to show to the user its about to be removed
-  $(
-    ".tokenTileContainer.chosenTokenTileContainer .tokenContainer .duplicateToken"
-  ).fadeIn();
-  $(
-    ".tokenTileContainer.chosenTokenTileContainer .tokenContainer .redCross"
-  ).fadeIn();
+  $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer .duplicateToken").fadeIn();
+  $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer .redCross").fadeIn();
 
   setTimeout(function () {
     // remove the previously hidden active version of the wildlife token
-    $(
-      ".tokenTileContainer.chosenTokenTileContainer .tokenContainer .activeToken"
-    ).remove();
+    $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer .activeToken").remove();
 
     // fade out the inactive version of the removed wildlifer token and the red cross to represent the token being completely removed from the game
-    $(
-      ".tokenTileContainer.chosenTokenTileContainer .tokenContainer .duplicateToken"
-    ).fadeOut();
-    $(
-      ".tokenTileContainer.chosenTokenTileContainer .tokenContainer .redCross"
-    ).fadeOut();
+    $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer .duplicateToken").fadeOut();
+    $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer .redCross").fadeOut();
   }, 500);
 
   setTimeout(function () {
     // now that time has elapsed for the inactive version of the removed token and the red cross to be hidden, they can now be removed from the game
-    $(
-      ".tokenTileContainer.chosenTokenTileContainer .tokenContainer .duplicateToken"
-    ).remove();
-    $(
-      ".tokenTileContainer.chosenTokenTileContainer .tokenContainer .redCross"
-    ).remove();
+    $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer .duplicateToken").remove();
+    $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer .redCross").remove();
 
     // now that the user has had their tile placed, and their token action finalized (in this case, the token removed from the game), the tile+tokens pairing that the solo player picks can now be removed from the game
     removeSoloTilesTokens();
@@ -1924,11 +1618,7 @@ function confirmInvalidNatureCubeTokenPlacementFunction() {
   // add the inactive version of the removed wildlife token intot he container, along with a red cross
   $(
     ".tokenTileContainer.potentialNatureCube.natureCubeToken.chosenNatureCubeTokenParent .tokenContainer.chosenNatureCubeToken"
-  ).append(
-    '<img class="duplicateToken" src="' +
-      tokenInactiveImage[currentChosenWildlife] +
-      '" />'
-  );
+  ).append('<img class="duplicateToken" src="' + tokenInactiveImage[currentChosenWildlife] + '" />');
   $(
     ".tokenTileContainer.potentialNatureCube.natureCubeToken.chosenNatureCubeTokenParent .tokenContainer.chosenNatureCubeToken"
   ).append('<img class="redCross" src="img/cross.png" />');
@@ -1973,9 +1663,7 @@ function confirmInvalidNatureCubeTokenPlacementFunction() {
     // remove all of the nature cube related classes from the various elements to prepare for the next turn
     $(".natureCubeToken").removeClass("natureCubeToken");
     $(".potentialNatureCube").removeClass("potentialNatureCube");
-    $(".chosenNatureCubeTokenParent").removeClass(
-      "chosenNatureCubeTokenParent"
-    );
+    $(".chosenNatureCubeTokenParent").removeClass("chosenNatureCubeTokenParent");
     $(".chosenNatureCubeTileParent").removeClass("chosenNatureCubeTileParent");
 
     // now that the user has had their tile placed, and their token action finalized (in this case, the token removed from the game), the tile+tokens pairing that the solo player picks can now be removed from the game
@@ -2000,16 +1688,16 @@ function undoTilePlacementFunction() {
   var lastPlacedTileColumn = parseInt(splitlastPlacedTileID[3]);
 
   // perform the loop to find the hex information by targetting the row and column information
-  for (let i = 0; i < mapData.length; i++) {
-    if (mapData[i][0].row == lastPlacedTileRow) {
-      for (let j = 0; j < mapData[i].length; j++) {
-        if (mapData[i][j].column == lastPlacedTileColumn) {
+  for (let i = 0; i < state.mapData.length; i++) {
+    if (state.mapData[i][0].row == lastPlacedTileRow) {
+      for (let j = 0; j < state.mapData[i].length; j++) {
+        if (state.mapData[i][j].column == lastPlacedTileColumn) {
           // once the row and column match (which signifies that the correct tile is being targetted), reset all of the tile information
-          mapData[i][j].placedTile = false;
-          mapData[i][j].placedToken = false;
-          mapData[i][j].rotation = 0;
-          mapData[i][j].habitats = [];
-          mapData[i][j].wildlife = [];
+          state.mapData[i][j].placedTile = false;
+          state.mapData[i][j].placedToken = false;
+          state.mapData[i][j].rotation = 0;
+          state.mapData[i][j].habitats = [];
+          state.mapData[i][j].wildlife = [];
         }
       }
     }
@@ -2025,25 +1713,15 @@ function undoTilePlacementFunction() {
     );
 
     // this condition is met if the user has clicked on a token ready to place it on a valid map hex AND THEN CLICKED THE UNDO LAST TILE PLACEMENT BUTTON
-    if (
-      $(
-        ".tokenTileContainer.chosenTokenTileContainer .tokenContainer .activeToken"
-      ).length
-    ) {
+    if ($(".tokenTileContainer.chosenTokenTileContainer .tokenContainer .activeToken").length) {
       // Create the standard default token image and insert it into the current chosen token container
       $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer").append(
-        '<img class="token" src="' +
-          tokenActiveImage[currentChosenWildlife] +
-          '">'
+        '<img class="token" src="' + tokenActiveImage[currentChosenWildlife] + '">'
       );
 
       // Fade out the active token image (which we already knows exists based on this if statement condition being met) and at the same time fade in the newly created standard default token image
-      $(
-        ".tokenTileContainer.chosenTokenTileContainer .tokenContainer .activeToken"
-      ).fadeOut();
-      $(
-        ".tokenTileContainer.chosenTokenTileContainer .tokenContainer .token"
-      ).fadeIn();
+      $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer .activeToken").fadeOut();
+      $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer .token").fadeIn();
 
       // remove the wildlife classes and attributes from the valid map hex tiles
       $(".wildlifeTokenPotential").removeAttr("wildlifetokenpotentialtype");
@@ -2051,9 +1729,7 @@ function undoTilePlacementFunction() {
 
       setTimeout(function () {
         //now that enough time has elapsed remove the activeToken that's previously been hidden
-        $(
-          ".tokenTileContainer.chosenTokenTileContainer .tokenContainer .activeToken"
-        ).remove();
+        $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer .activeToken").remove();
         // reset the currentChosenWildlife variable
         currentChosenWildlife = "";
       }, 400);
@@ -2064,9 +1740,7 @@ function undoTilePlacementFunction() {
 
     setTimeout(function () {
       // remove the .chosenTokenTileContainer and the .inactive classes ready for the player to choose a different tile+token combination
-      $(".tokenTileContainer.chosenTokenTileContainer").removeClass(
-        "chosenTokenTileContainer"
-      );
+      $(".tokenTileContainer.chosenTokenTileContainer").removeClass("chosenTokenTileContainer");
       $(".inactive").removeClass("inactive");
 
       // remove the .lastPlacedTile since there are now no last placed tiles this turn
@@ -2081,9 +1755,7 @@ function undoTilePlacementFunction() {
       $("#" + lastPlacedTileID).removeClass("placedTile");
 
       if (!$("#" + lastPlacedTileID + " .tileOutline").length) {
-        $("#" + lastPlacedTileID).html(
-          '<img class="tileOutline" src="img/tileOutline.png">'
-        );
+        $("#" + lastPlacedTileID).html('<img class="tileOutline" src="img/tileOutline.png">');
       }
     }, 500);
   } else if ($(".tokenTileContainer.potentialNatureCube").length) {
@@ -2096,25 +1768,15 @@ function undoTilePlacementFunction() {
     );
 
     // Again the code checks to see if another token has previously been chosen - if it has the below code is actioned in order to remove the appropraite elements and classes
-    if (
-      $(
-        ".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer .activeToken"
-      ).length
-    ) {
+    if ($(".tokenTileContainer.potentialNatureCube.natureCubeToken .tokenContainer .activeToken").length) {
       // Create the standard default token image and insert it into the current chosen token container
-      $(
-        ".tokenTileContainer.chosenNatureCubeTokenParent .tokenContainer"
-      ).append(
+      $(".tokenTileContainer.chosenNatureCubeTokenParent .tokenContainer").append(
         '<img class="token" src="' + tokenImage[currentChosenWildlife] + '">'
       );
 
       // Fade out the active token image (which we already knows exists based on this if statement condition being met) and at the same time fade in the newly created standard default token image
-      $(
-        ".tokenTileContainer.chosenNatureCubeTokenParent .tokenContainer .activeToken"
-      ).fadeOut();
-      $(
-        ".tokenTileContainer.chosenNatureCubeTokenParent .tokenContainer .token"
-      ).fadeIn();
+      $(".tokenTileContainer.chosenNatureCubeTokenParent .tokenContainer .activeToken").fadeOut();
+      $(".tokenTileContainer.chosenNatureCubeTokenParent .tokenContainer .token").fadeIn();
 
       // remove the wildlife classes and attributes from the valid map hex tiles
       $(".wildlifeTokenPotential").removeAttr("wildlifetokenpotentialtype");
@@ -2122,13 +1784,9 @@ function undoTilePlacementFunction() {
 
       setTimeout(function () {
         //now that enough time has elapsed remove the activeToken that's previously been hidden
-        $(
-          ".tokenTileContainer.chosenNatureCubeTokenParent .tokenContainer .activeToken"
-        ).remove();
+        $(".tokenTileContainer.chosenNatureCubeTokenParent .tokenContainer .activeToken").remove();
         // remove the chosenNatureCubeTokenParent class since there now no chosen tile
-        $(".chosenNatureCubeTokenParent").removeClass(
-          "chosenNatureCubeTokenParent"
-        );
+        $(".chosenNatureCubeTokenParent").removeClass("chosenNatureCubeTokenParent");
         // reset the currentChosenWildlife variable
         currentChosenWildlife = "";
       }, 400);
@@ -2139,9 +1797,7 @@ function undoTilePlacementFunction() {
       $(".inactive").removeClass("inactive");
 
       // the .chosenNatureCubeTileParent class is removed, since after undoing the tile placement - no tile has been selected yet
-      $(".chosenNatureCubeTileParent").removeClass(
-        "chosenNatureCubeTileParent"
-      );
+      $(".chosenNatureCubeTileParent").removeClass("chosenNatureCubeTileParent");
 
       // remove the .chosenNatureCubeToken JUST IN CASE the user had already selected a token before clicking the Undo Last Tile Placement button
       $(".chosenNatureCubeToken").removeClass("chosenNatureCubeToken");
@@ -2158,9 +1814,7 @@ function undoTilePlacementFunction() {
       $("#" + lastPlacedTileID).removeClass("placedTile");
 
       if (!$("#" + lastPlacedTileID + " .tileOutline").length) {
-        $("#" + lastPlacedTileID).html(
-          '<img class="tileOutline" src="img/tileOutline.png">'
-        );
+        $("#" + lastPlacedTileID).html('<img class="tileOutline" src="img/tileOutline.png">');
       }
     }, 500);
   }
@@ -2170,9 +1824,7 @@ function updateNatureCubesNum(activateButton) {
   // first update the amount of nature cubes on the span which corresponds with number visible on the "Nature Cubes" button
   $(".numNatureCubesInfo").html(natureCubesNum);
   // If there are no Nature Cubes, the button is deactivcated by default
-  $(
-    "#natureCubesModal .modal-card .modal-card-body #natureTokenAmount .numNatureCubes"
-  ).html(natureCubesNum);
+  $("#natureCubesModal .modal-card .modal-card-body #natureTokenAmount .numNatureCubes").html(natureCubesNum);
   if (natureCubesNum == 0) {
     $(".useNatureCube.button").attr("disabled", "disabled");
   } else if (activateButton) {
@@ -2199,10 +1851,7 @@ function removeSoloTilesTokens() {
     // since the solo AI will be taking whatever the bottom-most tile is remaining, we loop through the reverseTileTokenOrder variable until we get a match to find out what bottom-most tile still exists in order to remove it
     for (let i = 0; i < 4; i++) {
       // working our way up from the bottom, if the tile doesn't exist (the human player has already chosen it) the code simply works it's way up to the next available container to perform the same check
-      if (
-        $('.tokenTileContainer[tokentilenum="' + i + '"] .tileContainer')
-          .length == 0
-      ) {
+      if ($('.tokenTileContainer[tokentilenum="' + i + '"] .tileContainer').length == 0) {
         // once the code identifies the bottom-most tile that exists, it stores it into the chosenTile variable
         chosenTile = i;
         // the code then breaks since we don't want the value in the variable to be overridden
@@ -2214,11 +1863,7 @@ function removeSoloTilesTokens() {
     // since the solo AI will be taking whatever the bottom-most token is remaining, we loop through the reverseTileTokenOrder variable until we get a match to find out what bottom-most token still exists in order to remove it
     for (let j = 0; j < 4; j++) {
       // working our way up from the bottom, if the token doesn't exist (the human player has already chosen it) the code simply works it's way up to the next available container to perform the same check
-      if (
-        $(
-          '.tokenTileContainer[tokentilenum="' + j + '"] .tokenContainer .token'
-        ).length == 0
-      ) {
+      if ($('.tokenTileContainer[tokentilenum="' + j + '"] .tokenContainer .token').length == 0) {
         // once the code identifies the bottom-most token that exists, it stores it into the chosenToken variable
         chosenToken = j;
         // the code then breaks since we don't want the value in the variable to be overridden
@@ -2227,6 +1872,7 @@ function removeSoloTilesTokens() {
     }
 
     // update state
+    state.saveMap();
     state.takeTileAndToken(chosenTile, chosenToken);
 
     //pickNewTilesTokens();
@@ -2293,13 +1939,7 @@ function pickNewTilesTokens() {
 
   for (let i = 0; i < reverseTileTokenOrder.length; i++) {
     // since the .tileContainer is either moved (human player), or removed from the game (solo AI), checking to see if it exists gives an indication if that particular tile is left over
-    if (
-      $(
-        '.tokenTileContainer[tokentilenum="' +
-          reverseTileTokenOrder[i] +
-          '"] .tileContainer'
-      ).length
-    ) {
+    if ($('.tokenTileContainer[tokentilenum="' + reverseTileTokenOrder[i] + '"] .tileContainer').length) {
       // if it does exists, store the number of which container it corresponds with in the leftOverTiles array
       leftOverTiles.push(reverseTileTokenOrder[i]);
     }
@@ -2307,13 +1947,7 @@ function pickNewTilesTokens() {
 
   for (let j = 0; j < reverseTileTokenOrder.length; j++) {
     // since the .token is either moved (human player), or removed from the game (solo AI), checking to see if it exists gives an indication if that particular token is left over
-    if (
-      $(
-        '.tokenTileContainer[tokentilenum="' +
-          reverseTileTokenOrder[j] +
-          '"] .tokenContainer .token'
-      ).length
-    ) {
+    if ($('.tokenTileContainer[tokentilenum="' + reverseTileTokenOrder[j] + '"] .tokenContainer .token').length) {
       // if it does exists, store the number of which container it corresponds with in the leftOverTokens array
       leftOverTokens.push(reverseTileTokenOrder[j]);
     }
@@ -2340,15 +1974,10 @@ function pickNewTilesTokens() {
     // displayedTokens[currentTileTokenContainer] = thisToken[0];
 
     // generate the tile and token html
-    var nextTokenTileHTML =
-      '<div class="tokenTileContainer" tokentilenum="' +
-      newTileTokenContainerPositions[k] +
-      '">';
+    var nextTokenTileHTML = '<div class="tokenTileContainer" tokentilenum="' + newTileTokenContainerPositions[k] + '">';
     nextTokenTileHTML += generateDisplayTile(thisTile[0]);
-    nextTokenTileHTML +=
-      '<div class="tokenContainer" wildlifetoken="' + thisToken[0] + '">';
-    nextTokenTileHTML +=
-      '<img class="token" src="' + tokenImage[thisToken[0]] + '" />';
+    nextTokenTileHTML += '<div class="tokenContainer" wildlifetoken="' + thisToken[0] + '">';
+    nextTokenTileHTML += '<img class="token" src="' + tokenImage[thisToken[0]] + '" />';
     nextTokenTileHTML += "</div>";
     nextTokenTileHTML += "</div>";
     // add the newly created tile+token container into the same container with the rest of them
@@ -2357,38 +1986,24 @@ function pickNewTilesTokens() {
   }
 
   // the tiles that are left over are pushed down into the bottom two slots
-  $(
-    '.tokenTileContainer[tokentilenum="' +
-      leftOverTiles[0] +
-      '"] .tileContainer'
-  ).addClass("movingElementOpacity");
-  $(
-    '.tokenTileContainer[tokentilenum="' +
-      leftOverTiles[0] +
-      '"] .tileContainer'
-  ).parentToAnimate($('.tokenTileContainer[tokentilenum="3"]'), 1000);
-  $(
-    '.tokenTileContainer[tokentilenum="' +
-      leftOverTiles[1] +
-      '"] .tileContainer'
-  ).addClass("movingElementOpacity");
-  $(
-    '.tokenTileContainer[tokentilenum="' +
-      leftOverTiles[1] +
-      '"] .tileContainer'
-  ).parentToAnimate($('.tokenTileContainer[tokentilenum="2"]'), 1000);
+  $('.tokenTileContainer[tokentilenum="' + leftOverTiles[0] + '"] .tileContainer').addClass("movingElementOpacity");
+  $('.tokenTileContainer[tokentilenum="' + leftOverTiles[0] + '"] .tileContainer').parentToAnimate(
+    $('.tokenTileContainer[tokentilenum="3"]'),
+    1000
+  );
+  $('.tokenTileContainer[tokentilenum="' + leftOverTiles[1] + '"] .tileContainer').addClass("movingElementOpacity");
+  $('.tokenTileContainer[tokentilenum="' + leftOverTiles[1] + '"] .tileContainer').parentToAnimate(
+    $('.tokenTileContainer[tokentilenum="2"]'),
+    1000
+  );
 
   // the new tiles that are generated offscreen are pushed down from offscreen into the top two slots
-  $('.tokenTileContainer[tokentilenum="-1"] .tileContainer').addClass(
-    "movingElementOpacity"
-  );
+  $('.tokenTileContainer[tokentilenum="-1"] .tileContainer').addClass("movingElementOpacity");
   $('.tokenTileContainer[tokentilenum="-1"] .tileContainer').parentToAnimate(
     $('.tokenTileContainer[tokentilenum="1"]'),
     1000
   );
-  $('.tokenTileContainer[tokentilenum="-2"] .tileContainer').addClass(
-    "movingElementOpacity"
-  );
+  $('.tokenTileContainer[tokentilenum="-2"] .tileContainer').addClass("movingElementOpacity");
   $('.tokenTileContainer[tokentilenum="-2"] .tileContainer').parentToAnimate(
     $('.tokenTileContainer[tokentilenum="0"]'),
     1000
@@ -2396,80 +2011,48 @@ function pickNewTilesTokens() {
 
   // the new tiles that are generated offscreen are pushed down from offscreen into the top two slots
   // at the same time, the wildlifetoken attribute is updated on the tokenContainer to reflect the new wildlifetoken that has just been moved into it
-  $(
-    '.tokenTileContainer[tokentilenum="' +
-      leftOverTokens[0] +
-      '"] .tokenContainer .token'
-  ).addClass("movingElementOpacity");
-  $(
-    '.tokenTileContainer[tokentilenum="' +
-      leftOverTokens[0] +
-      '"] .tokenContainer .token'
-  ).parentToAnimate(
+  $('.tokenTileContainer[tokentilenum="' + leftOverTokens[0] + '"] .tokenContainer .token').addClass(
+    "movingElementOpacity"
+  );
+  $('.tokenTileContainer[tokentilenum="' + leftOverTokens[0] + '"] .tokenContainer .token').parentToAnimate(
     $('.tokenTileContainer[tokentilenum="3"] .tokenContainer'),
     1000
   );
   $('.tokenTileContainer[tokentilenum="3"] .tokenContainer').attr(
     "wildlifetoken",
-    $(
-      '.tokenTileContainer[tokentilenum="' +
-        leftOverTokens[0] +
-        '"] .tokenContainer'
-    ).attr("wildlifetoken")
+    $('.tokenTileContainer[tokentilenum="' + leftOverTokens[0] + '"] .tokenContainer').attr("wildlifetoken")
   );
-  $(
-    '.tokenTileContainer[tokentilenum="' +
-      leftOverTokens[1] +
-      '"] .tokenContainer .token'
-  ).addClass("movingElementOpacity");
-  $(
-    '.tokenTileContainer[tokentilenum="' +
-      leftOverTokens[1] +
-      '"] .tokenContainer .token'
-  ).parentToAnimate(
+  $('.tokenTileContainer[tokentilenum="' + leftOverTokens[1] + '"] .tokenContainer .token').addClass(
+    "movingElementOpacity"
+  );
+  $('.tokenTileContainer[tokentilenum="' + leftOverTokens[1] + '"] .tokenContainer .token').parentToAnimate(
     $('.tokenTileContainer[tokentilenum="2"] .tokenContainer'),
     1000
   );
   $('.tokenTileContainer[tokentilenum="2"] .tokenContainer').attr(
     "wildlifetoken",
-    $(
-      '.tokenTileContainer[tokentilenum="' +
-        leftOverTokens[1] +
-        '"] .tokenContainer'
-    ).attr("wildlifetoken")
+    $('.tokenTileContainer[tokentilenum="' + leftOverTokens[1] + '"] .tokenContainer').attr("wildlifetoken")
   );
 
   // the new tokens that are generated offscreen are pushed down from offscreen into the top two slots
   // at the same time, the wildlifetoken attribute is updated on the tokenContainer to reflect the new wildlifetoken that has just been moved into it
-  $('.tokenTileContainer[tokentilenum="-1"] .tokenContainer .token').addClass(
-    "movingElementOpacity"
-  );
-  $(
-    '.tokenTileContainer[tokentilenum="-1"] .tokenContainer .token'
-  ).parentToAnimate(
+  $('.tokenTileContainer[tokentilenum="-1"] .tokenContainer .token').addClass("movingElementOpacity");
+  $('.tokenTileContainer[tokentilenum="-1"] .tokenContainer .token').parentToAnimate(
     $('.tokenTileContainer[tokentilenum="1"] .tokenContainer'),
     1000
   );
   $('.tokenTileContainer[tokentilenum="1"] .tokenContainer').attr(
     "wildlifetoken",
-    $('.tokenTileContainer[tokentilenum="-1"] .tokenContainer').attr(
-      "wildlifetoken"
-    )
+    $('.tokenTileContainer[tokentilenum="-1"] .tokenContainer').attr("wildlifetoken")
   );
-  $('.tokenTileContainer[tokentilenum="-2"] .tokenContainer .token').addClass(
-    "movingElementOpacity"
-  );
-  $(
-    '.tokenTileContainer[tokentilenum="-2"] .tokenContainer .token'
-  ).parentToAnimate(
+  $('.tokenTileContainer[tokentilenum="-2"] .tokenContainer .token').addClass("movingElementOpacity");
+  $('.tokenTileContainer[tokentilenum="-2"] .tokenContainer .token').parentToAnimate(
     $('.tokenTileContainer[tokentilenum="0"] .tokenContainer'),
     1000
   );
   $('.tokenTileContainer[tokentilenum="0"] .tokenContainer').attr(
     "wildlifetoken",
-    $('.tokenTileContainer[tokentilenum="-2"] .tokenContainer').attr(
-      "wildlifetoken"
-    )
+    $('.tokenTileContainer[tokentilenum="-2"] .tokenContainer').attr("wildlifetoken")
   );
 
   setTimeout(function () {
@@ -2532,12 +2115,8 @@ export function checkDuplicateTokens() {
     $(".duplicateWildlifeText").html(uniqueTokens[0]);
     // similarly, the duplicated token image is also inserted into the instructions
     var duplicateImgContainer =
-      '<img class="duplicateTokenExample" src="' +
-      tokenInactiveImage[uniqueTokens[0]] +
-      '" />';
-    $(
-      "#allDuplicateTokensModal .modal-content .notification #duplicateImgContainer"
-    ).html(duplicateImgContainer);
+      '<img class="duplicateTokenExample" src="' + tokenInactiveImage[uniqueTokens[0]] + '" />';
+    $("#allDuplicateTokensModal .modal-content .notification #duplicateImgContainer").html(duplicateImgContainer);
   } else if (uniqueTokens.length == 2) {
     // if this condition is met, it means there's possibly 3 of the same token present in the displayed tokens area
     // example 'bear', 'bear', 'fox', 'bear'
@@ -2581,51 +2160,31 @@ function removeDuplicateTokens(duplicateAmount) {
     let currentToken = 0;
 
     $(".tokenContainer").each(function () {
-      $(this).append(
-        '<img class="duplicateToken" src="' +
-          tokenImage[displayedTokens[currentToken]] +
-          '" />'
-      );
+      $(this).append('<img class="duplicateToken" src="' + tokenImage[displayedTokens[currentToken]] + '" />');
       $(this).append('<img class="redCross" src="img/cross.png" />');
       currentToken++;
     });
 
     // now we take turns moving down the indexes of the token containers to fade in the inactive state of the duplicated token, as well as the associated red cross
-    $(
-      '.tokenTileContainer[tokentilenum="0"] .tokenContainer .duplicateToken'
-    ).fadeIn();
-    $(
-      '.tokenTileContainer[tokentilenum="0"] .tokenContainer .redCross'
-    ).fadeIn();
+    $('.tokenTileContainer[tokentilenum="0"] .tokenContainer .duplicateToken').fadeIn();
+    $('.tokenTileContainer[tokentilenum="0"] .tokenContainer .redCross').fadeIn();
 
     setTimeout(function () {
       // now we take turns moving down the indexes of the token containers to fade in the inactive state of the duplicated token, as well as the associated red cross
-      $(
-        '.tokenTileContainer[tokentilenum="1"] .tokenContainer .duplicateToken'
-      ).fadeIn();
-      $(
-        '.tokenTileContainer[tokentilenum="1"] .tokenContainer .redCross'
-      ).fadeIn();
+      $('.tokenTileContainer[tokentilenum="1"] .tokenContainer .duplicateToken').fadeIn();
+      $('.tokenTileContainer[tokentilenum="1"] .tokenContainer .redCross').fadeIn();
     }, 400);
 
     setTimeout(function () {
       // now we take turns moving down the indexes of the token containers to fade in the inactive state of the duplicated token, as well as the associated red cross
-      $(
-        '.tokenTileContainer[tokentilenum="2"] .tokenContainer .duplicateToken'
-      ).fadeIn();
-      $(
-        '.tokenTileContainer[tokentilenum="2"] .tokenContainer .redCross'
-      ).fadeIn();
+      $('.tokenTileContainer[tokentilenum="2"] .tokenContainer .duplicateToken').fadeIn();
+      $('.tokenTileContainer[tokentilenum="2"] .tokenContainer .redCross').fadeIn();
     }, 800);
 
     setTimeout(function () {
       // now we take turns moving down the indexes of the token containers to fade in the inactive state of the duplicated token, as well as the associated red cross
-      $(
-        '.tokenTileContainer[tokentilenum="3"] .tokenContainer .duplicateToken'
-      ).fadeIn();
-      $(
-        '.tokenTileContainer[tokentilenum="3"] .tokenContainer .redCross'
-      ).fadeIn();
+      $('.tokenTileContainer[tokentilenum="3"] .tokenContainer .duplicateToken').fadeIn();
+      $('.tokenTileContainer[tokentilenum="3"] .tokenContainer .redCross').fadeIn();
     }, 1200);
 
     setTimeout(function () {
@@ -2657,17 +2216,10 @@ function removeDuplicateTokens(duplicateAmount) {
 
       // once all 4 new tokens have been picked, we now loop through them, generate the HTML, and the update the displayed container with the relevant information of the new tokens
       for (let k = 0; k < displayedTokens.length; k++) {
-        $(
-          '.tokenTileContainer[tokentilenum="' + k + '"] .tokenContainer '
-        ).append(
-          '<img class="replacedToken" src="' +
-            tokenImage[displayedTokens[k]] +
-            '" />'
+        $('.tokenTileContainer[tokentilenum="' + k + '"] .tokenContainer ').append(
+          '<img class="replacedToken" src="' + tokenImage[displayedTokens[k]] + '" />'
         );
-        $('.tokenTileContainer[tokentilenum="' + k + '"] .tokenContainer').attr(
-          "wildlifetoken",
-          displayedTokens[k]
-        );
+        $('.tokenTileContainer[tokentilenum="' + k + '"] .tokenContainer').attr("wildlifetoken", displayedTokens[k]);
       }
 
       // all the newly replaced tokens have the temporary class of ".replacedToken", which is now targeted to fade in all of the new tokens at once
@@ -2713,22 +2265,16 @@ function removeDuplicateTokens(duplicateAmount) {
     var matchedTokensIndexes = [];
 
     // loop through the token containers whose "wildlifetoken" attribute match the duplicated wildlife type, then target the parent container to find the index of that container, and store it in the previously created "matchedTokensIndexes" array
-    $('.tokenContainer[wildlifetoken="' + duplicatedToken + '"]').each(
-      function () {
-        matchedTokensIndexes.push(
-          $(this).closest(".tokenTileContainer").attr("tokentilenum")
-        );
-      }
-    );
+    $('.tokenContainer[wildlifetoken="' + duplicatedToken + '"]').each(function () {
+      matchedTokensIndexes.push($(this).closest(".tokenTileContainer").attr("tokentilenum"));
+    });
 
     // sort the matched indexes numerically so that the tokens will be replaced periodically in order
     matchedTokensIndexes.sort();
 
     // for each of the containers that contain the duplicate token, create inactive image of that matched wildlife type, as well as a red cross, and insert it into each of the containers
     $('.tokenContainer[wildlifetoken="' + duplicatedToken + '"]').append(
-      '<img class="duplicateToken" src="' +
-        tokenInactiveImage[duplicatedToken] +
-        '" />'
+      '<img class="duplicateToken" src="' + tokenInactiveImage[duplicatedToken] + '" />'
     );
     $('.tokenContainer[wildlifetoken="' + duplicatedToken + '"]').append(
       '<img class="redCross" src="img/cross.png" />'
@@ -2752,21 +2298,9 @@ function removeDuplicateTokens(duplicateAmount) {
 
     setTimeout(function () {
       // now that enough time has elapsed, removed the previously hidden tokens
-      $(
-        '.tokenTileContainer[tokentilenum="' +
-          matchedTokensIndexes[0] +
-          '"] .tokenContainer .token'
-      ).remove();
-      $(
-        '.tokenTileContainer[tokentilenum="' +
-          matchedTokensIndexes[1] +
-          '"] .tokenContainer .token'
-      ).remove();
-      $(
-        '.tokenTileContainer[tokentilenum="' +
-          matchedTokensIndexes[2] +
-          '"] .tokenContainer .token'
-      ).remove();
+      $('.tokenTileContainer[tokentilenum="' + matchedTokensIndexes[0] + '"] .tokenContainer .token').remove();
+      $('.tokenTileContainer[tokentilenum="' + matchedTokensIndexes[1] + '"] .tokenContainer .token').remove();
+      $('.tokenTileContainer[tokentilenum="' + matchedTokensIndexes[2] + '"] .tokenContainer .token').remove();
 
       // start to fade out the now showing inactive states of each token as well as the associated red cross in each container
       $(".tokenTileContainer .tokenContainer .duplicateToken").fadeOut();
@@ -2798,19 +2332,12 @@ function removeDuplicateTokens(duplicateAmount) {
 
       for (let k = 0; k < matchedTokensIndexes.length; k++) {
         // each token container has the wildlife information updated to reflect the newly chosen token, and then has the default image of the newly chosen token inserted into the token container
-        $(
-          '.tokenTileContainer[tokentilenum="' +
-            matchedTokensIndexes[k] +
-            '"] .tokenContainer'
-        ).attr("wildlifetoken", displayedTokens[matchedTokensIndexes[k]]);
-        $(
-          '.tokenTileContainer[tokentilenum="' +
-            matchedTokensIndexes[k] +
-            '"] .tokenContainer'
-        ).append(
-          '<img class="replacedToken" src="' +
-            tokenImage[displayedTokens[matchedTokensIndexes[k]]] +
-            '" />'
+        $('.tokenTileContainer[tokentilenum="' + matchedTokensIndexes[k] + '"] .tokenContainer').attr(
+          "wildlifetoken",
+          displayedTokens[matchedTokensIndexes[k]]
+        );
+        $('.tokenTileContainer[tokentilenum="' + matchedTokensIndexes[k] + '"] .tokenContainer').append(
+          '<img class="replacedToken" src="' + tokenImage[displayedTokens[matchedTokensIndexes[k]]] + '" />'
         );
       }
       // the newly chosen tokens are faded in
@@ -2836,38 +2363,22 @@ function removeNatureCubeChosenTokens() {
   var tokensToReplaceWildlife = [];
 
   for (let i = 0; i < 4; i++) {
-    if (
-      $(
-        '.tokenTileContainer[tokentilenum="' +
-          i +
-          '"] .tokenContainer.confirmedTokenToClear'
-      ).length
-    ) {
+    if ($('.tokenTileContainer[tokentilenum="' + i + '"] .tokenContainer.confirmedTokenToClear').length) {
       tokensToReplaceIndexes.push(i);
       tokensToReplaceWildlife.push(
-        $('.tokenTileContainer[tokentilenum="' + i + '"] .tokenContainer').attr(
-          "wildlifetoken"
-        )
+        $('.tokenTileContainer[tokentilenum="' + i + '"] .tokenContainer').attr("wildlifetoken")
       );
     }
   }
 
   for (let j = 0; j < tokensToReplaceIndexes.length; j++) {
     // for each of the containers that contain the duplicate token, create inactive image of that matched wildlife type, as well as a red cross, and insert it into each of the containers
-    $(
-      '.tokenTileContainer[tokentilenum="' +
-        tokensToReplaceIndexes[j] +
-        '"] .tokenContainer'
-    ).append(
-      '<img class="duplicateToken" src="' +
-        tokenInactiveImage[tokensToReplaceWildlife[j]] +
-        '" />'
+    $('.tokenTileContainer[tokentilenum="' + tokensToReplaceIndexes[j] + '"] .tokenContainer').append(
+      '<img class="duplicateToken" src="' + tokenInactiveImage[tokensToReplaceWildlife[j]] + '" />'
     );
-    $(
-      '.tokenTileContainer[tokentilenum="' +
-        tokensToReplaceIndexes[j] +
-        '"] .tokenContainer'
-    ).append('<img class="redCross" src="img/cross.png" />');
+    $('.tokenTileContainer[tokentilenum="' + tokensToReplaceIndexes[j] + '"] .tokenContainer').append(
+      '<img class="redCross" src="img/cross.png" />'
+    );
   }
 
   var timeDelayPerToken = [];
@@ -2910,19 +2421,12 @@ function removeNatureCubeChosenTokens() {
 
     for (let p = 0; p < tokensToReplaceIndexes.length; p++) {
       // each token container has the wildlife information updated to reflect the newly chosen token, and then has the default image of the newly chosen token inserted into the token container
-      $(
-        '.tokenTileContainer[tokentilenum="' +
-          tokensToReplaceIndexes[p] +
-          '"] .tokenContainer'
-      ).attr("wildlifetoken", displayedTokens[tokensToReplaceIndexes[p]]);
-      $(
-        '.tokenTileContainer[tokentilenum="' +
-          tokensToReplaceIndexes[p] +
-          '"] .tokenContainer'
-      ).append(
-        '<img class="replacedToken" src="' +
-          tokenImage[isplayedTokens[tokensToReplaceIndexes[p]]] +
-          '" />'
+      $('.tokenTileContainer[tokentilenum="' + tokensToReplaceIndexes[p] + '"] .tokenContainer').attr(
+        "wildlifetoken",
+        displayedTokens[tokensToReplaceIndexes[p]]
+      );
+      $('.tokenTileContainer[tokentilenum="' + tokensToReplaceIndexes[p] + '"] .tokenContainer').append(
+        '<img class="replacedToken" src="' + tokenImage[isplayedTokens[tokensToReplaceIndexes[p]]] + '" />'
       );
     }
     // the newly chosen tokens are faded in
@@ -2955,8 +2459,7 @@ export function generateDisplayTile(thisTile) {
   if (thisTile.habitats.length == 1) {
     displayTileHTML += 'habitats="' + thisTile.habitats[0] + '" ';
   } else if (thisTile.habitats.length == 2) {
-    displayTileHTML +=
-      'habitats="' + thisTile.habitats[0] + " " + thisTile.habitats[1] + '" ';
+    displayTileHTML += 'habitats="' + thisTile.habitats[0] + " " + thisTile.habitats[1] + '" ';
   }
 
   displayTileHTML += 'wildlife="';
@@ -2970,19 +2473,11 @@ export function generateDisplayTile(thisTile) {
     }
   }
 
-  displayTileHTML +=
-    '" tilewildlife="' +
-    thisTile.wildlife.length +
-    '" tilerotation="' +
-    thisTile.rotation +
-    '">';
+  displayTileHTML += '" tilewildlife="' + thisTile.wildlife.length + '" tilerotation="' + thisTile.rotation + '">';
 
   // generate the actual tile image, based on the habitat(s)
   if (thisTile.habitats.length == 1) {
-    displayTileHTML +=
-      '<img class="habitatTile" src="' +
-      tileImage[thisTile.habitats[0]] +
-      '" />';
+    displayTileHTML += '<img class="habitatTile" src="' + tileImage[thisTile.habitats[0]] + '" />';
   } else if (thisTile.habitats.length == 2) {
     displayTileHTML +=
       '<img class="habitatTile" src="' +
@@ -2994,11 +2489,7 @@ export function generateDisplayTile(thisTile) {
 
   for (let i = 0; i < thisTile.wildlife.length; i++) {
     displayTileHTML +=
-      '<img class="tileToken wildlifeToken-' +
-      (i + 1) +
-      '" src="' +
-      tokenImage[thisTile.wildlife[i]] +
-      '" />';
+      '<img class="tileToken wildlifeToken-' + (i + 1) + '" src="' + tokenImage[thisTile.wildlife[i]] + '" />';
   }
 
   displayTileHTML += "</div>";
@@ -3009,61 +2500,58 @@ export function generateDisplayTile(thisTile) {
 
 let mapLoopLimit = 0;
 
-export function initiateMap() {
-  let numRows = mapLimits.down - mapLimits.up + 1;
-  let numColumns = mapLimits.right - mapLimits.left + 1;
+export function initiateMap(start = false) {
+  if (start) {
+    let numRows = mapLimits.down - mapLimits.up + 1;
+    let numColumns = mapLimits.right - mapLimits.left + 1;
+    // state.mapData = []
+    let i;
+    let j;
+    let k;
+    let l;
 
-  // mapData = []
-  let i;
-  let j;
-  let k;
-  let l;
+    // loop through all rows
+    for (i = 0, j = mapLimits.up; i < numRows; i++) {
+      mapRowsColumnsIndexes.rows["row" + j] = i;
 
-  // loop through all rows
-  for (i = 0, j = mapLimits.up; i < numRows; i++) {
-    mapRowsColumnsIndexes.rows["row" + j] = i;
+      // j = 16 ROW START
+      // i < 11 ROW DURATION (11 rows)
+      // end result = rows = [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26];
+      state.mapData[i] = [];
+      // loop through all the children of the currently targetted row - which represents the columns
+      for (k = 0, l = mapLimits.left; k < numColumns; k++) {
+        mapRowsColumnsIndexes.columns["column" + l] = k;
 
-    // j = 16 ROW START
-    // i < 11 ROW DURATION (11 rows)
-    // end result = rows = [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26];
-    mapData[i] = [];
-    // loop through all the children of the currently targetted row - which represents the columns
-    for (k = 0, l = mapLimits.left; k < numColumns; k++) {
-      mapRowsColumnsIndexes.columns["column" + l] = k;
-
-      // l = 14 COLUMNS START
-      // k < 12 COLUMNS DURATION (12 columns)
-      // end result = columns = [14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
-      mapData[i][k] = {
-        // every map hex is blank to start with
-        row: j,
-        column: l,
-        placedTile: false,
-        habitats: [],
-        wildlife: [],
-        placedToken: false,
-        rotation: 0,
-      };
-      l++;
+        // l = 14 COLUMNS START
+        // k < 12 COLUMNS DURATION (12 columns)
+        // end result = columns = [14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
+        state.mapData[i][k] = {
+          // every map hex is blank to start with
+          row: j,
+          column: l,
+          placedTile: false,
+          habitats: [],
+          wildlife: [],
+          placedToken: false,
+          rotation: 0,
+        };
+        l++;
+      }
+      j++;
     }
-    j++;
-  }
 
-  // there are 5 starting tiles - randomly choose one
-  var startingTileNum = Math.floor(Math.random() * 5);
-  // run the code to transfer the starting tile information into the map
-  loadStartingTileDetails(startingTileNum);
+    // there are 5 starting tiles - randomly choose one
+    var startingTileNum = Math.floor(Math.random() * 5);
+    // run the code to transfer the starting tile information into the map
+    loadStartingTileDetails(startingTileNum);
+  }
   // now that the starting template for the map has been creatd (as well as the starting tile information), the map is generated
   generateMap();
 }
 
 function loadStartingTileDetails(startingTile) {
   // : "bear"
-  let startingMapHexIDs = [
-    "row-20-column-20",
-    "row-21-column-19",
-    "row-21-column-20",
-  ];
+  let startingMapHexIDs = ["row-20-column-20", "row-21-column-19", "row-21-column-20"];
   let startingMapHexRows = [];
   let startingMapHexColumns = [];
 
@@ -3074,101 +2562,90 @@ function loadStartingTileDetails(startingTile) {
   }
 
   for (let i = 0; i < 3; i++) {
-    let mapRowIndex =
-      mapRowsColumnsIndexes["rows"]["row" + startingMapHexRows[i]];
-    let mapColumnIndex =
-      mapRowsColumnsIndexes["columns"]["column" + startingMapHexColumns[i]];
+    let mapRowIndex = mapRowsColumnsIndexes["rows"]["row" + startingMapHexRows[i]];
+    let mapColumnIndex = mapRowsColumnsIndexes["columns"]["column" + startingMapHexColumns[i]];
 
-    mapData[mapRowIndex][mapColumnIndex].placedTile = true;
-    mapData[mapRowIndex][mapColumnIndex].habitats =
-      startingTiles[startingTile][i].habitats;
-    mapData[mapRowIndex][mapColumnIndex].wildlife =
-      startingTiles[startingTile][i].wildlife;
-    mapData[mapRowIndex][mapColumnIndex].rotation =
-      startingTiles[startingTile][i].rotation;
+    state.mapData[mapRowIndex][mapColumnIndex].placedTile = true;
+    state.mapData[mapRowIndex][mapColumnIndex].habitats = startingTiles[startingTile][i].habitats;
+    state.mapData[mapRowIndex][mapColumnIndex].wildlife = startingTiles[startingTile][i].wildlife;
+    state.mapData[mapRowIndex][mapColumnIndex].rotation = startingTiles[startingTile][i].rotation;
   }
+  state.saveMap();
 }
 
 function generateMap() {
   // the map HTML script
   var mapHTML = '<div id="mapHiddenOverlay">';
-  for (let i = 0; i < mapData.length; i++) {
-    for (let j = 0; j < mapData[i].length; j++) {
+  for (let i = 0; i < state.mapData.length; i++) {
+    for (let j = 0; j < state.mapData[i].length; j++) {
       mapHTML +=
         '<div id="row-' +
-        mapData[i][j].row +
+        state.mapData[i][j].row +
         "-column-" +
-        mapData[i][j].column +
+        state.mapData[i][j].column +
         '" class="mapTileContainer row-' +
-        mapData[i][j].row +
+        state.mapData[i][j].row +
         " column-" +
-        mapData[i][j].column;
+        state.mapData[i][j].column;
 
-      if (mapData[i][j].placedToken) {
+      if (state.mapData[i][j].placedToken) {
         mapHTML += " placedToken";
       }
 
-      if (mapData[i][j].placedTile) {
+      if (state.mapData[i][j].placedTile) {
         mapHTML += ' placedTile">';
 
         mapHTML += '<div class="tileContainer" ';
 
-        if (mapData[i][j].habitats.length == 1) {
+        if (state.mapData[i][j].habitats.length == 1) {
           ``;
-          mapHTML += 'habitats="' + mapData[i][j].habitats[0] + '" ';
-        } else if (mapData[i][j].habitats.length == 2) {
-          mapHTML +=
-            'habitats="' +
-            mapData[i][j].habitats[0] +
-            " " +
-            mapData[i][j].habitats[1] +
-            '" ';
+          mapHTML += 'habitats="' + state.mapData[i][j].habitats[0] + '" ';
+        } else if (state.mapData[i][j].habitats.length == 2) {
+          mapHTML += 'habitats="' + state.mapData[i][j].habitats[0] + " " + state.mapData[i][j].habitats[1] + '" ';
         }
 
-        if (!mapData[i][j].placedToken) {
+        if (!state.mapData[i][j].placedToken) {
           mapHTML += 'wildlife="';
 
-          for (let k = 0; k < mapData[i][j].wildlife.length; k++) {
-            if (k < mapData[i][j].wildlife.length - 1) {
-              mapHTML += mapData[i][j].wildlife[k] + " ";
+          for (let k = 0; k < state.mapData[i][j].wildlife.length; k++) {
+            if (k < state.mapData[i][j].wildlife.length - 1) {
+              mapHTML += state.mapData[i][j].wildlife[k] + " ";
             } else {
-              mapHTML += mapData[i][j].wildlife[k];
+              mapHTML += state.mapData[i][j].wildlife[k];
             }
           }
         }
 
         mapHTML +=
           '" tilewildlife="' +
-          mapData[i][j].wildlife.length +
+          state.mapData[i][j].wildlife.length +
           '" tilerotation="' +
-          mapData[i][j].rotation +
+          state.mapData[i][j].rotation +
           '">';
 
-        if (mapData[i][j].habitats.length == 1) {
+        if (state.mapData[i][j].habitats.length == 1) {
           mapHTML +=
             '<img class="habitatTile" src="' +
-            tileImage[mapData[i][j].habitats] +
+            tileImage[state.mapData[i][j].habitats] +
             '" style="transform: rotate(' +
-            mapData[i][j].rotation +
+            state.mapData[i][j].rotation +
             'deg);">';
         } else {
           mapHTML +=
             '<img class="habitatTile" src="' +
-            tileImage[
-              mapData[i][j].habitats[0] + "+" + mapData[i][j].habitats[1]
-            ] +
+            tileImage[state.mapData[i][j].habitats[0] + "+" + state.mapData[i][j].habitats[1]] +
             '" style="transform: rotate(' +
-            mapData[i][j].rotation +
+            state.mapData[i][j].rotation +
             'deg);">';
         }
 
-        if (!mapData[i][j].placedToken) {
-          for (let k = 0; k < mapData[i][j].wildlife.length; k++) {
+        if (!state.mapData[i][j].placedToken) {
+          for (let k = 0; k < state.mapData[i][j].wildlife.length; k++) {
             mapHTML +=
               '<img class="tileToken wildlifeToken-' +
               (k + 1) +
               '" src="' +
-              tokenImage[mapData[i][j].wildlife[k]] +
+              tokenImage[state.mapData[i][j].wildlife[k]] +
               '">';
           }
         }
@@ -3179,11 +2656,9 @@ function generateMap() {
         mapHTML += '<img class="tileOutline" src="img/tileOutline.png" />';
       }
 
-      if (mapData[i][j].placedToken) {
+      if (state.mapData[i][j].placedToken) {
         mapHTML +=
-          '<img class="placedWildlifeToken" src="' +
-          tokenActiveImage[mapData[i][j].placedToken] +
-          '" />';
+          '<img class="placedWildlifeToken" src="' + tokenActiveImage[state.mapData[i][j].placedToken] + '" />';
       }
 
       mapHTML += "</div>";
@@ -3193,10 +2668,8 @@ function generateMap() {
 
   mapHTML += '<div class="zoomOptions">';
 
-  mapHTML +=
-    '<img zoomType="zoomIn" class="zoomIn zoomOption inactiveZoom" src="img/zoomIn-inactive.png" />';
-  mapHTML +=
-    '<img zoomType="zoomOut" class="zoomOut zoomOption activeZoom" src="img/zoomOut.png" />';
+  mapHTML += '<img zoomType="zoomIn" class="zoomIn zoomOption inactiveZoom" src="img/zoomIn-inactive.png" />';
+  mapHTML += '<img zoomType="zoomOut" class="zoomOut zoomOption activeZoom" src="img/zoomOut.png" />';
 
   mapHTML += "</div>";
 
@@ -3204,31 +2677,21 @@ function generateMap() {
 
   mapHTML += '<img class="navBackground" src="img/woodCircle.png" />';
 
-  mapHTML +=
-    '<img direction="up" class="upArrow navArrow" src="img/arrow.png" />';
-  mapHTML +=
-    '<img direction="right" class="rightArrow navArrow" src="img/arrow.png" />';
-  mapHTML +=
-    '<img direction="down" class="downArrow navArrow" src="img/arrow.png" />';
-  mapHTML +=
-    '<img direction="left" class="leftArrow navArrow" src="img/arrow.png" />';
+  mapHTML += '<img direction="up" class="upArrow navArrow" src="img/arrow.png" />';
+  mapHTML += '<img direction="right" class="rightArrow navArrow" src="img/arrow.png" />';
+  mapHTML += '<img direction="down" class="downArrow navArrow" src="img/arrow.png" />';
+  mapHTML += '<img direction="left" class="leftArrow navArrow" src="img/arrow.png" />';
 
   mapHTML += "</div>";
 
   mapHTML += '<div id="placedTileOptions">';
 
-  mapHTML +=
-    '<button id="cancelTilePlacement" class="button is-danger nonNatureCubeButton">Cancel</button>';
-  mapHTML +=
-    '<button id="confirmTilePlacement" class="button is-success nonNatureCubeButton">Confirm</button>';
-  mapHTML +=
-    '<button id="cancelNatureCubeTilePlacement" class="button is-danger natureCubeButton">Cancel</button>';
-  mapHTML +=
-    '<button id="confirmNatureCubeTilePlacement" class="button is-success natureCubeButton">Confirm</button>';
-  mapHTML +=
-    '<button id="rotateTileCounterclockwise" class="button is-link">Rotate Counterclockwise</button>';
-  mapHTML +=
-    '<button id="rotateTileClockwise" class="button is-primary">Rotate Clockwise</button>';
+  mapHTML += '<button id="cancelTilePlacement" class="button is-danger nonNatureCubeButton">Cancel</button>';
+  mapHTML += '<button id="confirmTilePlacement" class="button is-success nonNatureCubeButton">Confirm</button>';
+  mapHTML += '<button id="cancelNatureCubeTilePlacement" class="button is-danger natureCubeButton">Cancel</button>';
+  mapHTML += '<button id="confirmNatureCubeTilePlacement" class="button is-success natureCubeButton">Confirm</button>';
+  mapHTML += '<button id="rotateTileCounterclockwise" class="button is-link">Rotate Counterclockwise</button>';
+  mapHTML += '<button id="rotateTileClockwise" class="button is-primary">Rotate Clockwise</button>';
 
   mapHTML += "</div>";
 
@@ -3238,9 +2701,7 @@ function generateMap() {
   if ($(".tokenTileContainer.potentialNatureCube").length) {
     $(".nonNatureCubeButton").hide();
     $(".natureCubeButton").show();
-    $(".mobileTilePlacementOptions .mobileTilePlacementOption").addClass(
-      "natureCubeMode"
-    );
+    $(".mobileTilePlacementOptions .mobileTilePlacementOption").addClass("natureCubeMode");
   }
   $(".navArrow").show();
 }
@@ -3276,9 +2737,7 @@ function showPossibleTilePlacements(mode) {
       $("#" + confirmedTiles[i]).addClass("potentialNatureCubeTilePlacement");
     }
     // finally, add the opaque yellow hex to each of the potential map hexes for the player to easily see which hexes can receive the tile that is currently chosen
-    $("#" + confirmedTiles[i]).append(
-      '<img class="validPlacement" src="img/potentialPlacement.png" />'
-    );
+    $("#" + confirmedTiles[i]).append('<img class="validPlacement" src="img/potentialPlacement.png" />');
   }
 }
 
@@ -3292,25 +2751,17 @@ function neighbourTiles(tileID) {
   var potentialPlacements = [];
 
   if (thisRow % 2 == 0) {
-    potentialPlacements.push(
-      "row-" + (thisRow - 1) + "-column-" + (thisColumn - 1)
-    );
+    potentialPlacements.push("row-" + (thisRow - 1) + "-column-" + (thisColumn - 1));
     potentialPlacements.push("row-" + (thisRow - 1) + "-column-" + thisColumn);
     potentialPlacements.push("row-" + thisRow + "-column-" + (thisColumn + 1));
     potentialPlacements.push("row-" + (thisRow + 1) + "-column-" + thisColumn);
-    potentialPlacements.push(
-      "row-" + (thisRow + 1) + "-column-" + (thisColumn - 1)
-    );
+    potentialPlacements.push("row-" + (thisRow + 1) + "-column-" + (thisColumn - 1));
     potentialPlacements.push("row-" + thisRow + "-column-" + (thisColumn - 1));
   } else {
     potentialPlacements.push("row-" + (thisRow - 1) + "-column-" + thisColumn);
-    potentialPlacements.push(
-      "row-" + (thisRow - 1) + "-column-" + (thisColumn + 1)
-    );
+    potentialPlacements.push("row-" + (thisRow - 1) + "-column-" + (thisColumn + 1));
     potentialPlacements.push("row-" + thisRow + "-column-" + (thisColumn + 1));
-    potentialPlacements.push(
-      "row-" + (thisRow + 1) + "-column-" + (thisColumn + 1)
-    );
+    potentialPlacements.push("row-" + (thisRow + 1) + "-column-" + (thisColumn + 1));
     potentialPlacements.push("row-" + (thisRow + 1) + "-column-" + thisColumn);
     potentialPlacements.push("row-" + thisRow + "-column-" + (thisColumn - 1));
   }
@@ -3338,33 +2789,23 @@ function activateTokenPlacement(mode) {
     // TOKEN CODE STARTS!!!!!!!!!!
 
     // since a nature cube IS NOT BEING USED we can now target the token that is contained in the previously chosen tilke+token combination container that the tile previously came from
-    currentChosenWildlife = $(
-      ".tokenTileContainer.chosenTokenTileContainer .tokenContainer"
-    ).attr("wildlifetoken");
+    currentChosenWildlife = $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer").attr("wildlifetoken");
 
     // the active token image (with a green border) is added into the token container. By default it is hidden
     $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer").append(
-      '<img class="activeToken" src="' +
-        tokenActiveImage[currentChosenWildlife] +
-        '" />'
+      '<img class="activeToken" src="' + tokenActiveImage[currentChosenWildlife] + '" />'
     );
 
     // the active token image fades in
-    $(
-      ".tokenTileContainer.chosenTokenTileContainer .tokenContainer .activeToken"
-    ).fadeIn();
+    $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer .activeToken").fadeIn();
 
     // at the same time, the standard token image fades out
-    $(
-      ".tokenTileContainer.chosenTokenTileContainer .tokenContainer .token"
-    ).fadeOut();
+    $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer .token").fadeOut();
 
     // the showOptions class is removed from the #placedTileOptions element, since we've finished manipulating the newly placed tile
     $("#placedTileOptions").removeClass("showOptions");
 
-    $(".mobileTilePlacementOptions.activeTileOptions")
-      .addClass("inactiveTileOptions")
-      .removeClass("activeTileOptions");
+    $(".mobileTilePlacementOptions.activeTileOptions").addClass("inactiveTileOptions").removeClass("activeTileOptions");
 
     // the yellow border around the newly placed tile can also be faded out, since we've finished the tile placement process and are now moving on to the token placement
     $(".selectedTileOutline").fadeOut();
@@ -3374,9 +2815,7 @@ function activateTokenPlacement(mode) {
 
     setTimeout(function () {
       // now that enough time has elapsed to fade out the relveant elements, we can remove them from the DOM
-      $(
-        ".tokenTileContainer.chosenTokenTileContainer .tokenContainer .token"
-      ).remove();
+      $(".tokenTileContainer.chosenTokenTileContainer .tokenContainer .token").remove();
       $(".selectedTileOutline").remove();
     }, 400);
   }
@@ -3385,26 +2824,22 @@ function activateTokenPlacement(mode) {
   var validTokenPlacements = false;
 
   // loop through every map hex that has a placed tile BUT DOES NOT HAVE A PLACED TOKEN
-  $(".mapTileContainer.placedTile:not(.placedToken) .tileContainer").each(
-    function (index) {
-      // store all of the associated wildlife types for each placed tile into a variable
-      let thisTilesWildlife = $(this).attr("wildlife");
-      // split the stored information by blank spaces (if there's multiple wildlife types they'll have a space between each of them)
-      let thisWildlifeSplit = thisTilesWildlife.split(" ");
+  $(".mapTileContainer.placedTile:not(.placedToken) .tileContainer").each(function (index) {
+    // store all of the associated wildlife types for each placed tile into a variable
+    let thisTilesWildlife = $(this).attr("wildlife");
+    // split the stored information by blank spaces (if there's multiple wildlife types they'll have a space between each of them)
+    let thisWildlifeSplit = thisTilesWildlife.split(" ");
 
-      // check to see if any of the wildlife types associated with each tile match the currently chosen token
-      if (thisWildlifeSplit.indexOf(currentChosenWildlife) !== -1) {
-        // if a placed tile allows the currently chosen token to be placed onto it, it is given the .wildlifeTokenPotential class
-        $(this).parent().addClass("wildlifeTokenPotential");
-        // since there are some tiles that can take multiple tokens, the specific wildlife type that is currently being placed is assigned to the map hex
-        $(this)
-          .parent()
-          .attr("wildlifeTokenPotentialType", currentChosenWildlife);
-        // since there is a match, the "validTokenPlacements" variable is set to true
-        validTokenPlacements = true;
-      }
+    // check to see if any of the wildlife types associated with each tile match the currently chosen token
+    if (thisWildlifeSplit.indexOf(currentChosenWildlife) !== -1) {
+      // if a placed tile allows the currently chosen token to be placed onto it, it is given the .wildlifeTokenPotential class
+      $(this).parent().addClass("wildlifeTokenPotential");
+      // since there are some tiles that can take multiple tokens, the specific wildlife type that is currently being placed is assigned to the map hex
+      $(this).parent().attr("wildlifeTokenPotentialType", currentChosenWildlife);
+      // since there is a match, the "validTokenPlacements" variable is set to true
+      validTokenPlacements = true;
     }
-  );
+  });
 
   // if the thisWildlifeNum remains false, it means there were no map hexes that matched with the currently chosen token - therefore the "remove token" modal is now activated to give the players either the choice of bailing to pick another tile+token combination, or to continue in order to remove the token from the game
   if (!validTokenPlacements) {
@@ -3412,12 +2847,8 @@ function activateTokenPlacement(mode) {
       // this condition is met if the player is currently carrying out a normal token placement (NOT NATURE CUBE)
 
       $("#noValidPlacementModal").addClass("is-active");
-      $(
-        "#noValidPlacementModal .modal-content .notification .invalidWildlifeText"
-      ).html(currentChosenWildlife);
-      $(
-        "#noValidPlacementModal .modal-content .notification .invalidTokenImg"
-      ).html(
+      $("#noValidPlacementModal .modal-content .notification .invalidWildlifeText").html(currentChosenWildlife);
+      $("#noValidPlacementModal .modal-content .notification .invalidTokenImg").html(
         '<img class="removedToken" src="' +
           tokenInactiveImage[currentChosenWildlife] +
           '" alt=""><img class="removeTokenRedCross" src="img/cross.png" />'
@@ -3425,12 +2856,10 @@ function activateTokenPlacement(mode) {
     } else if ($(".tokenTileContainer.potentialNatureCube").length) {
       // this condition is met if the player is currently carrying out a NATURE CUBE token placement
       $("#noValidPlacementNatureCubeModal").addClass("is-active");
-      $(
-        "#noValidPlacementNatureCubeModal .modal-content .notification .invalidWildlifeText"
-      ).html(currentChosenWildlife);
-      $(
-        "#noValidPlacementNatureCubeModal .modal-content .notification .invalidTokenImg"
-      ).html(
+      $("#noValidPlacementNatureCubeModal .modal-content .notification .invalidWildlifeText").html(
+        currentChosenWildlife
+      );
+      $("#noValidPlacementNatureCubeModal .modal-content .notification .invalidTokenImg").html(
         '<img class="removedToken" src="' +
           tokenInactiveImage[currentChosenWildlife] +
           '" alt=""><img class="removeTokenRedCross" src="img/cross.png" />'
@@ -3649,10 +3078,7 @@ function endOfGameSetup() {
     $("#scoringTable-FinalScoringModalTrigger").prepend(
       '<img class="activeScoringFrame" src="img/scoringGoal-active.png" />'
     );
-    $("#scoringTable-FinalScoringModalTrigger .activeScoringFrame").css(
-      "display",
-      "block"
-    );
+    $("#scoringTable-FinalScoringModalTrigger .activeScoringFrame").css("display", "block");
 
     $("#scoringTable-mobileFinalScoringModalTrigger")
       .removeClass("mobileActiveScoringItemTrigger")
@@ -3660,9 +3086,7 @@ function endOfGameSetup() {
     $("#scoringTable-mobileFinalScoringModalTrigger").prepend(
       '<img class="mobileActiveScoringFrame" src="img/mobileScoringGoal-active.png" />'
     );
-    $(
-      "#scoringTable-mobileFinalScoringModalTrigger .mobileActiveScoringFrame"
-    ).css("display", "block");
+    $("#scoringTable-mobileFinalScoringModalTrigger .mobileActiveScoringFrame").css("display", "block");
 
     $("#tileTokenContainer.finalScoring #scoringTable-finalScoringContainer")
       .removeClass("inactiveScoringItem")
@@ -3706,9 +3130,7 @@ $(document).on(
   ".finalScoringItemTrigger:not(.lockTrigger).activeScoringItemTrigger .goalScoringTransparentLayer",
   function () {
     $(".hoverScoringFrame").remove();
-    $(this).after(
-      '<img class="hoverScoringFrame" src="img/scoringGoal-hover.png" />'
-    );
+    $(this).after('<img class="hoverScoringFrame" src="img/scoringGoal-hover.png" />');
     $(".hoverScoringFrame").css("display", "block");
   }
 );
@@ -3736,17 +3158,11 @@ $(document).on(
 
     setTimeout(function () {
       $(".activeScoringFrame").remove();
-      $("#" + parentID).prepend(
-        '<img class="activeScoringFrame" src="img/scoringGoal-active.png" />'
-      );
+      $("#" + parentID).prepend('<img class="activeScoringFrame" src="img/scoringGoal-active.png" />');
     }, 200);
 
-    $(".inactiveScoringItemTrigger")
-      .removeClass("inactiveScoringItemTrigger")
-      .addClass("activeScoringItemTrigger");
-    $(".activeScoringItem")
-      .removeClass("activeScoringItem")
-      .addClass("inactiveScoringItem");
+    $(".inactiveScoringItemTrigger").removeClass("inactiveScoringItemTrigger").addClass("activeScoringItemTrigger");
+    $(".activeScoringItem").removeClass("activeScoringItem").addClass("inactiveScoringItem");
 
     $("#" + parentID)
       .addClass("inactiveScoringItemTrigger")
@@ -3762,9 +3178,7 @@ $(document).on(
 
       if (parentID != "scoringTable") {
         if ($(".placedWildlifeToken[wildlife=" + thisID[0] + "]").length) {
-          $(".placedWildlifeToken[wildlife=" + thisID[0] + "]").addClass(
-            "animated pulse"
-          );
+          $(".placedWildlifeToken[wildlife=" + thisID[0] + "]").addClass("animated pulse");
         }
       }
       $(".activeScoringFrame").fadeIn("slow");
@@ -3778,9 +3192,7 @@ $(document).on(
   function () {
     $(".mobileHoverScoringFrame").remove();
 
-    $(this).after(
-      '<img class="mobileHoverScoringFrame" src="img/mobileScoringGoal-hover.png" />'
-    );
+    $(this).after('<img class="mobileHoverScoringFrame" src="img/mobileScoringGoal-hover.png" />');
     $(".mobileHoverScoringFrame").css("display", "block");
   }
 );
@@ -3808,17 +3220,13 @@ $(document).on(
 
     setTimeout(function () {
       $(".mobileActiveScoringFrame").remove();
-      $("#" + parentID).prepend(
-        '<img class="mobileActiveScoringFrame" src="img/mobileScoringGoal-active.png" />'
-      );
+      $("#" + parentID).prepend('<img class="mobileActiveScoringFrame" src="img/mobileScoringGoal-active.png" />');
     }, 200);
 
     $(".mobileInactiveScoringItemTrigger")
       .removeClass("mobileInactiveScoringItemTrigger")
       .addClass("mobileActiveScoringItemTrigger");
-    $(".activeScoringItem")
-      .removeClass("activeScoringItem")
-      .addClass("inactiveScoringItem");
+    $(".activeScoringItem").removeClass("activeScoringItem").addClass("inactiveScoringItem");
 
     $("#" + parentID)
       .addClass("mobileInactiveScoringItemTrigger")
@@ -3834,9 +3242,7 @@ $(document).on(
 
       if (parentID != "scoringTable") {
         if ($(".placedWildlifeToken[wildlife=" + thisID[0] + "]").length) {
-          $(".placedWildlifeToken[wildlife=" + thisID[0] + "]").addClass(
-            "animated pulse"
-          );
+          $(".placedWildlifeToken[wildlife=" + thisID[0] + "]").addClass("animated pulse");
         }
       }
       $(".mobileActiveScoringFrame").fadeIn("slow");
@@ -3847,41 +3253,27 @@ $(document).on(
 let lastCell = "";
 let currentCell = "";
 
-$(document).on(
-  touchEvent,
-  ".finalScoringTable .scoreCell .scoringInput",
-  function () {
-    if (lastCell == "") {
-      lastCell = $(this).attr("id");
-    } else {
-      currentCell = $(this).attr("id");
+$(document).on(touchEvent, ".finalScoringTable .scoreCell .scoringInput", function () {
+  if (lastCell == "") {
+    lastCell = $(this).attr("id");
+  } else {
+    currentCell = $(this).attr("id");
 
-      if (lastCell != currentCell) {
-        lastCell = currentCell;
-        checkForBlanks();
-      }
+    if (lastCell != currentCell) {
+      lastCell = currentCell;
+      checkForBlanks();
     }
   }
-);
+});
 
 function updateAllSubtotals() {
-  let tables = [
-    "wildlifeScoringTable",
-    "habitatScoringTable",
-    "habitatBonusScoringTable",
-  ];
+  let tables = ["wildlifeScoringTable", "habitatScoringTable", "habitatBonusScoringTable"];
   let categories = ["wildlife", "habitat", "habitatBonus"];
   let fullCategoryName = ["wildlife-Cell", "habitat-Cell", "habitatBonus-Cell"];
 
   for (let i = 0; i < tables.length; i++) {
     let thisSubTotal = 0;
-    $(
-      "#" +
-        tables[i] +
-        ' .scoreCell .scoringInput[category="' +
-        fullCategoryName[i] +
-        '"]'
-    ).each(function () {
+    $("#" + tables[i] + ' .scoreCell .scoringInput[category="' + fullCategoryName[i] + '"]').each(function () {
       if ($(this).hasClass("dataFromInput")) {
         if ($(this).val() != "") {
           thisSubTotal = thisSubTotal + parseInt($(this).val());
@@ -3904,9 +3296,7 @@ function updateSubtotal(tableID, category) {
   let subTotalID = category.split("-");
   let subTotal = 0;
 
-  $(
-    "#" + tableID + ' .scoreCell .scoringInput[category="' + category + '"]'
-  ).each(function () {
+  $("#" + tableID + ' .scoreCell .scoringInput[category="' + category + '"]').each(function () {
     if ($(this).val() != "" && $(this).hasClass("dataFromInput")) {
       subTotal = subTotal + parseInt($(this).val());
     } else if ($(this).hasClass("dataFromText")) {
@@ -3934,9 +3324,7 @@ function updateTotalScore() {
 }
 
 function checkForBlanks() {
-  $(
-    "#scoringTable-finalScoringContainer .finalScoringTable .scoreCell .scoringInput"
-  ).each(function () {
+  $("#scoringTable-finalScoringContainer .finalScoringTable .scoreCell .scoringInput").each(function () {
     if ($(this).hasClass("dataFromInput")) {
       if ($(this).val() == "") $(this).val("0");
     } else if ($(this).hasClass("dataFromText")) {
@@ -3960,12 +3348,10 @@ function checkForBlanks() {
 function setupFinalScoring() {
   $("#natureTokensScoringInput").html(natureCubesNum);
 
-  $("#mapHiddenOverlay .mapTileContainer .placedWildlifeToken").each(
-    function () {
-      let tokenWildlife = $(this).attr("wildlife");
-      $(this).attr("src", tokenImage[tokenWildlife]);
-    }
-  );
+  $("#mapHiddenOverlay .mapTileContainer .placedWildlifeToken").each(function () {
+    let tokenWildlife = $(this).attr("wildlife");
+    $(this).attr("src", tokenImage[tokenWildlife]);
+  });
 
   checkForBlanks();
   processPlacedTilesAndTokens();
@@ -3979,11 +3365,9 @@ function setupFinalScoring() {
   const allWildlife = Object.keys(tokenScoring);
 
   for (const currentWildlife of allWildlife) {
-    $(
-      "#wildlifeScoringTable.finalScoringTable .scoreCell #" +
-        currentWildlife +
-        "-wildlifeScoringInput"
-    ).html(tokenScoring[currentWildlife].totalScore);
+    $("#wildlifeScoringTable.finalScoringTable .scoreCell #" + currentWildlife + "-wildlifeScoringInput").html(
+      tokenScoring[currentWildlife].totalScore
+    );
 
     $(
       "#tileTokenContainer.finalScoring .finalScoringItem #" +
@@ -4168,36 +3552,31 @@ let linkedTileSides = [
 function processPlacedTilesAndTokens() {
   let tileNum = 1;
 
-  for (let i = 0; i < mapData.length; i++) {
-    for (let j = 0; j < mapData[i].length; j++) {
-      if (mapData[i][j].placedTile) {
-        let thisRow = mapData[i][j].row;
-        let thisColumn = mapData[i][j].column;
-        let thisRotation = processRotationFigure(
-          parseInt(mapData[i][j].rotation)
-        );
+  for (let i = 0; i < state.mapData.length; i++) {
+    for (let j = 0; j < state.mapData[i].length; j++) {
+      if (state.mapData[i][j].placedTile) {
+        let thisRow = state.mapData[i][j].row;
+        let thisColumn = state.mapData[i][j].column;
+        let thisRotation = processRotationFigure(parseInt(state.mapData[i][j].rotation));
         let numTurns = findRotationIndex(thisRotation);
         let thisHabitats = [];
         let thisHabitatSides = new Array(6);
-        if (mapData[i][j].habitats.length == 1) {
+        if (state.mapData[i][j].habitats.length == 1) {
           for (let k = 0; k < thisHabitatSides.length; k++) {
-            thisHabitatSides[k] = mapData[i][j].habitats[0];
+            thisHabitatSides[k] = state.mapData[i][j].habitats[0];
           }
 
-          habitatMatches[mapData[i][j].habitats[0]].placedTiles++;
-          thisHabitats.push(mapData[i][j].habitats[0]);
-        } else if (mapData[i][j].habitats.length == 2) {
+          habitatMatches[state.mapData[i][j].habitats[0]].placedTiles++;
+          thisHabitats.push(state.mapData[i][j].habitats[0]);
+        } else if (state.mapData[i][j].habitats.length == 2) {
           // let numTurns = rotationIndexes.indexOf(thisRotation);
           let habitatsLoaded = 0;
           let turnedIndex = habitatsLoaded + numTurns;
 
-          habitatMatches[mapData[i][j].habitats[0]].placedTiles++;
-          habitatMatches[mapData[i][j].habitats[1]].placedTiles++;
+          habitatMatches[state.mapData[i][j].habitats[0]].placedTiles++;
+          habitatMatches[state.mapData[i][j].habitats[1]].placedTiles++;
 
-          thisHabitats.push(
-            mapData[i][j].habitats[1],
-            mapData[i][j].habitats[0]
-          );
+          thisHabitats.push(state.mapData[i][j].habitats[1], state.mapData[i][j].habitats[0]);
           let currentHabitat = thisHabitats[0];
 
           for (let k = 0; k < thisHabitatSides.length; k++) {
@@ -4220,9 +3599,8 @@ function processPlacedTilesAndTokens() {
           habitatSides: thisHabitatSides,
         };
 
-        if (mapData[i][j].placedToken)
-          allPlacedTokens["row-" + thisRow + "-column-" + thisColumn] =
-            mapData[i][j].placedToken;
+        if (state.mapData[i][j].placedToken)
+          allPlacedTokens["row-" + thisRow + "-column-" + thisColumn] = state.mapData[i][j].placedToken;
         tileNum++;
       }
     }
@@ -4238,10 +3616,8 @@ function processPlacedTilesAndTokens() {
     if (rowColMapSet != 0) rowColMapSet = 1;
 
     for (let i = 0; i < linkedTileSides.length; i++) {
-      let newRow =
-        thisRow + linkedTileSides[i].rowColMapping[rowColMapSet].rowDif;
-      let newColumn =
-        thisColumn + linkedTileSides[i].rowColMapping[rowColMapSet].colDif;
+      let newRow = thisRow + linkedTileSides[i].rowColMapping[rowColMapSet].rowDif;
+      let newColumn = thisColumn + linkedTileSides[i].rowColMapping[rowColMapSet].colDif;
       let newTileID = "row-" + newRow + "-column-" + newColumn;
 
       if (allPlacedTiles.hasOwnProperty(newTileID)) {
@@ -4252,9 +3628,9 @@ function processPlacedTilesAndTokens() {
         ) {
           let thisTileNum = allPlacedTiles[tileID].tileNum;
           let matchedTileNum = allPlacedTiles[newTileID].tileNum;
-          habitatMatches[
-            allPlacedTiles[tileID].habitatSides[matchedIndexes[0]]
-          ].tilesWithMatchedHabitats.push(thisTileNum + "-" + matchedTileNum);
+          habitatMatches[allPlacedTiles[tileID].habitatSides[matchedIndexes[0]]].tilesWithMatchedHabitats.push(
+            thisTileNum + "-" + matchedTileNum
+          );
         }
       }
     }
@@ -4266,11 +3642,7 @@ function processPlacedTilesAndTokens() {
   for (const currentHabitat of allHabitats) {
     if (habitatMatches[currentHabitat].placedTiles > 0) {
       if (habitatMatches[currentHabitat].tilesWithMatchedHabitats.length > 0) {
-        let linkedTiles = JSON.parse(
-          JSON.stringify(
-            habitatMatches[currentHabitat].tilesWithMatchedHabitats
-          )
-        );
+        let linkedTiles = JSON.parse(JSON.stringify(habitatMatches[currentHabitat].tilesWithMatchedHabitats));
 
         let tileQueue = [];
         let thisTileGroup = [];
@@ -4299,10 +3671,7 @@ function processPlacedTilesAndTokens() {
                 let matched = linkedTiles.splice(k, 1);
                 let matchedString = matched.toString();
                 let splitMatched = matchedString.split("-");
-                if (
-                  tileQueue.indexOf(splitMatched[1]) === -1 &&
-                  thisTileGroup.indexOf(splitMatched[1]) === -1
-                ) {
+                if (tileQueue.indexOf(splitMatched[1]) === -1 && thisTileGroup.indexOf(splitMatched[1]) === -1) {
                   tileQueue.push(splitMatched[1]);
                 }
               }
@@ -4312,9 +3681,7 @@ function processPlacedTilesAndTokens() {
             thisTileGroup.push(lastTileChecked);
           }
 
-          if (
-            thisTileGroup.length > habitatMatches[currentHabitat].largestSet
-          ) {
+          if (thisTileGroup.length > habitatMatches[currentHabitat].largestSet) {
             habitatMatches[currentHabitat].largestSet = thisTileGroup.length;
           }
 
@@ -4334,23 +3701,17 @@ function calculateHabitatScoring() {
 
   for (const currentHabitat of allHabitats) {
     let largestGroupNum = habitatMatches[currentHabitat].largestSet;
-    $(
-      "#habitatScoringTable.finalScoringTable .scoreCell #" +
-        currentHabitat +
-        "-habitatScoringInput"
-    ).html(largestGroupNum);
+    $("#habitatScoringTable.finalScoringTable .scoreCell #" + currentHabitat + "-habitatScoringInput").html(
+      largestGroupNum
+    );
     if (largestGroupNum > 6) {
-      $(
-        "#habitatBonusScoringTable.finalScoringTable .scoreCell #" +
-          currentHabitat +
-          "Bonus-habitatScoringInput"
-      ).html("+2");
+      $("#habitatBonusScoringTable.finalScoringTable .scoreCell #" + currentHabitat + "Bonus-habitatScoringInput").html(
+        "+2"
+      );
     } else {
-      $(
-        "#habitatBonusScoringTable.finalScoringTable .scoreCell #" +
-          currentHabitat +
-          "Bonus-habitatScoringInput"
-      ).html("-");
+      $("#habitatBonusScoringTable.finalScoringTable .scoreCell #" + currentHabitat + "Bonus-habitatScoringInput").html(
+        "-"
+      );
     }
   }
 }
@@ -4381,10 +3742,7 @@ function calculateBearTokenScoring() {
   for (const tokenID of tokenIDs) {
     potentialTokenIDs = [];
 
-    if (
-      allPlacedTokens[tokenID] == "bear" &&
-      usedTokenIDs.indexOf(tokenID) == -1
-    ) {
+    if (allPlacedTokens[tokenID] == "bear" && usedTokenIDs.indexOf(tokenID) == -1) {
       let neighbourTiles = neighbourTileIDs(tokenID);
 
       for (let i = 0; i < neighbourTiles.length; i++) {
@@ -4401,13 +3759,9 @@ function calculateBearTokenScoring() {
         // Only one beighbouring bear means it only has the pair and could qualify for scoring!
         // Need to now make sure there's no bears touching the matched neighbour tile before locking it in for scoring
 
-        let potentialBearPairNeighbourTiles = neighbourTileIDs(
-          potentialTokenIDs[0]
-        );
+        let potentialBearPairNeighbourTiles = neighbourTileIDs(potentialTokenIDs[0]);
         for (let i = 0; i < potentialBearPairNeighbourTiles.length; i++) {
-          if (
-            allPlacedTokens.hasOwnProperty(potentialBearPairNeighbourTiles[i])
-          ) {
+          if (allPlacedTokens.hasOwnProperty(potentialBearPairNeighbourTiles[i])) {
             // The neighbouring tile exists and has a placed token on it!
             // Continue with the specified scoring process for this wildlife'
 
@@ -4483,10 +3837,7 @@ function generateAllElkLines() {
   // first remove all elk tokens just by themselves
 
   for (let i = allElkTokens.length - 1; i >= 0; i--) {
-    let neighbouringElk = searchNeighbourTilesForWildlife(
-      allElkTokens[i],
-      "elk"
-    );
+    let neighbouringElk = searchNeighbourTilesForWildlife(allElkTokens[i], "elk");
 
     // no neibouring elk means the token is just by itself
     // add it as a separate run and add it's ID to the used tokens pool - also removing it from the allTokens variable
@@ -4502,20 +3853,14 @@ function generateAllElkLines() {
     validStartingLineDirection = checkValidStartingElkToken(allElkTokens[i]);
     if (validStartingLineDirection.length != 0) {
       for (let j = 0; j < validStartingLineDirection.length; j++) {
-        potentialElkLineStartingTokens[validStartingLineDirection[j]].push(
-          allElkTokens[i]
-        );
+        potentialElkLineStartingTokens[validStartingLineDirection[j]].push(allElkTokens[i]);
       }
     }
   }
 
   const allDirections = Object.keys(potentialElkLineStartingTokens);
   for (const currentDirection of allDirections) {
-    for (
-      let i = 0;
-      i < potentialElkLineStartingTokens[currentDirection].length;
-      i++
-    ) {
+    for (let i = 0; i < potentialElkLineStartingTokens[currentDirection].length; i++) {
       let currentPotentialElkLine = [];
       currentPotentialElkLine = allElkTokensInLine(
         potentialElkLineStartingTokens[currentDirection][i],
@@ -4547,9 +3892,7 @@ function generateAllElkLines() {
       ) {
         checkedIndexCombos.push(thisIndexCombo);
         let sharedElkTokenDetected = false;
-        sharedElkTokenDetected = potentialElkLines[i].some(
-          (r) => potentialElkLines[j].indexOf(r) >= 0
-        );
+        sharedElkTokenDetected = potentialElkLines[i].some((r) => potentialElkLines[j].indexOf(r) >= 0);
 
         if (sharedElkTokenDetected) {
           let matchedLineOne = `line${i + 1}`;
@@ -4557,10 +3900,7 @@ function generateAllElkLines() {
 
           allSharedElkTokenLineNums.push(matchedLineOne, matchedLineTwo);
 
-          let thisSharedTile = returnDuplicates(
-            potentialElkLines[i],
-            potentialElkLines[j]
-          );
+          let thisSharedTile = returnDuplicates(potentialElkLines[i], potentialElkLines[j]);
 
           if (!sharedElkTokenIDs.hasOwnProperty(thisSharedTile)) {
             sharedElkTokenIDs[thisSharedTile] = {
@@ -4568,24 +3908,12 @@ function generateAllElkLines() {
             };
           }
 
-          if (
-            sharedElkTokenIDs[thisSharedTile].includedLines.indexOf(
-              matchedLineOne
-            ) === -1
-          ) {
-            sharedElkTokenIDs[thisSharedTile].includedLines.push(
-              matchedLineOne
-            );
+          if (sharedElkTokenIDs[thisSharedTile].includedLines.indexOf(matchedLineOne) === -1) {
+            sharedElkTokenIDs[thisSharedTile].includedLines.push(matchedLineOne);
           }
 
-          if (
-            sharedElkTokenIDs[thisSharedTile].includedLines.indexOf(
-              matchedLineTwo
-            ) === -1
-          ) {
-            sharedElkTokenIDs[thisSharedTile].includedLines.push(
-              matchedLineTwo
-            );
+          if (sharedElkTokenIDs[thisSharedTile].includedLines.indexOf(matchedLineTwo) === -1) {
+            sharedElkTokenIDs[thisSharedTile].includedLines.push(matchedLineTwo);
           }
         }
       }
@@ -4617,13 +3945,8 @@ function generateAllElkLines() {
 
     for (const sharedTile of allSharedTiles) {
       let currentArray = [];
-      for (
-        let i = 0;
-        i < sharedElkTokenIDs[sharedTile].includedLines.length;
-        i++
-      ) {
-        let sharedElkTokenIDsClone =
-          sharedElkTokenIDs[sharedTile].includedLines.slice();
+      for (let i = 0; i < sharedElkTokenIDs[sharedTile].includedLines.length; i++) {
+        let sharedElkTokenIDsClone = sharedElkTokenIDs[sharedTile].includedLines.slice();
         sharedElkTokenIDsClone.splice(i, 1);
 
         let matchedLinesConvertedToText = "";
@@ -4698,8 +4021,7 @@ function generateAllElkLines() {
       let currentLineVariationScore = 0;
 
       for (let m = 0; m < currentLineVariations.length; m++) {
-        currentLineVariationScore +=
-          elkScoringValues[currentLineVariations[m].length];
+        currentLineVariationScore += elkScoringValues[currentLineVariations[m].length];
       }
 
       allPotentialLineCombinations.push(currentLineVariations);
@@ -4746,20 +4068,12 @@ function checkValidStartingElkToken(thisID) {
     let thisDirection = linkedTileSides[blankSides[i]].direction;
     let thisOppositeDirection = linkedTileSides[lineCheckSides[i]].direction;
 
-    let precedingRow =
-      thisRow +
-      linkedTileSides[blankSides[i]].rowColMapping[rowColMapSet].rowDif;
-    let precedingColumn =
-      thisColumn +
-      linkedTileSides[blankSides[i]].rowColMapping[rowColMapSet].colDif;
+    let precedingRow = thisRow + linkedTileSides[blankSides[i]].rowColMapping[rowColMapSet].rowDif;
+    let precedingColumn = thisColumn + linkedTileSides[blankSides[i]].rowColMapping[rowColMapSet].colDif;
     let precedingTileID = "row-" + precedingRow + "-column-" + precedingColumn;
 
-    let followingRow =
-      thisRow +
-      linkedTileSides[lineCheckSides[i]].rowColMapping[rowColMapSet].rowDif;
-    let followingColumn =
-      thisColumn +
-      linkedTileSides[lineCheckSides[i]].rowColMapping[rowColMapSet].colDif;
+    let followingRow = thisRow + linkedTileSides[lineCheckSides[i]].rowColMapping[rowColMapSet].rowDif;
+    let followingColumn = thisColumn + linkedTileSides[lineCheckSides[i]].rowColMapping[rowColMapSet].colDif;
     let followingTileID = "row-" + followingRow + "-column-" + followingColumn;
 
     let validPrecedingTile = false;
@@ -4930,10 +4244,7 @@ function calculateSalmonTokenScoring() {
   let validSalmonTiles = [];
 
   for (let i = 0; i < allSalmonTileIDs.length; i++) {
-    let neighbouringSalmon = searchNeighbourTilesForWildlife(
-      allSalmonTileIDs[i],
-      "salmon"
-    );
+    let neighbouringSalmon = searchNeighbourTilesForWildlife(allSalmonTileIDs[i], "salmon");
     if (neighbouringSalmon.length <= 2) {
       validSalmonTiles.push(allSalmonTileIDs[i]);
     } else {
@@ -4945,10 +4256,7 @@ function calculateSalmonTokenScoring() {
     potentialSalmonTokenIDs = [];
 
     if (usedSalmonTokenIDs.indexOf(validSalmonTiles[j]) == -1) {
-      let potentialNeighbourSalmon = searchNeighbourTilesForWildlife(
-        validSalmonTiles[j],
-        "salmon"
-      );
+      let potentialNeighbourSalmon = searchNeighbourTilesForWildlife(validSalmonTiles[j], "salmon");
       let confirmedNeighbourSalmon = [];
 
       for (let k = 0; k < potentialNeighbourSalmon.length; k++) {
@@ -4962,9 +4270,7 @@ function calculateSalmonTokenScoring() {
         tilesToCheck.push(...confirmedNeighbourSalmon);
 
         let firstNeighbourTiles = neighbourTileIDs(confirmedNeighbourSalmon[0]);
-        let secondNeighbourTiles = neighbourTileIDs(
-          confirmedNeighbourSalmon[1]
-        );
+        let secondNeighbourTiles = neighbourTileIDs(confirmedNeighbourSalmon[1]);
 
         if (
           firstNeighbourTiles.indexOf(confirmedNeighbourSalmon[1]) === -1 &&
@@ -5087,10 +4393,8 @@ function searchNeighbourTilesForWildlife(currentID, thisWildlife) {
   if (rowColMapSet != 0) rowColMapSet = 1;
 
   for (let i = 0; i < linkedTileSides.length; i++) {
-    let newRow =
-      thisRow + linkedTileSides[i].rowColMapping[rowColMapSet].rowDif;
-    let newColumn =
-      thisColumn + linkedTileSides[i].rowColMapping[rowColMapSet].colDif;
+    let newRow = thisRow + linkedTileSides[i].rowColMapping[rowColMapSet].rowDif;
+    let newColumn = thisColumn + linkedTileSides[i].rowColMapping[rowColMapSet].colDif;
     let newTileID = "row-" + newRow + "-column-" + newColumn;
 
     if (allPlacedTokens.hasOwnProperty(newTileID)) {
@@ -5115,10 +4419,8 @@ function neighbourTileIDs(currentID) {
   if (rowColMapSet != 0) rowColMapSet = 1;
 
   for (let i = 0; i < linkedTileSides.length; i++) {
-    let newRow =
-      thisRow + linkedTileSides[i].rowColMapping[rowColMapSet].rowDif;
-    let newColumn =
-      thisColumn + linkedTileSides[i].rowColMapping[rowColMapSet].colDif;
+    let newRow = thisRow + linkedTileSides[i].rowColMapping[rowColMapSet].rowDif;
+    let newColumn = thisColumn + linkedTileSides[i].rowColMapping[rowColMapSet].colDif;
     let newTileID = "row-" + newRow + "-column-" + newColumn;
 
     neighbourIDs.push(newTileID);
@@ -5139,20 +4441,13 @@ function nextElkTokenInDirection(startID, thisDirection) {
 
   let directionIndex = directions.indexOf(thisDirection);
 
-  let newRow =
-    thisRow +
-    linkedTileSides[directionIndex].rowColMapping[rowColMapSet].rowDif;
-  let newColumn =
-    thisColumn +
-    linkedTileSides[directionIndex].rowColMapping[rowColMapSet].colDif;
+  let newRow = thisRow + linkedTileSides[directionIndex].rowColMapping[rowColMapSet].rowDif;
+  let newColumn = thisColumn + linkedTileSides[directionIndex].rowColMapping[rowColMapSet].colDif;
 
   let newTileID = "row-" + newRow + "-column-" + newColumn;
 
   if (allPlacedTokens.hasOwnProperty(newTileID)) {
-    if (
-      allPlacedTokens[newTileID] == "elk" &&
-      usedElkTokenIDs.indexOf(newTileID) == -1
-    ) {
+    if (allPlacedTokens[newTileID] == "elk" && usedElkTokenIDs.indexOf(newTileID) == -1) {
       return newTileID;
     } else {
       return false;
