@@ -5371,11 +5371,61 @@ top: 290px;
 #joinLayer {
   display: none;
   float: left;
-  width:300px;
+  width: 300px;
   margin-top: 2rem;
-  margin-left: 210px;
+  margin-left: 200px;
 }
 
 #joinLayer #join {
   border: 1px solid black;
+}
+
+#playersContainer {
+  float: left;
+  margin-top: 1rem;
+  padding-left: 207px;
+  padding-right: 60px;
+  width: 100%;
+  display: flex;
+  gap: 1.5rem;
+}
+
+#playersContainer .player {
+  width: 25%;
+  border: 1px solid black;
+  border-radius: .5rem;
+  padding: .5rem 1rem;
+  font-size: 20px;
+}
+
+#playersContainer .player h3 {
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  margin-bottom: 5px;
+}
+
+#playersContainer .player h3 span {
+  margin-right: 4px;
+  margin-left: -1px;
+}
+
+#playersContainer .player div  {
+  display: flex;
+  align-items: center;
+  gap: 6px
+}
+
+#playersContainer .player div.natureToken span {
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+#playersContainer .player div.turnsLeft {
+  padding-left: 4px;
+}
+#playersContainer .player div.turnsLeft span {
+  font-weight: bold;
+  margin-left: 4px;
 }

@@ -4,7 +4,7 @@ import { defaultTokenNums, tiles } from "./data.js";
 import { shuffle } from "./util/shuffle.js";
 import { navigate } from "./util/navigate.js";
 import state from "./state.js";
-import { initiateMap } from "./scripts.js";
+import { initiateMap, updateNatureCubesNum } from "./scripts.js";
 import { uuidv4 } from "./util/uuid.js";
 
 import "./image-preloader.js";
@@ -27,6 +27,8 @@ $(document).ready(() => {
         } else {
           state.mapData = JSON.parse(data.mapData);
           state.logMap();
+          state.natureCubesNum = data.natureCubesNum;
+          updateNatureCubesNum(true);
           initiateMap();
         }
         $("body").addClass("gameView");

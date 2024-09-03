@@ -32,6 +32,10 @@ import mountainSwamp from "../assets/img/tiles/mountain+swamp.png";
 import swamp from "../assets/img/tiles/swamp.png";
 import swampLake from "../assets/img/tiles/swamp+lake.png";
 
+import natureToken from "../assets/img/tokens/nature-token.png";
+
+export const natureTokenImage = natureToken;
+
 export const tokenImage = {
   elk,
   fox,

@@ -1,15 +1,18 @@
-import { doc, getDoc, increment, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
+import { collection, doc, getDoc, increment, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "./firebase";
 import { tiles } from "./data";
-import { randomRotation } from "./util/randomRotation";
 import { updateTokensAndTiles } from "./ui/updateTokens";
-import { initiateMap } from "./scripts";
+import { updatePlayers } from "./ui/updatePlayers";
+import { updateTurnsLeft } from "./ui/updateTurnsLeft";
 
 class State {
   gameId = "";
   clientId = "";
   mapData = [];
   currentPlayer = "";
+  turnsLeft;
+
+  players = [];
 
   allTiles = [];
   allTokens = [];
@@ -23,10 +26,7 @@ class State {
     this.clientId = clientId;
     const playerDoc = await getDoc(doc(db, "games", gameId, "players", clientId));
     if (!playerDoc.exists()) {
-      this.player = {
-        turnsLeft: 20,
-      };
-      setDoc(doc(db, "games", gameId, "players", clientId), this.player);
+      throw "Player not found";
     } else {
       this.player = playerDoc.data();
     }
@@ -61,16 +61,27 @@ class State {
         }
         this.currentTiles.push(thisTile);
       }
-      console.log("tiles:", this.currentTiles);
-      console.log("tokens:", this.currentTokens);
-
+      // console.log("tiles:", this.currentTiles);
+      // console.log("tokens:", this.currentTokens);
       updateTokensAndTiles();
+      updatePlayers();
+    });
+    onSnapshot(collection(db, "games", gameId, "players"), async (querySnapshot) => {
+      const players = [];
+      querySnapshot.forEach((doc) => {
+        players.push({ ...doc.data(), id: doc.id });
+      });
+      this.players = players;
+      this.turnsLeft = this.players.find((player) => player.id === this.clientId).turnsLeft;
+      updatePlayers();
+      updateTurnsLeft();
     });
   }
 
   joinGame(name) {
     setDoc(doc(db, "games", this.gameId, "players", this.clientId), {
       name,
+      turnsLeft: 5,
     });
   }
 
@@ -82,6 +93,8 @@ class State {
     updateDoc(doc(db, "games", this.gameId), {
       allTileNums: this.allTiles.filter((_, index) => index !== tileIndex).map((tile) => tile.tileNum),
       allTokens: this.allTokens.filter((_, index) => index !== tokenIndex),
+      currentPlayer:
+        this.players[(this.players.findIndex((player) => player.id === this.clientId) + 1) % this.players.length].id,
     });
     updateDoc(doc(db, "games", this.gameId, "players", this.clientId), {
       turnsLeft: increment(-1),
@@ -89,10 +102,15 @@ class State {
   }
 
   async saveMap() {
-    console.log("Saving map data...");
     this.logMap();
     await updateDoc(doc(db, "games", this.gameId, "players", this.clientId), {
       mapData: JSON.stringify(this.mapData),
+    });
+  }
+
+  async saveNatureCubesNum() {
+    await updateDoc(doc(db, "games", this.gameId, "players", this.clientId), {
+      natureCubesNum: this.natureCubesNum,
     });
   }
 

@@ -5,8 +5,6 @@ import state from "./state";
 import { randomRotation } from "./util/randomRotation";
 import { shuffle } from "./util/shuffle";
 
-var turnsLeft = 20;
-
 var displayedTokens = [];
 // var state.mapData = [];
 
@@ -94,8 +92,6 @@ var mapStats = {
 };
 
 var currentChosenWildlife;
-
-var natureCubesNum = 0;
 
 var duplicatesClearedThisTurn = false;
 
@@ -978,7 +974,8 @@ $(document).on(touchEvent, ".mapTileContainer.placedTile.wildlifeTokenPotential"
       setTimeout(function () {
         // ANIMATE NATURE TOKEN TO MOVE TO THE NATURE TOKEN BUTTON AREA!
 
-        natureCubesNum++;
+        state.natureCubesNum++;
+        state.saveNatureCubesNum();
         updateNatureCubesNum(false);
 
         let tileParentOffest = $("#" + chosenTokenTileID + " .activeToken").offset();
@@ -1047,7 +1044,8 @@ $(document).on(touchEvent, ".mapTileContainer.placedTile.wildlifeTokenPotential"
       setTimeout(function () {
         // ANIMATE NATURE TOKEN TO MOVE TO THE NATURE TOKEN BUTTON AREA!
 
-        natureCubesNum++;
+        state.natureCubesNum++;
+        state.saveNatureCubesNum();
         updateNatureCubesNum(false);
 
         let tileParentOffest = $("#" + chosenTokenTileID + " .activeToken").offset();
@@ -1129,7 +1127,8 @@ $(document).on(touchEvent, "#natureCubePickAnyTileToken", function () {
   $(".mobileTilePlacementOptions .mobileTilePlacementOption").addClass("natureCubeMode");
 
   // Remove a nature cube and run the updateNatureCubesNum() function to update the amount of nature cubes available displayed on the button
-  natureCubesNum--;
+  state.natureCubesNum--;
+  state.saveNatureCubesNum();
   // the false is to signify to NOT deactivate the button, since the player is still taking their turn at this point
   updateNatureCubesNum(false);
   // if there were 3 or more duplicated tokens the player has missed the opportunity to clear them, so the button is deactivated
@@ -1157,7 +1156,8 @@ function clearAnyTokensWithNatureCube() {
   // This code is actioned once a player has clicked the "Nature Cube" button AND clicked the "Use Nature Cube" confirmation button
 
   // Remove a nature cube and run the updateNatureCubesNum() function to update the amount of nature cubes available displayed on the button
-  natureCubesNum--;
+  state.natureCubesNum--;
+  state.saveNatureCubesNum();
   // the false is to signify to NOT deactivate the button, since the player is still taking their turn at this point
   updateNatureCubesNum(false);
 
@@ -1250,7 +1250,8 @@ function selectAllTokensToClearFunction() {
 
 $(document).on(touchEvent, "#natureCubeClearAllTokens", function () {
   // Remove a nature cube and run the updateNatureCubesNum() function to update the amount of nature cubes available displayed on the button
-  natureCubesNum--;
+  state.natureCubesNum--;
+  state.saveNatureCubesNum();
   // the false is to signify to NOT deactivate the button, since the player is still taking their turn at this point
   updateNatureCubesNum(false);
 
@@ -1820,12 +1821,12 @@ function undoTilePlacementFunction() {
   }
 }
 
-function updateNatureCubesNum(activateButton) {
+export function updateNatureCubesNum(activateButton) {
   // first update the amount of nature cubes on the span which corresponds with number visible on the "Nature Cubes" button
-  $(".numNatureCubesInfo").html(natureCubesNum);
+  $(".numNatureCubesInfo").html(state.natureCubesNum);
   // If there are no Nature Cubes, the button is deactivcated by default
-  $("#natureCubesModal .modal-card .modal-card-body #natureTokenAmount .numNatureCubes").html(natureCubesNum);
-  if (natureCubesNum == 0) {
+  $("#natureCubesModal .modal-card .modal-card-body #natureTokenAmount .numNatureCubes").html(state.natureCubesNum);
+  if (state.natureCubesNum == 0) {
     $(".useNatureCube.button").attr("disabled", "disabled");
   } else if (activateButton) {
     // If there are Nature Cubes, the button is activcated
@@ -1837,7 +1838,7 @@ function updateNatureCubesNum(activateButton) {
 }
 
 function removeSoloTilesTokens() {
-  if (turnsLeft == 1) {
+  if (!state.players.some((player) => player.turnsLeft >= 0)) {
     endOfGameNotification();
   } else {
     // Now the next turn is soon to start, the .chosenTokenTileContainer class can be removed ready for the next turn to start
@@ -2771,14 +2772,16 @@ function neighbourTiles(tileID) {
 function updateNextTurn(mode) {
   if (mode != "setup") {
     // the function runs when the player succesfully concludes a turn, the turnsLeft variable figure is always reduced by one
-    turnsLeft--;
+    // turnsLeft--;
   }
 
+  console.log("turnsLeft: " + state.turnsLeft);
+
   // then the new turnsLeft figure is updated in the Turns Left info on the page
-  $(".turnsLeftFigure").html(turnsLeft);
+  $(".turnsLeftFigure").html(state.turnsLeft);
 
   // if the turnsLeft variable is at 0, the game is over, and the red color indicates this to the player
-  if (turnsLeft == 0) {
+  if (state.turnsLeft == 0) {
     $("#turnsAndNatureTokenContainer").addClass("has-text-danger");
     $("#mobileTurnsAndNatureTokenContainer").addClass("has-text-danger");
   }
@@ -3346,7 +3349,7 @@ function checkForBlanks() {
 }
 
 function setupFinalScoring() {
-  $("#natureTokensScoringInput").html(natureCubesNum);
+  $("#natureTokensScoringInput").html(state.natureCubesNum);
 
   $("#mapHiddenOverlay .mapTileContainer .placedWildlifeToken").each(function () {
     let tokenWildlife = $(this).attr("wildlife");
